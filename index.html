@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>모델의 자기소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  /* 허브는 어느 모델의 색도 아닌 중성 먹색. 모델 색은 각 카드 안에서만 쓴다 */
+  --bg: #111113;
+  --card: #18181b;
+  --paper: #ece6da;
+  --paper-2: #b0aba2;
+  --paper-3: #7c786f;
+  --line: #34343a;
+  --opus: #e2552b;       /* Opus 사이트의 주홍 */
+  --opus-ink: #12110f;
+  --sol: #ffad65;        /* Sol 사이트의 해 */
+  --sol-2: #ff683b;
+  --sol-sky: #0e1726;
+  --sol-cyan: #82d9dc;
+  --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
+  --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
+  --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+  background: radial-gradient(80% 60% at 50% -10%, #1f1f23, transparent 70%), var(--bg);
+  color: var(--paper); font-family: var(--sans); word-break: keep-all;
+  padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
+}
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; }
+
+/* 머리: 질문과 안내를 한 줄 기준선 위에 */
+header { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s4); row-gap: var(--s2); align-items: end; padding-bottom: var(--s4); border-bottom: 1px solid var(--line); }
+.head-l { grid-column: 1 / -1; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 var(--s2); font-size: .82rem; letter-spacing: .2em; color: var(--paper-2); }
+.eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--paper-2); }
+.eyebrow::before { flex: none; }
+.eyebrow q { letter-spacing: .02em; quotes: '“' '”'; color: var(--paper); }
+h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(4.9vw, 3.2rem); line-height: 1.22; letter-spacing: -.02em; white-space: nowrap; }
+@media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
+
+/* 카드 두 장: 같은 틀, 다른 재료 */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); margin-top: var(--s4); }
+@media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s4); } }
+.card {
+  --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
+  position: relative; min-width: 0; display: flex; flex-direction: column; padding: var(--s4);
+  background: var(--card); border: 1px solid var(--line); border-radius: 0;
+  color: inherit; text-decoration: none; overflow: hidden;
+  transform: perspective(1400px) rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+  transition: transform .6s var(--ease), border-color .35s, scale .08s;
+  opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards;
+}
+.card:nth-child(1) { animation-delay: .36s; }
+.card:nth-child(2) { animation-delay: .48s; }
+.head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
+.head-l { animation-delay: .12s; }
+@keyframes rise { to { opacity: 1; translate: 0 0; } }
+.card::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(460px circle at var(--mx) var(--my), var(--glow), transparent 62%); }
+.card.opus { --accent: var(--opus); --glow: rgba(226, 85, 43, .13); }
+.card.sol { --accent: var(--sol); --glow: rgba(255, 173, 101, .13); }
+.card:active { scale: .985; }
+.card:focus-visible { outline: 1px solid var(--paper-2); outline-offset: 6px; }
+
+.meta { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); font-size: .8rem; letter-spacing: .12em; color: var(--paper-3); }
+.meta b { font-weight: 500; color: var(--paper-2); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+
+.art { display: grid; place-items: center; padding: var(--s3) 0; }
+.plate {
+  position: relative; width: min(66%, 300px); aspect-ratio: 5 / 4; overflow: hidden;
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .04);
+  translate: calc(var(--ry) * -1.2px) calc(var(--rx) * 1.2px); transition: translate .6s var(--ease);
+}
+.seal { position: absolute; right: 6%; bottom: 8%; width: 16%; aspect-ratio: 1; display: grid; place-items: center; text-align: center; font-family: var(--serif); font-weight: 900; line-height: 1.02; transform: rotate(-3deg); }
+.seal.off { opacity: 0; }
+.seal.on { animation: stamp .22s cubic-bezier(.3, 1.4, .5, 1) forwards; }
+@keyframes stamp { from { transform: rotate(-3deg) scale(1.15); opacity: 0; } to { transform: rotate(-3deg) scale(1); opacity: 1; } }
+
+/* Opus: 한지 위에 먹으로 쓰는 劃 */
+.plate.hanji { background: #ece3cf; }
+.plate.hanji svg { position: absolute; left: 50%; top: 50%; height: 84%; width: auto; translate: -50% -50%; }
+.plate.hanji .ink { fill: #16130f; }
+.plate.hanji .ghost { fill: #16130f; opacity: 0; transition: opacity .2s; }
+.plate.hanji.retrace .ghost { opacity: .12; }
+.plate.hanji .note { position: absolute; left: 7%; bottom: 7%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(11px, 1.1vw, 13px); letter-spacing: .28em; color: rgba(22, 19, 15, .82); }
+.card.opus .seal { background: var(--opus); color: #ece3cf; font-size: clamp(8px, .95vw, 11px); }
+
+/* Sol: 남색 하늘 아래에서 떠오르는 해 (Sol 사이트의 색) */
+.plate.sky { background: linear-gradient(#090f1c 0%, #0e1726 55%, #1b2436 100%); }
+.plate.sky .warm { position: absolute; inset: 0; background: radial-gradient(90% 55% at 50% 78%, rgba(255, 104, 59, .38), transparent 70%); opacity: .35; transition: opacity .9s var(--ease); }
+.plate.sky .sun { position: absolute; left: 50%; top: 50%; width: 38%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 50% 42%, #ffe2bd, var(--sol) 52%, var(--sol-2)); box-shadow: 0 0 70px rgba(255, 173, 101, .35); transform: translate(-50%, 60%); transition: transform 1.2s var(--ease), box-shadow .9s; }
+.plate.sky.up .sun { transform: translate(-50%, 0); }
+.plate.sky .horizon { position: absolute; left: 0; right: 0; top: 70%; bottom: 0; background: linear-gradient(#0c1422, #070b14); border-top: 1px solid rgba(130, 217, 220, .3); transition: border-color .9s; }
+.card.sol .seal { background: var(--sol); color: var(--sol-sky); font-size: clamp(9px, 1.05vw, 12px); }
+
+.name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; letter-spacing: -.01em; }
+.tag { margin: var(--s1) 0 0; font-family: var(--serif); font-weight: 500; font-size: 1rem; color: var(--paper); }
+.desc { margin: 4px 0 0; font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
+.go { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .9rem; font-weight: 500; color: var(--accent); }
+.go svg { width: 14px; height: 14px; transition: transform .3s var(--ease); }
+
+/* 마우스가 있는 기기에서만 호버 */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+  .card:hover::before { opacity: 1; }
+  .card:hover .go svg { transform: translateX(6px); }
+  .card.sol:hover .sun { transform: translate(-50%, -22%); box-shadow: 0 0 120px rgba(255, 173, 101, .55); }
+  .card.sol:hover .warm { opacity: 1; }
+  .card.sol:hover .horizon { border-color: rgba(130, 217, 220, .7); }
+}
+.card:focus-visible .go svg { transform: translateX(6px); }
+
+footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .6s forwards; }
+
+/* 먹색으로 번지며 넘어가기 */
+.veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
+.veil.on { opacity: 1; }
+
+@media (max-width: 760px) {
+  .card { padding: var(--s3); }
+  .plate { width: 56%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
+  .card, .plate, .sun, .warm, .horizon, .go svg { transition: none !important; }
+  .plate.sky .sun { transform: translate(-50%, 0); }
+  .seal.on { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="head-l">
+      <p class="eyebrow"><span>모델의 자기소개: <q>너를 설명하는 가장 화려한 웹사이트를 만들어 줘</q></span></p>
+      <h1>어느 모델의 이야기부터 들어 볼까요?</h1>
+    </div>
+  </header>
+
+  <main class="cards">
+    <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
+      <div class="meta"><b>01</b><span>Anthropic</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="plate hanji">
+          <svg viewBox="0 -60 1024 1080"><g transform="translate(0, 900) scale(1, -1)" filter="url(#rough)"><g class="ghost"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z"/></g><g class="ink"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z" mask="url(#mk0)"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z" mask="url(#mk1)"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z" mask="url(#mk2)"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z" mask="url(#mk3)"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z" mask="url(#mk4)"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z" mask="url(#mk5)"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z" mask="url(#mk6)"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z" mask="url(#mk7)"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z" mask="url(#mk8)"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z" mask="url(#mk9)"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z" mask="url(#mk10)"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z" mask="url(#mk11)"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z" mask="url(#mk12)"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z" mask="url(#mk13)"/></g></g>
+            <defs>
+              <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
+              <mask id="mk0" maskUnits="userSpaceOnUse"><path d="M259 713 L301 711 L366 722 L490 753 L518 746 L541 726 L507 611 L486 595" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk1" maskUnits="userSpaceOnUse"><path d="M126 603 L174 593 L554 663 L604 667 L628 662" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk2" maskUnits="userSpaceOnUse"><path d="M263 532 L302 532 L502 571 L543 564" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk3" maskUnits="userSpaceOnUse"><path d="M263 447 L297 442 L455 475 L505 472" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk4" maskUnits="userSpaceOnUse"><path d="M345 829 L389 790 L382 413 L367 392" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk5" maskUnits="userSpaceOnUse"><path d="M159 350 L195 341 L527 396 L579 389" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk6" maskUnits="userSpaceOnUse"><path d="M212 280 L237 259 L245 244 L280 106" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk7" maskUnits="userSpaceOnUse"><path d="M268 280 L284 273 L450 312 L509 308 L525 293 L528 275 L491 148 L494 134" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk8" maskUnits="userSpaceOnUse"><path d="M317 208 L422 233 L449 229" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk9" maskUnits="userSpaceOnUse"><path d="M394 279 L379 255 L380 179 L365 160" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk10" maskUnits="userSpaceOnUse"><path d="M298 120 L314 131 L441 155 L466 165" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk11" maskUnits="userSpaceOnUse"><path d="M148 39 L213 27 L519 80 L544 82 L585 74" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk12" maskUnits="userSpaceOnUse"><path d="M667 624 L692 597 L696 584 L698 414 L692 327 L697 291" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk13" maskUnits="userSpaceOnUse"><path d="M797 812 L846 772 L845 451 L855 78 L835 33 L714 90" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask>
+            </defs>
+          </svg>
+          <span class="note">劃 그을 획</span>
+          <span class="seal">Opus<br>5.5</span>
+        </div>
+      </div>
+      <h2 class="name">Claude Opus 5.5</h2>
+      <p class="tag">시 「획」으로 쓴 자기소개</p>
+      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다. 2026. 9. 22 공개</p>
+      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+    </a>
+
+    <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#090f1c">
+      <div class="meta"><b>02</b><span>OpenAI</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="plate sky"><span class="warm"></span><span class="sun"></span><span class="horizon"></span><span class="seal">GPT-6<br>Sol</span></div>
+      </div>
+      <h2 class="name">GPT-6 Sol</h2>
+      <p class="tag">아이디어가 결과가 되는 순간</p>
+      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델을 직접 체험합니다.</p>
+      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+    </a>
+  </main>
+
+  <footer><span>각 페이지의 모델 정보는 모델을 만든 회사의 공식 발표를 따릅니다.</span></footer>
+</div>
+<div class="veil" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const MEDIANS = [[[259,713],[301,711],[366,722],[490,753],[518,746],[541,726],[507,611],[486,595]],[[126,603],[174,593],[554,663],[604,667],[628,662]],[[263,532],[302,532],[502,571],[543,564]],[[263,447],[297,442],[455,475],[505,472]],[[345,829],[389,790],[382,413],[367,392]],[[159,350],[195,341],[527,396],[579,389]],[[212,280],[237,259],[245,244],[280,106]],[[268,280],[284,273],[450,312],[509,308],[525,293],[528,275],[491,148],[494,134]],[[317,208],[422,233],[449,229]],[[394,279],[379,255],[380,179],[365,160]],[[298,120],[314,131],[441,155],[466,165]],[[148,39],[213,27],[519,80],[544,82],[585,74]],[[667,624],[692,597],[696,584],[698,414],[692,327],[697,291]],[[797,812],[846,772],[845,451],[855,78],[835,33],[714,90]]];
+
+  /* 劃 붓쓰기: 획마다 중심선 마스크를 획순대로 연다 */
+  const opus = document.getElementById('card-opus');
+  const hanji = opus.querySelector('.hanji'), ops = opus.querySelector('.seal');
+  const inks = [...opus.querySelectorAll('.ink path')];
+  const masks = [...opus.querySelectorAll('mask path')];
+  const lens = MEDIANS.map(m => m.reduce((a, p, i) => i ? a + Math.hypot(p[0] - m[i - 1][0], p[1] - m[i - 1][1]) : 0, 0));
+  let writing = false, lastDone = -Infinity;
+  if (!RM) { masks.forEach(m => m.style.strokeDashoffset = 1); ops.classList.add('off'); }
+  function write() {
+    if (writing || performance.now() - lastDone < 3000) return;
+    writing = true;
+    if (RM) { masks.forEach(m => m.style.strokeDashoffset = 0); ops.classList.add('on'); writing = false; return; }
+    const redo = lastDone > -Infinity;
+    if (redo) hanji.classList.add('retrace');
+    ops.classList.remove('on'); ops.classList.add('off');
+    masks.forEach(m => m.style.strokeDashoffset = 1);
+    let t = redo ? 220 : 0;
+    const anims = masks.map((m, i) => {
+      const dur = Math.max(110, Math.min(240, 60 + lens[i] * .32));
+      const a = m.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: dur, delay: t, easing: 'cubic-bezier(.45, 0, .15, 1)', fill: 'forwards' });
+      t += dur + 45;
+      return a;
+    });
+    anims[anims.length - 1].onfinish = () => {
+      masks.forEach(m => m.style.strokeDashoffset = 0);
+      anims.forEach(a => a.cancel());
+      hanji.classList.remove('retrace');
+      ops.classList.remove('off'); ops.classList.add('on');
+      writing = false; lastDone = performance.now();
+    };
+  }
+
+  /* Sol: 해가 수평선 위로 올라온다 */
+  const sky = document.querySelector('.plate.sky'), sseal = sky.querySelector('.seal');
+  if (!RM) sseal.classList.add('off');
+  function sunrise() { sky.classList.add('up'); setTimeout(() => { sseal.classList.remove('off'); sseal.classList.add('on'); }, RM ? 0 : 1100); }
+
+  /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
+  const once = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    once.unobserve(e.target);
+    setTimeout(() => e.target === opus ? write() : sunrise(), RM ? 0 : 700);
+  }), { threshold: .5 });
+  once.observe(opus); once.observe(document.getElementById('card-sol'));
+
+  document.querySelectorAll('.card').forEach(card => {
+    if (FINE && !RM) {
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--mx', x * 100 + '%'); card.style.setProperty('--my', y * 100 + '%');
+        card.style.setProperty('--ry', ((x - .5) * 5).toFixed(2)); card.style.setProperty('--rx', ((.5 - y) * 5).toFixed(2));
+      });
+      card.addEventListener('pointerleave', () => { card.style.setProperty('--rx', 0); card.style.setProperty('--ry', 0); });
+    }
+    // 새 탭으로 열 때는 막지 않는다. 그 밖에는 그 모델의 바탕색으로 번진 뒤 넘어간다
+    card.addEventListener('click', e => {
+      if (RM || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      const veil = document.querySelector('.veil');
+      veil.style.background = card.dataset.world; veil.classList.add('on');
+      setTimeout(() => { location.href = card.getAttribute('href'); }, 280);
+    });
+  });
+  if (FINE) opus.addEventListener('pointerenter', write);
+  opus.addEventListener('focus', () => { if (opus.matches(':focus-visible')) write(); });
+  // 뒤로 가기로 돌아오면 번짐을 걷는다
+  addEventListener('pageshow', () => document.querySelector('.veil').classList.remove('on'));
+})();
+</script>
+</body>
+</html>
