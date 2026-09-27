@@ -6,23 +6,21 @@
 <title>모델의 자기소개</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=Noto+Sans+KR:wght@600&display=swap">
+<script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');</script>
 <style>
 :root {
   color-scheme: dark;
-  /* 허브는 어느 모델의 색도 아닌 중성 먹색. 모델 색은 각 카드 안에서만 쓴다 */
-  --bg: #111113;
-  --card: #18181b;
+  /* 허브는 벼루 같은 따뜻한 먹빛. 모델 색은 각 카드 안에서만 쓴다 */
+  --bg: #171513;
+  --card: #1e1c19;
   --paper: #ece6da;
   --paper-2: #b0aba2;
   --paper-3: #7c786f;
-  --line: #34343a;
+  --line: #3a3631;
   --opus: #e2552b;       /* Opus 사이트의 주홍 */
   --opus-ink: #12110f;
-  --sol: #ffad65;        /* Sol 사이트의 해 */
-  --sol-2: #ff683b;
-  --sol-sky: #0e1726;
-  --sol-cyan: #82d9dc;
+  --sol: #e07d63;        /* Sol 포스터의 해 */
   --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
   --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -32,11 +30,17 @@
 html { background: var(--bg); }
 body {
   margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
-  background: radial-gradient(80% 60% at 50% -10%, #1f1f23, transparent 70%), var(--bg);
+  /* 각 카드가 여는 사이트의 바탕색: 왼쪽 Opus의 먹빛(#12110f), 오른쪽 Sol의 남보라(#070713) */
+  background:
+    radial-gradient(38% 50% at 18% 30%, rgba(226, 85, 43, .09), transparent 70%),
+    radial-gradient(40% 55% at 84% 26%, rgba(140, 80, 190, .20), transparent 70%),
+    radial-gradient(34% 45% at 80% 92%, rgba(240, 150, 90, .10), transparent 70%),
+    linear-gradient(100deg, #12110f 0%, #12110f 18%, #0d0c15 60%, #070713 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
 }
 .wrap { width: 100%; max-width: 1120px; margin: 0 auto; }
+body::after { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
 /* 머리: 질문과 안내를 한 줄 기준선 위에 */
 header { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s4); row-gap: var(--s2); align-items: end; padding-bottom: var(--s4); border-bottom: 1px solid var(--line); }
@@ -45,7 +49,9 @@ header { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); colum
 .eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--paper-2); }
 .eyebrow::before { flex: none; }
 .eyebrow q { letter-spacing: .02em; quotes: '“' '”'; color: var(--paper); }
-h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(4.9vw, 3.2rem); line-height: 1.22; letter-spacing: -.02em; white-space: nowrap; }
+h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(3.8vw, 3rem); line-height: 1.2; letter-spacing: -.02em; white-space: nowrap; }
+h1 q { quotes: '“' '”'; }
+@media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
 /* 카드 두 장: 같은 틀, 다른 재료 */
@@ -67,7 +73,8 @@ h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(4.9v
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
 .card::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(460px circle at var(--mx) var(--my), var(--glow), transparent 62%); }
 .card.opus { --accent: var(--opus); --glow: rgba(226, 85, 43, .13); }
-.card.sol { --accent: var(--sol); --glow: rgba(255, 173, 101, .13); }
+.card.sol { --accent: var(--sol); --glow: rgba(170, 110, 220, .16); background: #10101b; border-color: #2c2b3a; }
+.card.opus { background: #1a1815; }
 .card:active { scale: .985; }
 .card:focus-visible { outline: 1px solid var(--paper-2); outline-offset: 6px; }
 
@@ -94,14 +101,33 @@ h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(4.9v
 .plate.hanji .note { position: absolute; left: 7%; bottom: 7%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(11px, 1.1vw, 13px); letter-spacing: .28em; color: rgba(22, 19, 15, .82); }
 .card.opus .seal { background: var(--opus); color: #ece3cf; font-size: clamp(8px, .95vw, 11px); }
 
-/* Sol: 남색 하늘 아래에서 떠오르는 해 (Sol 사이트의 색) */
-.plate.sky { background: linear-gradient(#090f1c 0%, #0e1726 55%, #1b2436 100%); }
-.plate.sky .warm { position: absolute; inset: 0; background: radial-gradient(90% 55% at 50% 78%, rgba(255, 104, 59, .38), transparent 70%); opacity: .35; transition: opacity .9s var(--ease); }
-.plate.sky .sun { position: absolute; left: 50%; top: 50%; width: 38%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 50% 42%, #ffe2bd, var(--sol) 52%, var(--sol-2)); box-shadow: 0 0 70px rgba(255, 173, 101, .35); transform: translate(-50%, 60%); transition: transform 1.2s var(--ease), box-shadow .9s; }
-.plate.sky.up .sun { transform: translate(-50%, 0); }
-.plate.sky .horizon { position: absolute; left: 0; right: 0; top: 70%; bottom: 0; background: linear-gradient(#0c1422, #070b14); border-top: 1px solid rgba(130, 217, 220, .3); transition: border-color .9s; }
-.card.sol .seal { background: var(--sol); color: var(--sol-sky); font-size: clamp(9px, 1.05vw, 12px); }
+/* Sol: 종이 위의 해, 궤도, 물결 (Sol 페이지의 포스터를 카드 크기로) */
+.plate.solp { background: #ebe3d6; }
+.solart { position: absolute; inset: 0; width: 100%; height: 100%; }
+.solart .solword { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 150px; letter-spacing: -.05em; fill: #1d1a17; stroke: #efe6d8; stroke-width: 5; paint-order: stroke; }
+.solart .sollabel { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 15px; letter-spacing: .14em; fill: #4a433b; }
+.solart .orbits ellipse { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.solart .waves { animation: drift 18s linear infinite; }
+@keyframes drift { to { transform: translateX(-500px); } }
+.solart .orb, .solart .glow { transform-box: fill-box; transform-origin: center; }
+.plate.solp .vcol { position: absolute; top: 9%; writing-mode: vertical-rl; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; font-size: clamp(7px, .72vw, 9px); letter-spacing: .12em; color: #2c2722; padding-left: 5px; border-left: 1px solid rgba(40, 30, 20, .28); }
+.plate.solp .c1 { right: 6%; } .plate.solp .c2 { right: 12%; } .plate.solp .c3 { right: 18%; }
+.card.sol .seal { right: 5%; bottom: 7%; width: 17%; background: #d45a3b; color: #f4ece0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(7px, .8vw, 10px); line-height: 1; box-shadow: 0 0 0 2px #ebe3d6, 0 0 0 3px rgba(212, 90, 59, .6); }
+.card.sol .seal { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
+.card.sol .seal i { font-style: normal; letter-spacing: .04em; }
+.card.sol .seal b { font-size: 2.1em; line-height: .85; }
 
+/* 처음 들어올 때: 궤도가 그어지고, 해가 떠오르고, SOL이 들어온다 */
+.js .plate.solp .orbits ellipse { stroke-dashoffset: 1; }
+.js .plate.solp .orb, .js .plate.solp .glow { opacity: 0; transform: translateY(40px) scale(.92); }
+.js .plate.solp .solword { opacity: 0; transform: translateX(-60px) rotate(-4deg); }
+.plate.solp.up .orbits ellipse { stroke-dashoffset: 0; transition: stroke-dashoffset 1.4s cubic-bezier(.6, 0, .2, 1); }
+.plate.solp.up .orbits ellipse:nth-child(2) { transition-delay: .2s; }
+.plate.solp.up .orb { opacity: 1; transform: none; transition: opacity .9s ease .15s, transform 1.2s var(--ease) .15s; }
+.plate.solp.up .glow { opacity: .35; transform: none; transition: opacity 1.2s ease .3s, transform 1.2s var(--ease) .15s; }
+.plate.solp.up .solword { opacity: 1; transform: rotate(-4deg); transform-box: fill-box; transition: opacity .6s ease .55s, transform .9s var(--ease) .55s; }
+.solart .solword { transform-box: fill-box; transform-origin: center; }
+@keyframes orbit { to { transform: rotate(360deg); } }
 .name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; letter-spacing: -.01em; }
 .tag { margin: var(--s1) 0 0; font-family: var(--serif); font-weight: 500; font-size: 1rem; color: var(--paper); }
 .desc { margin: 4px 0 0; font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
@@ -113,9 +139,10 @@ h1 { margin: 0; font-family: var(--serif); font-weight: 700; font-size: min(4.9v
   .card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
   .card:hover::before { opacity: 1; }
   .card:hover .go svg { transform: translateX(6px); }
-  .card.sol:hover .sun { transform: translate(-50%, -22%); box-shadow: 0 0 120px rgba(255, 173, 101, .55); }
-  .card.sol:hover .warm { opacity: 1; }
-  .card.sol:hover .horizon { border-color: rgba(130, 217, 220, .7); }
+  .card.sol:hover .orb { transform: translate(-6px, -8px) scale(1.03); transition: transform 1.2s var(--ease); }
+  .card.sol:hover .glow { opacity: .6; }
+  .card.sol:hover .orbits { animation: orbit 30s linear infinite; transform-box: view-box; transform-origin: 48% 53%; }
+  .card.sol:hover .waves { animation-duration: 8s; }
 }
 .card:focus-visible .go svg { transform: translateX(6px); }
 
@@ -126,13 +153,14 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .veil.on { opacity: 1; }
 
 @media (max-width: 760px) {
+  body { background: radial-gradient(80% 30% at 50% 5%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 30% at 50% 85%, rgba(140, 80, 190, .18), transparent 70%), linear-gradient(180deg, #12110f 0%, #12110f 30%, #070713 100%); }
   .card { padding: var(--s3); }
   .plate { width: 56%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .sun, .warm, .horizon, .go svg { transition: none !important; }
-  .plate.sky .sun { transform: translate(-50%, 0); }
+  .card, .plate, .go svg, .solart * { transition: none !important; }
+  .solart .waves { animation: none; }
   .seal.on { animation: none; }
 }
 </style>
@@ -141,8 +169,8 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 <div class="wrap">
   <header>
     <div class="head-l">
-      <p class="eyebrow"><span>모델의 자기소개: <q>너를 설명하는 가장 화려한 웹사이트를 만들어 줘</q></span></p>
-      <h1>어느 모델의 이야기부터 들어 볼까요?</h1>
+      <p class="eyebrow"><span>모델의 자기소개 · 두 모델에게 같은 부탁을 했습니다</span></p>
+      <h1><q>너를 소개하는 가장 화려한 웹사이트를 만들어 줘</q></h1>
     </div>
   </header>
 
@@ -167,14 +195,39 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
 
-    <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#090f1c">
+    <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
       <div class="meta"><b>02</b><span>OpenAI</span></div>
       <div class="art" aria-hidden="true">
-        <div class="plate sky"><span class="warm"></span><span class="sun"></span><span class="horizon"></span><span class="seal">GPT-6<br>Sol</span></div>
+        <div class="plate solp">
+          <svg class="solart" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <radialGradient id="orb" cx="38%" cy="30%" r="78%" fx="34%" fy="26%">
+                <stop offset="0" stop-color="#fbe6b8"/><stop offset=".32" stop-color="#f3b681"/>
+                <stop offset=".62" stop-color="#e07d63"/><stop offset=".86" stop-color="#7c4a6c"/><stop offset="1" stop-color="#4e3462"/>
+              </radialGradient>
+              <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+              <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+            </defs>
+            <rect width="500" height="400" fill="#ebe3d6"/>
+            <rect x="9" y="9" width="482" height="382" fill="none" stroke="rgba(40,30,20,.16)"/>
+            <g class="waves" fill="none" stroke="rgba(90,80,70,.34)" stroke-width="1"><path d="M0 262.0 L10 263.3 L20 264.5 L30 265.7 L40 266.8 L50 267.9 L60 268.8 L70 269.7 L80 270.4 L90 271.0 L100 271.5 L110 271.8 L120 272.0 L130 272.0 L140 271.8 L150 271.5 L160 271.0 L170 270.4 L180 269.7 L190 268.8 L200 267.9 L210 266.8 L220 265.7 L230 264.5 L240 263.3 L250 262.0 L260 260.7 L270 259.5 L280 258.3 L290 257.2 L300 256.1 L310 255.2 L320 254.3 L330 253.6 L340 253.0 L350 252.5 L360 252.2 L370 252.0 L380 252.0 L390 252.2 L400 252.5 L410 253.0 L420 253.6 L430 254.3 L440 255.2 L450 256.1 L460 257.2 L470 258.3 L480 259.5 L490 260.7 L500 262.0 L510 263.3 L520 264.5 L530 265.7 L540 266.8 L550 267.9 L560 268.8 L570 269.7 L580 270.4 L590 271.0 L600 271.5 L610 271.8 L620 272.0 L630 272.0 L640 271.8 L650 271.5 L660 271.0 L670 270.4 L680 269.7 L690 268.8 L700 267.9 L710 266.8 L720 265.7 L730 264.5 L740 263.3 L750 262.0 L760 260.7 L770 259.5 L780 258.3 L790 257.2 L800 256.1 L810 255.2 L820 254.3 L830 253.6 L840 253.0 L850 252.5 L860 252.2 L870 252.0 L880 252.0 L890 252.2 L900 252.5 L910 253.0 L920 253.6 L930 254.3 L940 255.2 L950 256.1 L960 257.2 L970 258.3 L980 259.5 L990 260.7 L1000 262.0"/><path d="M0 294.5 L10 295.2 L20 295.7 L30 295.9 L40 296.0 L50 295.8 L60 295.4 L70 294.8 L80 294.0 L90 293.1 L100 291.9 L110 290.6 L120 289.1 L130 287.6 L140 285.9 L150 284.2 L160 282.4 L170 280.7 L180 278.9 L190 277.3 L200 275.6 L210 274.1 L220 272.7 L230 271.5 L240 270.4 L250 269.5 L260 268.8 L270 268.3 L280 268.1 L290 268.0 L300 268.2 L310 268.6 L320 269.2 L330 270.0 L340 270.9 L350 272.1 L360 273.4 L370 274.9 L380 276.4 L390 278.1 L400 279.8 L410 281.6 L420 283.3 L430 285.1 L440 286.7 L450 288.4 L460 289.9 L470 291.3 L480 292.5 L490 293.6 L500 294.5 L510 295.2 L520 295.7 L530 295.9 L540 296.0 L550 295.8 L560 295.4 L570 294.8 L580 294.0 L590 293.1 L600 291.9 L610 290.6 L620 289.1 L630 287.6 L640 285.9 L650 284.2 L660 282.4 L670 280.7 L680 278.9 L690 277.3 L700 275.6 L710 274.1 L720 272.7 L730 271.5 L740 270.4 L750 269.5 L760 268.8 L770 268.3 L780 268.1 L790 268.0 L800 268.2 L810 268.6 L820 269.2 L830 270.0 L840 270.9 L850 272.1 L860 273.4 L870 274.9 L880 276.4 L890 278.1 L900 279.8 L910 281.6 L920 283.3 L930 285.1 L940 286.7 L950 288.4 L960 289.9 L970 291.3 L980 292.5 L990 293.6 L1000 294.5"/><path d="M0 308.9 L10 308.0 L20 307.0 L30 305.9 L40 304.7 L50 303.4 L60 302.1 L70 300.7 L80 299.3 L90 297.9 L100 296.6 L110 295.3 L120 294.1 L130 293.0 L140 292.0 L150 291.1 L160 290.4 L170 289.8 L180 289.3 L190 289.1 L200 289.0 L210 289.1 L220 289.3 L230 289.8 L240 290.4 L250 291.1 L260 292.0 L270 293.0 L280 294.1 L290 295.3 L300 296.6 L310 297.9 L320 299.3 L330 300.7 L340 302.1 L350 303.4 L360 304.7 L370 305.9 L380 307.0 L390 308.0 L400 308.9 L410 309.6 L420 310.2 L430 310.7 L440 310.9 L450 311.0 L460 310.9 L470 310.7 L480 310.2 L490 309.6 L500 308.9 L510 308.0 L520 307.0 L530 305.9 L540 304.7 L550 303.4 L560 302.1 L570 300.7 L580 299.3 L590 297.9 L600 296.6 L610 295.3 L620 294.1 L630 293.0 L640 292.0 L650 291.1 L660 290.4 L670 289.8 L680 289.3 L690 289.1 L700 289.0 L710 289.1 L720 289.3 L730 289.8 L740 290.4 L750 291.1 L760 292.0 L770 293.0 L780 294.1 L790 295.3 L800 296.6 L810 297.9 L820 299.3 L830 300.7 L840 302.1 L850 303.4 L860 304.7 L870 305.9 L880 307.0 L890 308.0 L900 308.9 L910 309.6 L920 310.2 L930 310.7 L940 310.9 L950 311.0 L960 310.9 L970 310.7 L980 310.2 L990 309.6 L1000 308.9"/><path d="M0 327.0 L10 328.6 L20 330.0 L30 331.3 L40 332.3 L50 333.1 L60 333.6 L70 333.9 L80 334.0 L90 333.8 L100 333.4 L110 332.7 L120 331.7 L130 330.6 L140 329.3 L150 327.8 L160 326.1 L170 324.3 L180 322.4 L190 320.5 L200 318.5 L210 316.4 L220 314.5 L230 312.5 L240 310.7 L250 309.0 L260 307.4 L270 306.0 L280 304.7 L290 303.7 L300 302.9 L310 302.4 L320 302.1 L330 302.0 L340 302.2 L350 302.6 L360 303.3 L370 304.3 L380 305.4 L390 306.7 L400 308.2 L410 309.9 L420 311.7 L430 313.6 L440 315.5 L450 317.5 L460 319.6 L470 321.5 L480 323.5 L490 325.3 L500 327.0 L510 328.6 L520 330.0 L530 331.3 L540 332.3 L550 333.1 L560 333.6 L570 333.9 L580 334.0 L590 333.8 L600 333.4 L610 332.7 L620 331.7 L630 330.6 L640 329.3 L650 327.8 L660 326.1 L670 324.3 L680 322.4 L690 320.5 L700 318.5 L710 316.4 L720 314.5 L730 312.5 L740 310.7 L750 309.0 L760 307.4 L770 306.0 L780 304.7 L790 303.7 L800 302.9 L810 302.4 L820 302.1 L830 302.0 L840 302.2 L850 302.6 L860 303.3 L870 304.3 L880 305.4 L890 306.7 L900 308.2 L910 309.9 L920 311.7 L930 313.6 L940 315.5 L950 317.5 L960 319.6 L970 321.5 L980 323.5 L990 325.3 L1000 327.0"/><path d="M0 349.9 L10 349.6 L20 349.1 L30 348.5 L40 347.7 L50 346.7 L60 345.6 L70 344.4 L80 343.1 L90 341.7 L100 340.2 L110 338.7 L120 337.2 L130 335.7 L140 334.3 L150 332.9 L160 331.5 L170 330.3 L180 329.2 L190 328.3 L200 327.5 L210 326.8 L220 326.4 L230 326.1 L240 326.0 L250 326.1 L260 326.4 L270 326.9 L280 327.5 L290 328.3 L300 329.3 L310 330.4 L320 331.6 L330 332.9 L340 334.3 L350 335.8 L360 337.3 L370 338.8 L380 340.3 L390 341.7 L400 343.1 L410 344.5 L420 345.7 L430 346.8 L440 347.7 L450 348.5 L460 349.2 L470 349.6 L480 349.9 L490 350.0 L500 349.9 L510 349.6 L520 349.1 L530 348.5 L540 347.7 L550 346.7 L560 345.6 L570 344.4 L580 343.1 L590 341.7 L600 340.2 L610 338.7 L620 337.2 L630 335.7 L640 334.3 L650 332.9 L660 331.5 L670 330.3 L680 329.2 L690 328.3 L700 327.5 L710 326.8 L720 326.4 L730 326.1 L740 326.0 L750 326.1 L760 326.4 L770 326.9 L780 327.5 L790 328.3 L800 329.3 L810 330.4 L820 331.6 L830 332.9 L840 334.3 L850 335.8 L860 337.3 L870 338.8 L880 340.3 L890 341.7 L900 343.1 L910 344.5 L920 345.7 L930 346.8 L940 347.7 L950 348.5 L960 349.2 L970 349.6 L980 349.9 L990 350.0 L1000 349.9"/></g>
+            <circle class="glow" cx="240" cy="212" r="108" fill="#f0a57c" opacity=".35" filter="url(#soft)"/>
+            <g class="orb"><circle cx="240" cy="212" r="108" fill="url(#orb)"/><circle cx="240" cy="212" r="108" fill="#fff" filter="url(#grain)"/></g>
+            <g class="orbits" fill="none" stroke="rgba(80,70,62,.42)" stroke-width="1">
+              <ellipse cx="238" cy="212" rx="205" ry="84" transform="rotate(-18 238 212)" pathLength="1"/>
+              <ellipse cx="242" cy="208" rx="150" ry="120" transform="rotate(28 242 208)" pathLength="1"/>
+            </g>
+            <circle cx="92" cy="128" r="4" fill="#c79a90"/><circle cx="398" cy="262" r="3.5" fill="#c79a90"/>
+            <text class="solword" x="28" y="262" transform="rotate(-4 180 210)">SOL</text>
+            <text class="sollabel" x="30" y="34">GPT-6 SOL · 2026.09.22</text>
+          </svg>
+          <span class="vcol c1">컴퓨터 사용</span><span class="vcol c2">도구를 쓰는 에이전트</span><span class="vcol c3">코드 작성과 수정</span>
+          <span class="seal"><i>GPT</i><b>6</b><i>SOL</i></span>
+        </div>
       </div>
       <h2 class="name">GPT-6 Sol</h2>
       <p class="tag">아이디어가 결과가 되는 순간</p>
-      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델을 직접 체험합니다.</p>
+      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다. 2026. 9. 22 공개</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
   </main>
@@ -222,9 +275,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   }
 
   /* Sol: 해가 수평선 위로 올라온다 */
-  const sky = document.querySelector('.plate.sky'), sseal = sky.querySelector('.seal');
+  const sky = document.querySelector('.plate.solp'), sseal = sky.querySelector('.seal');
   if (!RM) sseal.classList.add('off');
-  function sunrise() { sky.classList.add('up'); setTimeout(() => { sseal.classList.remove('off'); sseal.classList.add('on'); }, RM ? 0 : 1100); }
+  function sunrise() { sky.classList.add('up'); setTimeout(() => { sseal.classList.remove('off'); sseal.classList.add('on'); }, RM ? 0 : 1500); }
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
   const once = new IntersectionObserver(es => es.forEach(e => {
