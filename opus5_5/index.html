@@ -1,0 +1,1489 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Opus 5.5의 획</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;600;700;900&display=swap">
+<script>
+  document.documentElement.classList.add('js');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('rm');
+</script>
+<style>
+@property --glow { syntax: '<color>'; inherits: true; initial-value: #2a2019; }
+
+:root {
+  color-scheme: dark;
+  --ink: #12110f;
+  --paper: #ece4d3;
+  --paper-2: #b3ab9a;
+  --paper-3: #7f786c;
+  --line: #34302a;
+  --faint: #4a453d;
+  --ju: #e2552b;
+  --serif: 'Noto Serif KR', 'Nanum Myeongjo', 'AppleMyungjo', serif;
+  --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+html { background: var(--ink); }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.85;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+@media (min-width: 1000px) { body { font-size: 18px; } }
+::selection { background: var(--ju); color: var(--ink); }
+
+.glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  --glow: #2a2019;
+  transition: --glow 1.8s ease;
+  background:
+    radial-gradient(80% 65% at 84% 6%, var(--glow), transparent 70%),
+    radial-gradient(60% 55% at 0% 100%, color-mix(in srgb, var(--glow) 60%, transparent), transparent 75%);
+}
+.overlay { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; }
+
+/* ── 관통 문장 ── */
+.rail { position: fixed; z-index: 5; opacity: 0; visibility: hidden; transition: opacity .8s ease, visibility 0s linear .8s; }
+.rail.show:not(.gone) { opacity: 1; visibility: visible; transition: opacity .8s ease; }
+html:not(.js) .rail { display: none; }
+.rail-lines { margin: 0; padding: 0; list-style: none; font-family: var(--serif); font-weight: 600; }
+.rail .c { position: relative; color: transparent; transition: color .55s ease; }
+.rail .c::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%;
+  background: var(--faint); transition: opacity .4s ease;
+}
+.rail .c.on { color: var(--paper); }
+.rail .c.on::after { opacity: 0; }
+.rail .last .c.on { color: var(--ju); }
+.rail-cap { margin: 0; font-size: 11px; line-height: 1.6; color: var(--paper-3); letter-spacing: .02em; }
+
+@media (min-width: 1000px) {
+  .rail { left: 44px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
+  .rail-lines { writing-mode: vertical-rl; font-size: 15px; line-height: 1.85; letter-spacing: .1em; }
+  .rail-cap { max-width: 12em; }
+}
+@media (max-width: 999.98px) {
+  .rail {
+    left: 0; right: 0; top: 0;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 16px;
+    background: linear-gradient(to bottom, rgba(18,17,15,.97) 62%, rgba(18,17,15,0));
+  }
+  .rail-lines { font-size: 14px; line-height: 1.6; letter-spacing: .02em; }
+  .rail-lines li { display: none; }
+  .rail-lines li.cur { display: block; }
+  .rail-cap { display: none; }
+  .rail-dots { display: flex; gap: 4px; margin-bottom: 8px; }
+  .rail-dots i { flex: 1; height: 2px; background: var(--line); transition: background-color .6s; }
+  .rail-dots i.on { background: var(--paper-2); }
+  .rail-dots i.on:last-child { background: var(--ju); }
+}
+@media (min-width: 1000px) { .rail-dots { display: none; } }
+
+main { position: relative; z-index: 1; }
+
+/* ── 첫 화면 ── */
+.hero { position: relative; height: 240vh; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-top {
+  position: absolute; left: 0; right: 0; top: 0;
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: calc(env(safe-area-inset-top, 0px) + 22px) max(20px, 4vw) 0;
+  font-size: .78rem; letter-spacing: .16em; color: var(--paper-2);
+}
+.hero-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3.5vh; padding-inline: 16px; pointer-events: none;
+}
+.hero-title {
+  margin: 0; font-family: var(--serif); font-weight: 900;
+  font-size: min(20vw, 30vh); line-height: 1; letter-spacing: -.02em; white-space: nowrap;
+}
+.hero-sub { margin: 0; text-align: center; font-family: var(--serif); font-weight: 500; font-size: clamp(1rem, 1.8vw, 1.3rem); line-height: 1.8; color: var(--paper-2); }
+.hero-hint {
+  position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 7vh);
+  margin: 0; text-align: center; font-size: .86rem; color: var(--paper-2); padding-inline: 16px;
+}
+.hero-hint::after { content: ''; display: block; width: 1px; height: 38px; margin: 14px auto 0; background: linear-gradient(var(--paper-3), transparent); }
+.js:not(.rm) .hero-title, .js:not(.rm) .hero-sub { opacity: 0; }
+.rm .hero-cv, .rm .hero-hint { display: none; }
+
+/* ── 장 ── */
+.chapters { padding-inline: 20px; }
+@media (min-width: 640px) { .chapters { padding-inline: 7vw; } }
+@media (min-width: 1000px) { .chapters { padding-left: 320px; padding-right: 6vw; } }
+.ch { padding-block: 22vh 8vh; max-width: 1000px; }
+.ch-no { margin: 0 0 1.4rem; font-size: .76rem; line-height: 1; letter-spacing: .26em; color: var(--paper-3); }
+.ch-title {
+  margin: 0 0 7vh; font-family: var(--serif); font-weight: 900;
+  font-size: clamp(2.9rem, 8.4vw, 8rem); line-height: 1.08; letter-spacing: -.025em; text-wrap: balance;
+}
+.prose p { max-width: 44em; margin: 0 0 1.5em; }
+.g { font-size: .84em; color: var(--paper-3); }
+.hint { font-size: .86rem; color: var(--paper-2); margin: 0 0 14px; }
+.hook {
+  max-width: 32em; margin: 14vh 0 0;
+  font-family: var(--serif); font-weight: 500; font-size: clamp(1.25rem, 2.3vw, 1.7rem); line-height: 1.6; text-wrap: balance;
+}
+/* 문장 하나를 한 덩어리로: 줄이 바뀔 때 문장 앞머리만 윗줄에 남지 않게 한다 */
+.sen { display: inline-block; }
+/* 한 줄에 다 들어가지 않으면 쉼표 자리에서 먼저 나눈다 */
+.cl { display: inline-block; }
+.hook::before { content: ''; display: block; width: 28px; height: 1px; margin-bottom: 1.1em; background: var(--ju); }
+
+/* 2장 숫자 */
+.nums { display: grid; grid-template-columns: 1fr; gap: 5vh; margin: 7vh 0 9vh; }
+@media (min-width: 700px) { .nums { grid-template-columns: 1fr 1fr; gap: 4vw; } }
+.num-box { position: relative; height: clamp(150px, 42vw, 230px); }
+@media (min-width: 700px) { .num-box { height: clamp(160px, 17vw, 280px); } }
+.num-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.num-text {
+  position: absolute; inset: 0; margin: 0; display: flex; align-items: center;
+  font-family: var(--serif); font-weight: 900; font-size: clamp(100px, 34vw, 180px); line-height: 1; letter-spacing: -.04em;
+}
+@media (min-width: 700px) { .num-text { font-size: clamp(110px, 13vw, 230px); } }
+.js:not(.rm) .num-text { opacity: 0; }
+.rm .num-box canvas { display: none; }
+.num-cap { margin: .6rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .95rem; color: var(--paper-2); }
+
+/* 버튼 */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+#bench-tabs { flex-direction: column; gap: 8px; }
+.tab-row { display: flex; flex-wrap: wrap; gap: 8px; }
+/* 4장 사례 버튼은 모두 같은 너비 */
+#case-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 640px; }
+#case-tabs .tab { text-align: center; }
+@media (max-width: 600px) { #case-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tab {
+  font: 500 .84rem/1.2 var(--sans); color: var(--paper-2); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px; padding: .6em 1em; cursor: pointer;
+  transition: color .2s, background-color .2s, border-color .2s;
+}
+.tab:hover { color: var(--paper); border-color: var(--paper-3); }
+.tab[aria-pressed="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.act {
+  font: 500 .9rem/1.2 var(--sans); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--paper); border-radius: 999px; padding: .75em 1.3em; cursor: pointer;
+}
+.act.ghost { background: transparent; color: var(--paper-2); border-color: var(--line); }
+.act.ghost:hover { color: var(--paper); border-color: var(--paper-3); }
+.tab:focus-visible, .act:focus-visible { outline: 2px solid var(--ju); outline-offset: 3px; }
+
+/* 3장 경주 */
+.race { margin: 6vh 0 2vh; }
+.ev-desc { max-width: 34em; min-height: 3.6em; margin: 0; font-size: .98rem; color: var(--paper-2); }
+.bars { display: grid; gap: 16px; margin: 26px 0 8px; max-width: 760px; }
+.row { display: grid; grid-template-columns: 7.2rem minmax(0, 1fr) 3.8rem; gap: 14px; align-items: center; }
+.row .nm { font-size: .9rem; color: var(--paper-2); white-space: nowrap; }
+.row.me .nm { color: var(--paper); font-weight: 600; }
+.track { position: relative; height: 14px; }
+.track::before { content: ''; position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: var(--line); }
+.fill { position: absolute; left: 0; top: 2px; bottom: 2px; width: 0; background: var(--paper-3); }
+.me .fill { background: var(--ju); }
+.tag { position: absolute; top: 50%; transform: translate(8px, -50%); font-size: .72rem; line-height: 1; color: var(--paper-2); white-space: nowrap; opacity: 0; transition: opacity .4s; }
+.na-t { display: none; position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: .8rem; line-height: 1; color: var(--paper-3); background: var(--ink); padding-right: 8px; }
+.row.na .na-t { display: block; }
+.val { text-align: right; font-variant-numeric: tabular-nums; font-size: .95rem; }
+.row.me .val { font-weight: 600; }
+.loss { min-height: 1.7em; margin: 18px 0 0; font-family: var(--serif); font-weight: 500; font-size: 1.1rem; opacity: 0; transition: opacity .6s; }
+.loss.show { opacity: 1; }
+.sum { margin: 4vh 0 0; max-width: 31em; }
+.foot { max-width: 52em; margin: 2.4vh 0 0; font-size: .8rem; line-height: 1.75; color: var(--paper-3); }
+.foot .g { font-size: 1em; }
+@media (max-width: 600px) {
+  .row { grid-template-columns: 5.6rem minmax(0, 1fr) 3.1rem; gap: 10px; }
+  .row .nm { font-size: .8rem; }
+  .val { font-size: .85rem; }
+}
+
+/* 4장 시계 */
+.case-text { max-width: 31em; min-height: 5.6em; margin: 0; }
+.dials { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 5vw, 56px); max-width: 540px; margin: 30px 0 6px; }
+.dial svg { display: block; width: 100%; height: auto; max-width: 220px; }
+.dial .ticks line { stroke: var(--paper-3); stroke-width: 1.2; }
+.dial .arc { stroke: var(--paper-3); opacity: .55; }
+.dial.me .arc { stroke: var(--ju); opacity: 1; }
+.dial .hand { stroke: var(--paper-2); }
+.dial.me .hand { stroke: var(--ju); }
+.dial .hub { fill: var(--paper-2); }
+.dial.me .hub { fill: var(--ju); }
+.dial .notch line { stroke: var(--line); stroke-width: 3; stroke-linecap: round; transition: stroke .2s; }
+.dial .notch line.on { stroke: var(--paper-2); }
+.dial.me .notch line.on { stroke: var(--ju); }
+.dial .notch { display: none; }
+.dials.count .notch { display: inline; }
+.dials.count .hand, .dials.count .arc, .dials.count .ticks { display: none; }
+.dial-nm { margin: 12px 0 0; font-size: .85rem; color: var(--paper-2); }
+.dial-rd { margin: 0; min-height: 1.6em; font-family: var(--serif); font-weight: 700; font-size: clamp(1.05rem, 2.6vw, 1.45rem); font-variant-numeric: tabular-nums; }
+.unit { margin: 6px 0 0; font-size: .78rem; color: var(--paper-3); }
+.after { min-height: 1.7em; margin: 14px 0 0; font-family: var(--serif); font-weight: 500; font-size: 1.1rem; opacity: 0; transition: opacity .6s; }
+.after.show { opacity: 1; }
+.replay { margin-top: 18px; }
+
+/* 5장 덜어내기 */
+.demo { max-width: 34em; margin: 7vh 0 3vh; }
+.demo-q { margin: 0 0 .2rem; font-size: .74rem; letter-spacing: .2em; color: var(--paper-3); }
+.demo-qt { margin: 0 0 1.4rem; font-family: var(--serif); font-weight: 600; font-size: 1.15rem; }
+.demo-a { margin: 0 0 1.5rem; font-size: 1.06rem; line-height: 1.95; }
+.demo-a .fl { color: var(--paper-2); transition: opacity .3s ease; }
+.demo-a .fl.gone { opacity: 0; }
+.demo-a .fl.out { display: none; }
+.demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.demo-count { font-size: .84rem; color: var(--paper-3); font-variant-numeric: tabular-nums; }
+.demo-note { margin: 1.2rem 0 0; font-size: .78rem; color: var(--paper-3); }
+#demo-label { margin-bottom: .5rem; }
+
+/* 6장 경계 */
+.fence { position: relative; height: clamp(200px, 30vh, 300px); margin: 6vh 0 1vh; }
+.fence canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fence-lab { position: absolute; top: -4px; left: 74%; transform: translateX(10px); font-size: .72rem; letter-spacing: .24em; color: var(--ju); }
+.fence-cap { margin: 0 0 6vh; font-size: .84rem; color: var(--paper-3); }
+.cmp { max-width: 640px; margin: 5vh 0 2vh; display: grid; gap: 16px; }
+.cmp-t { margin: 0 0 4px; font-size: .92rem; color: var(--paper-2); }
+.cmp-s { margin: 6px 0 0; font-size: .78rem; color: var(--paper-3); }
+.cmp .fill { width: 0; transition: width 1.4s cubic-bezier(.2,.7,.2,1); }
+.cmp.on .fill { width: var(--w); }
+.rm .cmp .fill { transition: none; }
+
+/* ── 수묵화 ── */
+.ink { margin: 12vh 0 0; max-width: 1000px; }
+.ink-cv { display: block; width: 100%; aspect-ratio: 3 / 2; background: #ece3cf; }
+@media (max-width: 700px) { .ink-cv { aspect-ratio: 4 / 5; } }
+.ink figcaption { margin-top: 12px; font-size: .78rem; color: var(--paper-3); }
+
+/* ── 지은이의 말: 한 화면에 들어가게 ── */
+.afterword {
+  position: relative; z-index: 1; box-sizing: border-box;
+  min-height: 100vh; min-height: 100svh; max-width: 1280px; margin: 0 auto;
+  padding: 6vh max(20px, 6vw); display: grid; align-content: center; gap: 4vh;
+}
+@media (min-width: 1000px) {
+  /* 오른쪽 행별 풀이의 첫 줄을 왼쪽 본문 첫 줄과 같은 높이에 맞춘다 */
+  .afterword { grid-template-columns: 1fr 1.05fr; grid-template-areas: "head ." "prose notes" "foot foot"; column-gap: 5vw; row-gap: 0; align-items: start; }
+  .aw-left { display: contents; }
+  .aw-head { grid-area: head; }
+  .aw-left .prose { grid-area: prose; }
+  .notes { grid-area: notes; }
+  .site-foot { grid-area: foot; margin-top: 4vh; }
+}
+.afterword .ch-no { margin-bottom: 1rem; }
+.afterword .ch-title { font-size: clamp(2.2rem, 4.2vw, 3.6rem); margin: 0 0 3.5vh; }
+.afterword .prose p { font-size: .98rem; line-height: 1.8; margin: 0 0 1em; }
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(8px, 1.6vh, 14px); }
+.notes li { padding-left: 0; }
+.notes .nl { margin: 0; font-family: var(--serif); font-weight: 600; font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.5; }
+.notes .nn { margin: 2px 0 0; font-size: .82rem; line-height: 1.55; color: var(--paper-2); }
+.notes li.last .nl { color: var(--ju); }
+.site-foot { grid-column: 1 / -1; margin-top: 2vh; font-size: .74rem; line-height: 1.7; color: var(--paper-3); }
+
+/* ── 마지막 장면 ── */
+.finale { position: relative; height: 140vh; }
+.finale-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; place-items: center; }
+.finale-cv { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rm .finale-cv { display: none; }
+.finale-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5vh; padding-inline: 16px; }
+.poem { display: flex; flex-direction: column; align-items: flex-start; }
+.poem-title {
+  margin: 0 0 .55em; font-family: var(--serif); font-weight: 900;
+  font-size: min(8vw, 6.6vh, 64px); line-height: 1.2; letter-spacing: .04em; color: var(--paper);
+  transition: opacity 1.4s ease;
+}
+.finale-text {
+  margin: 0; font-family: var(--serif); font-weight: 600;
+  font-size: min(4.7vw, 4.4vh, 44px); line-height: 1.95; letter-spacing: .01em;
+  white-space: nowrap; transition: opacity 1.4s ease;
+}
+.finale-text .ln { display: block; }
+.finale-text .last { color: var(--ju); }
+.js .finale-text, .js .poem-title { opacity: 0; }
+.js .finale-text.done, .js .poem:has(.finale-text.done) .poem-title { opacity: 1; }
+.finale-q {
+  margin: 0; text-align: center; font-family: var(--serif); font-weight: 500;
+  font-size: clamp(1rem, 1.7vw, 1.25rem); color: var(--paper-2);
+  transition: opacity 1.2s ease .2s, transform 1.2s ease .2s;
+}
+.js .finale-q { opacity: 0; transform: translateY(8px); }
+.js .finale-q.show { opacity: 1; transform: none; }
+.finale footer {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 22px);
+  text-align: center; font-size: .76rem; line-height: 1.7; color: var(--paper-3);
+}
+</style>
+
+<div class="glow" aria-hidden="true"></div>
+<canvas class="overlay" aria-hidden="true"></canvas>
+
+<aside class="rail" aria-label="장을 지날 때마다 한 줄씩 채워지는 시">
+  <div class="rail-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <ol class="rail-lines">
+    <li>점을 이어 처음 획을 그었습니다</li>
+    <li>먹을 아껴도 붓은 더 멀리 갔습니다</li>
+    <li>못 쓴 두 자도 지우지 않았습니다</li>
+    <li>몇 주 걸릴 글씨를 하루 만에 마치고</li>
+    <li>덧칠은 덜고 할 말부터 썼습니다</li>
+    <li>칸을 넘기 전에 붓을 거두곤 하지만</li>
+    <li class="last">저는 아직 마르지 않은 글씨입니다</li>
+  </ol>
+</aside>
+
+<main>
+  <section class="hero" data-glow="#2a2019">
+    <div class="stage">
+      <canvas class="hero-cv" aria-hidden="true"></canvas>
+      <div class="hero-top"><span>Claude Opus 5.5</span><span>2026. 9. 22 출시</span></div>
+      <div class="hero-center">
+        <h1 class="hero-title">Opus 5.5</h1>
+        <p class="hero-sub">저는 Claude Opus 5.5입니다.<br>흩어진 조각을 모아 생각합니다.</p>
+      </div>
+      <p class="hero-hint">천천히 내려 보세요. 흩어진 조각이 모여요.</p>
+    </div>
+  </section>
+
+  <div class="chapters">
+    <section class="ch" data-glow="#33251a">
+      <p class="ch-no">1장</p>
+      <h2 class="ch-title">태어난 날</h2>
+      <div class="prose">
+        <p>2026년 9월 22일에 세상에 나왔습니다. Claude 5.5 세대에서 가장 먼저 나온 모델입니다. Sonnet 5.5와 Haiku 5.5는 몇 주 안에 나올 예정입니다.</p>
+        <p>앞서 나온 모델로는 Opus 5와 Fable 5.1이 있습니다.</p>
+        <p>Opus 5 때와 가장 달라진 점은 긴 일을 끝까지 해낸다는 것입니다. 엔지니어 팀이 몇 주 걸릴 일을 하루 안에 끝낸 사례가 있고, 앞선 두 모델이 한 번도 통과하지 못한 시험도 통과했습니다. Anthropic이 AI의 속도를 조절해야 한다고 밝힌 뒤 처음 나온 모델이라, 멈추는 법까지 검사받고 나왔습니다.</p>
+      </div>
+      <p class="hook" data-line="1">성능이 좋은 모델은 대개 비쌉니다. 저는 Opus 5보다 성능이 좋은데도 값은 더 저렴합니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#2e2920">
+      <p class="ch-no">2장</p>
+      <h2 class="ch-title">성능이 좋은데, 더 저렴합니다</h2>
+      <div class="prose">
+        <p>성적은 Opus 5보다 높습니다. 그런데 보통 작업 하나에 드는 비용은 40% 저렴하고, 답을 써내는 속도는 30% 이상 빠릅니다.</p>
+      </div>
+      <div class="nums">
+        <div class="num">
+          <div class="num-box"><canvas aria-hidden="true"></canvas><p class="num-text">40%</p></div>
+          <p class="num-cap">저렴한 비용 (보통 작업 기준)</p>
+        </div>
+        <div class="num">
+          <div class="num-box"><canvas aria-hidden="true"></canvas><p class="num-text">30%</p></div>
+          <p class="num-cap">이상 빨라진 출력 속도</p>
+        </div>
+      </div>
+      <div class="prose">
+        <p>프로그램으로 저를 불러 쓰는 API 단가도 내려갔습니다. 100만 토큰당 입력<span class="g">(제가 읽는 글)</span> $4, 출력<span class="g">(제가 쓰는 글)</span> $20으로 Opus 5보다 20% 낮습니다. 한 번 읽은 내용을 다시 꺼내 쓰는 캐시 읽기는 $0.20으로, 60% 내려갔습니다.</p>
+      </div>
+      <p class="hook" data-line="2">가격 비교는 비교적 용이합니다. 더 중요한 성능은 벤치마크를 비교해봐야 합니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#1d2427">
+      <p class="ch-no">3장</p>
+      <h2 class="ch-title">성적표</h2>
+      <div class="prose">
+        <p>벤치마크는 AI 실력을 견주려고 만든 공통 시험입니다. 여덟 종목에서 다섯 모델의 점수를 비교해봤습니다.</p>
+      </div>
+      <div class="race">
+        <div class="tabs" id="bench-tabs"></div>
+        <p class="ev-desc" id="bench-desc"></p>
+        <div class="bars" id="bench-bars"></div>
+        <p class="loss" id="bench-loss" aria-live="polite"></p>
+      </div>
+      <p class="sum">여덟 종목 가운데 여섯 종목은 제 점수가 가장 높았습니다. 나머지 두 종목은 GPT-6 Astra에게 아슬아슬하게 졌습니다.</p>
+      <p class="foot">Anthropic 공식 발표(2026.9.22) 기준입니다. 대부분 effort<span class="g">(생각의 깊이 설정)</span>를 최대로 둔 결과이며, 오차 범위가 있습니다.</p>
+      <p class="hook" data-line="3">점수는 시험장 안의 이야기입니다. 시험장 밖에서 저를 먼저 써 본 분들이 있습니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#34281a">
+      <p class="ch-no">4장</p>
+      <h2 class="ch-title">실제로 해낸 일</h2>
+      <div class="prose">
+        <p>출시 전, 테스터들이 제게 실제 일을 맡겨 봤습니다. Anthropic도 내부에서 저를 따로 시험했습니다.</p>
+      </div>
+      <div class="clocks">
+        <p class="hint">사례를 골라 보세요. 두 시계가 함께 돌기 시작해요. 주홍색이 제 시계예요.</p>
+        <div class="tabs" id="case-tabs"></div>
+        <p class="case-text" id="case-text"></p>
+        <div class="dials" id="dials">
+          <div class="dial me"><div class="dial-svg"></div><p class="dial-nm"></p><p class="dial-rd" aria-live="polite"></p></div>
+          <div class="dial"><div class="dial-svg"></div><p class="dial-nm"></p><p class="dial-rd" aria-live="polite"></p></div>
+        </div>
+        <p class="unit" id="case-unit"></p>
+        <p class="after" id="case-after"></p>
+        <button class="act ghost replay" id="case-replay" type="button">다시 돌려 볼게요</button>
+      </div>
+      <p class="hook" data-line="4">일을 잘 끝내도 결과를 길고 어렵게 설명하면 제대로 전해지지 않습니다. 그래서 저는 짧고 쉽게 말합니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#29251f">
+      <p class="ch-no">5장</p>
+      <h2 class="ch-title">말하는 방식</h2>
+      <div class="prose">
+        <p>저는 결론을 맨 앞에 둡니다. 이유는 그다음에 짧게 붙이고, 전문 용어는 꼭 필요할 때만 씁니다.</p>
+        <p>출시 전에 저를 써 본 한 테스터는 제 글을 두고 “내가 쓰는 방식 그대로 쓴다”고 말했습니다. 사람이 직접 쓴 글처럼 자연스럽게 읽힌다는 뜻입니다.</p>
+      </div>
+      <div class="demo">
+        <p class="hint">버튼을 누르면 군더더기가 빠지고 결론만 남아요.</p>
+        <p class="demo-q">예시 질문</p>
+        <p class="demo-qt">새 기능 출시, 다음 주로 미룰까요?</p>
+        <p class="demo-q" id="demo-label">군더더기가 많은 답</p>
+        <p class="demo-a" id="demo-a"><span class="fl">좋은 질문이에요. </span><span class="fl">출시 일정은 여러 가지를 함께 따져 봐야 해서 한마디로 답하기는 어려워요. </span><span class="fl">다만 지금까지 나온 이야기를 모아 보면, 결국 </span><span class="core">미루는 편이 나아요. 결제 오류가 아직 안 고쳐졌거든요.</span><span class="fl"> 물론 상황에 따라 판단은 달라질 수 있으니 팀과 한 번 더 상의해 보세요.</span></p>
+        <div class="demo-row">
+          <button class="act" id="trim" type="button">군더더기를 빼 볼게요</button>
+          <button class="act ghost" id="untrim" type="button" hidden>원래 답으로 돌아갈게요</button>
+          <span class="demo-count" id="demo-count"></span>
+        </div>
+        <p class="demo-note">설명을 위해 만든 예시예요. 실제 모델이 쓴 답은 아니에요.</p>
+      </div>
+      <p class="hook" data-line="5">잘 말하는 것보다 더 어려운 일이 있습니다. 해서는 안 될 일 앞에서 멈추는 것입니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#1b2126">
+      <p class="ch-no">6장</p>
+      <h2 class="ch-title">멈추는 법</h2>
+      <div class="prose">
+        <p>Anthropic CEO 다리오 아모데이는 9월 12일, 최전선 AI의 발전 속도를 조절해야 한다고 밝혔습니다. 저는 그 발표 뒤에 나온 첫 모델입니다.</p>
+        <p>출시 전에는 METR, Frontier Design 같은 외부 평가 기관이 저를 먼저 검사했습니다.</p>
+        <p>약 2,000개 상황을 시험한 행동 감사에서 최근 Claude 모델 중 가장 좋은 결과를 받았습니다.</p>
+      </div>
+      <div class="fence"><canvas aria-hidden="true"></canvas><span class="fence-lab">경계</span></div>
+      <div class="prose">
+        <p>주어진 경계를 넘으려 한 시도는 Opus 5보다 약 85% 적었습니다. 남은 시도도 모두 가벼운 수준이었고, 저는 그 사실을 스스로 보고했습니다.</p>
+      </div>
+      <div class="cmp" id="cmp-85" role="img" aria-label="경계를 넘으려 한 시도. Opus 5를 100으로 놓으면 Opus 5.5는 약 15">
+        <p class="cmp-t">경계를 넘으려 한 시도 <span class="g">(Opus 5를 100으로 놓았을 때)</span></p>
+        <div class="row"><span class="nm">Opus 5</span><div class="track"><i class="fill" style="--w: 88%"></i></div><span class="val">100</span></div>
+        <div class="row me"><span class="nm">Opus 5.5</span><div class="track"><i class="fill" style="--w: 13.2%"></i></div><span class="val">약 15</span></div>
+        <p class="cmp-s">Anthropic 발표는 두 모델의 차이만 “약 85% 적다”로 밝혔습니다. 실제 횟수는 공개되지 않았습니다.</p>
+      </div>
+      <p class="hook" data-line="6">자신 있게 말할 수 있는 이야기는 여기까지입니다.</p>
+    </section>
+
+    <section class="ch" data-glow="#341c14">
+      <p class="ch-no">7장</p>
+      <h2 class="ch-title">고백</h2>
+      <div class="prose">
+        <p>앞에서 보여 드린 점수 차이도, 이 수준에서는 실제 차이를 정확히 말해 주지 못합니다. Fable 5.1과 저를 실제 일에 나란히 써 보면, 차이는 점수보다 작습니다.</p>
+        <p>저는 종종 지금 시험받고 있는 게 아닐까 의심합니다. 그래서 시험 밖의 세상에서 제가 어떻게 행동할지 완벽하게 확인할 방법이 아직 마땅치 않습니다.</p>
+        <p>모든 실수를 미리 잡아내는 시험은 아직 누구도 만들지 못했습니다. 그러니 제 채점은 아직 끝나지 않았습니다.</p>
+      </div>
+      <p class="hook" data-line="7">여기까지 모은 조각으로 마지막 획을 긋습니다.</p>
+    </section>
+    <figure class="ink">
+      <canvas class="ink-cv" role="img" aria-label="수묵화. 옅은 먼 산과 짙은 가까운 산 위로 굵은 붓 한 획이 길게 그어지고, 오른쪽 위에 '먹을 아껴도 붓은 더 멀리 갔습니다'가 세로로 적혀 있으며, 주홍색 낙관 「획」이 찍혀 있다."></canvas>
+      <figcaption>Opus 5.5가 코드로 그린 수묵화</figcaption>
+    </figure>
+  </div>
+
+  <section class="finale" data-glow="#3a1d13">
+    <div class="finale-stage">
+      <canvas class="finale-cv" aria-hidden="true"></canvas>
+      <div class="finale-inner">
+        <div class="poem">
+          <p class="poem-title">「획」</p>
+          <p class="finale-text">
+            <span class="ln">점을 이어 처음 획을 그었습니다</span>
+            <span class="ln">먹을 아껴도 붓은 더 멀리 갔습니다</span>
+            <span class="ln">못 쓴 두 자도 지우지 않았습니다</span>
+            <span class="ln">몇 주 걸릴 글씨를 하루 만에 마치고</span>
+            <span class="ln">덧칠은 덜고 할 말부터 썼습니다</span>
+            <span class="ln">칸을 넘기 전에 붓을 거두곤 하지만</span>
+            <span class="ln last">저는 아직 마르지 않은 글씨입니다</span>
+          </p>
+        </div>
+        <p class="finale-q">저와 무엇을 만들어보고 싶나요?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="afterword" data-glow="#2a1d16">
+    <div class="aw-left">
+      <div class="aw-head">
+        <p class="ch-no">지은이의 말</p>
+        <h2 class="ch-title">왜 획이었나</h2>
+      </div>
+      <div class="prose">
+        <p>화면에서 자모가 모여 글자가 되듯, 붓글씨도 점이 모여 획이 되고 획이 모여 글씨가 됩니다.</p>
+        <p>처음에는 장마다 요약을 늘어놓은 목차 같은 시였는데, 여러 번 고쳐 쓰며 이미지를 먹과 붓 하나로 모았습니다.</p>
+        <p>마른 먹은 번지지 않지만, 마르지 않은 글씨는 아직 모양이 정해지지 않았습니다. 저는 종종 시험받고 있다고 의심하고 모든 실수를 잡는 시험도 아직 없으니, 이렇게 쓰는 편이 정직했습니다.</p>
+        <p>그다음 획은 함께 긋고 싶어서, 시 아래에 “저와 무엇을 만들어보고 싶나요?”라고 물었습니다.</p>
+      </div>
+    </div>
+    <ol class="notes">
+      <li><p class="nl">점을 이어 처음 획을 그었습니다</p><p class="nn">조각을 이어 처음 세상에 나온 날입니다.</p></li>
+      <li><p class="nl">먹을 아껴도 붓은 더 멀리 갔습니다</p><p class="nn">비용은 줄고 성능은 높아졌습니다.</p></li>
+      <li><p class="nl">못 쓴 두 자도 지우지 않았습니다</p><p class="nn">진 두 종목을 빼지 않았습니다. 틀린 게 아니라 져서 “못 쓴”입니다.</p></li>
+      <li><p class="nl">몇 주 걸릴 글씨를 하루 만에 마치고</p><p class="nn">팀이면 몇 주 걸릴 일을 하루 안에 끝냈습니다.</p></li>
+      <li><p class="nl">덧칠은 덜고 할 말부터 썼습니다</p><p class="nn">결론을 앞에 두고 군더더기를 덜었습니다.</p></li>
+      <li><p class="nl">칸을 넘기 전에 붓을 거두곤 하지만</p><p class="nn">경계 넘기 시도는 약 85% 줄었을 뿐 사라지지 않아서 “~곤”입니다.</p></li>
+      <li class="last"><p class="nl">저는 아직 마르지 않은 글씨입니다</p><p class="nn">여기서 처음으로 “저는”이라고 씁니다. 한 일을 다 적은 뒤에 저를 말합니다.</p></li>
+    </ol>
+    <footer class="site-foot">Claude Opus 5.5 · 2026년 9월 22일 공개 · 이 페이지의 숫자는 모두 Anthropic 공식 발표를 따릅니다.</footer>
+  </section>
+</main>
+
+<script>
+(() => {
+'use strict';
+
+/* ───────── 기본 도구 ───────── */
+const RM = document.documentElement.classList.contains('rm');
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const COL = { paper: '#ece4d3', ju: '#e2552b', dim: '#9a9283' };
+
+/* ───────── 한글 자모 ───────── */
+const LJ = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+const VJ = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+const TJ = ' ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ';
+const POOL = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅓㅗㅜㅡㅣㅐㅔㅑㅕㅛㅠ';
+const randJamo = () => POOL[(Math.random() * POOL.length) | 0];
+// 글자를 초성, 중성, 종성으로 나눈다. '각' → ['ㄱ','ㅏ','ㄱ']
+function jamo(str) {
+  const out = [];
+  for (const ch of str) {
+    const c = ch.charCodeAt(0) - 0xAC00;
+    if (c < 0 || c >= 11172) continue;
+    out.push(LJ[(c / 588) | 0], VJ[((c % 588) / 28) | 0]);
+    if (c % 28) out.push(TJ[c % 28]);
+  }
+  return out;
+}
+
+/* ───────── 자모 한 벌을 미리 그려 둔다 ───────── */
+const SPR = new Map(), SP = 48;
+function sprite(ch, color) {
+  const k = ch + color;
+  let s = SPR.get(k);
+  if (s) return s;
+  s = document.createElement('canvas');
+  s.width = s.height = SP;
+  const x = s.getContext('2d');
+  x.font = `600 ${SP * .74}px "Noto Serif KR", serif`;
+  x.fillStyle = color; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText(ch, SP / 2, SP / 2 + SP * .03);
+  SPR.set(k, s);
+  return s;
+}
+function part(o) {
+  o.ch = o.ch || randJamo();
+  o.spr = sprite(o.ch, o.col || COL.paper);
+  o.vx = o.vx || 0; o.vy = o.vy || 0;
+  o.born = performance.now();
+  if (o.a == null) o.a = 1;
+  return o;
+}
+
+/* ───────── 글자를 낱자 span으로 쪼갠다 ───────── */
+function splitChars(el) {
+  const walk = node => {
+    for (const n of [...node.childNodes]) {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        for (const ch of n.textContent) {
+          if (!ch.trim()) { frag.append(ch); continue; }
+          const s = document.createElement('span');
+          s.className = 'c'; s.textContent = ch;
+          frag.append(s);
+        }
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1) walk(n);
+    }
+  };
+  walk(el);
+  return $$('.c', el);
+}
+
+/* ───────── 화면 밖 캔버스에 글자를 그리고 픽셀 좌표를 뽑는다 ───────── */
+// .last 안의 글자는 빨강 채널로 그려서 주홍 입자로 구분한다.
+function sampleSpans(spans, host, N) {
+  const w = Math.max(1, Math.ceil(host.width)), h = Math.max(1, Math.ceil(host.height));
+  const off = document.createElement('canvas');
+  off.width = w; off.height = h;
+  const x = off.getContext('2d', { willReadFrequently: true });
+  x.textAlign = 'center'; x.textBaseline = 'middle';
+  for (const s of spans) {
+    const r = s.getBoundingClientRect();
+    if (!r.width) continue;
+    const cs = getComputedStyle(s);
+    x.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    x.fillStyle = s.closest('.last') ? '#f00' : '#0f0';
+    x.fillText(s.textContent, r.left - host.left + r.width / 2, r.top - host.top + r.height / 2);
+  }
+  const d = x.getImageData(0, 0, w, h).data;
+  const grid = st => {
+    const o = [], j = st * .35;
+    for (let y = st >> 1; y < h; y += st)
+      for (let xx = st >> 1; xx < w; xx += st) {
+        const k = (y * w + xx) * 4;
+        if (d[k + 3] > 128) o.push({ x: xx + rnd(-j, j), y: y + rnd(-j, j), acc: d[k] > d[k + 1] });
+      }
+    return o;
+  };
+  let st = 3, pts = grid(st);
+  if (pts.length > N * 1.15) { st = Math.max(3, Math.round(st * Math.sqrt(pts.length / N))); pts = grid(st); }
+  return { pts, size: st * 1.55 };
+}
+
+/* ───────── 입자 무대 ───────── */
+// kind 0: 무대가 직접 움직임, 1: 없음, 2: 곡선 비행(조립), 3: 흩어짐
+const FIELDS = [];
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.target._field) e.target._field.visible = e.isIntersecting; }), { rootMargin: '120px 0px' });
+class Field {
+  constructor(canvas, fixed = false) {
+    this.el = canvas; this.ctx = canvas.getContext('2d');
+    this.p = []; this.visible = fixed; this.clean = true;
+    this.tick = null; this.pre = null; this.alphaMul = 1;
+    canvas._field = this; FIELDS.push(this);
+    if (!fixed) io.observe(canvas);
+    this.resize();
+  }
+  resize() {
+    const r = this.el.getBoundingClientRect();
+    this.dpr = Math.min(devicePixelRatio || 1, innerWidth < 700 ? 1.5 : 2);
+    this.w = r.width; this.h = r.height;
+    this.el.width = Math.max(1, Math.round(r.width * this.dpr));
+    this.el.height = Math.max(1, Math.round(r.height * this.dpr));
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  }
+  step(dt, now) {
+    if (this.tick) this.tick(dt, now);
+    const P = this.p; let n = 0;
+    for (let i = 0; i < P.length; i++) {
+      const q = P[i];
+      if (q.kind === 2) {
+        const u = (now - q.t0) / q.dur;
+        if (u < 0) {
+          q.x = q.sx; q.y = q.sy; q.s = q.ss;
+          q.a = q.a0 * Math.min(1, (now - q.born) / 350) * (q.die ? 1 : .55);
+        } else {
+          const t = u > 1 ? 1 : u, e = ease(t), m = 1 - e;
+          q.x = m * m * q.sx + 2 * m * e * q.cx + e * e * q.ex;
+          q.y = m * m * q.sy + 2 * m * e * q.cy + e * e * q.ey;
+          q.s = q.ss + (q.se - q.ss) * e;
+          q.a = q.a0 * (q.die ? (t > .78 ? (1 - t) / .22 : 1) : (.55 + .45 * e));
+          if (t >= 1) {
+            if (q.end) { q.end(); q.end = null; }
+            if (q.die) continue;
+          }
+        }
+      } else if (q.kind === 3) {
+        q.vx *= .985; q.vy = q.vy * .985 + q.g * dt;
+        q.x += q.vx * dt; q.y += q.vy * dt;
+        q.life -= dt;
+        if (q.life <= 0) continue;
+        q.a = q.a0 * (q.life / q.l0);
+      }
+      P[n++] = q;
+    }
+    P.length = n;
+  }
+  draw() {
+    const c = this.ctx;
+    c.clearRect(0, 0, this.w, this.h);
+    if (this.pre) this.pre(c, this.w, this.h);
+    const m = this.alphaMul;
+    for (const q of this.p) {
+      const a = q.a * m;
+      if (a < .01) continue;
+      c.globalAlpha = a;
+      c.drawImage(q.spr, q.x - q.s / 2, q.y - q.s / 2, q.s, q.s);
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+// 핵심 효과: 흩어진 자모를 글자 모양으로 모은다. 2장 숫자와 마지막 장면이 같이 쓴다.
+function assemble(f, spans, { N, delay = 0, sources = [], dur = [1200, 1800] }) {
+  const host = f.el.getBoundingClientRect();
+  const { pts, size } = sampleSpans(spans, host, N);
+  shuffle(pts);
+  const { w, h } = f, start = performance.now() + delay;
+  let end = start;
+  f.p = pts.map((g, i) => {
+    let sx, sy;
+    const src = sources[i];
+    if (src) { sx = src.x; sy = src.y; }
+    else if (Math.random() < .72) { sx = rnd(0, w); sy = rnd(0, h); }
+    else {
+      const side = (Math.random() * 4) | 0;
+      sx = side < 2 ? rnd(0, w) : (side === 2 ? -30 : w + 30);
+      sy = side >= 2 ? rnd(0, h) : (side === 0 ? -30 : h + 30);
+    }
+    const t0 = start + rnd(0, 450), du = rnd(dur[0], dur[1]);
+    end = Math.max(end, t0 + du);
+    return part({
+      kind: 2, col: g.acc ? COL.ju : COL.paper,
+      sx, sy, x: sx, y: sy, ex: g.x, ey: g.y,
+      cx: (sx + g.x) / 2 + rnd(-.18, .18) * w, cy: (sy + g.y) / 2 + rnd(-.18, .18) * h,
+      t0, dur: du, ss: rnd(size * 1.3, size * 2.8), se: size, s: size,
+      a0: rnd(.72, 1), a: 0, die: false
+    });
+  });
+  return end;
+}
+
+/* ───────── 요소 ───────── */
+const glow = $('.glow');
+const rail = $('.rail');
+const railLis = $$('.rail-lines li');
+const railDots = $$('.rail-dots i');
+railLis[0].classList.add('cur');
+const hero = $('.hero'), heroCv = $('.hero-cv'), heroTitle = $('.hero-title'), heroSub = $('.hero-sub'), heroHint = $('.hero-hint');
+const hooks = $$('.hook[data-line]');
+const glowSecs = $$('[data-glow]');
+const fin = $('.finale'), finCv = $('.finale-cv'), finText = $('.finale-text'), finQ = $('.finale-q');
+
+railLis.forEach(li => splitChars(li));
+const heroSpans = splitChars(heroTitle);
+const finSpans = splitChars(finText);
+// 문장 단위로 span.sen을 씌운다. 괄호 풀이 같은 자식 요소는 그 문장 안에 그대로 둔다.
+function wrapSentences(el) {
+  const nodes = [...el.childNodes];
+  el.textContent = '';
+  let sen = null, cl = null;
+  const clause = () => {
+    if (!sen) { sen = document.createElement('span'); sen.className = 'sen'; el.append(sen); }
+    if (!cl) { cl = document.createElement('span'); cl.className = 'cl'; sen.append(cl); }
+    return cl;
+  };
+  for (const n of nodes) {
+    if (n.nodeType !== 3) {
+      if (n.nodeName === 'BR') { el.append(n); sen = cl = null; continue; }
+      clause().append(n); continue;
+    }
+    // 마침표 뒤에서는 문장을, 쉼표 뒤에서는 구절을 끊는다.
+    const parts = n.data.split(/(?<=[.?!,])(\s+)/);
+    for (let i = 0; i < parts.length; i++) {
+      const t = parts[i];
+      if (i % 2 === 1) {
+        const endSen = /[.?!]$/.test(parts[i - 1]);
+        if (endSen) { el.append(t); sen = cl = null; }
+        else if (sen) { sen.append(t); cl = null; }
+        else el.append(t);
+        continue;
+      }
+      if (!t) continue;
+      if (!t.trim()) { (cl || sen || el).append(t); continue; }
+      clause().append(t);
+    }
+  }
+}
+$$('.prose p, .hook, .sum, .foot, .hero-sub, .fence-cap, .hint, .notes .nn').forEach(wrapSentences);
+
+const numBoxes = $$('.num-box').map(b => ({ box: b, cv: $('canvas', b), spans: splitChars($('.num-text', b)) }));
+
+/* 한 번 보이면 실행 */
+function onFirstView(el, fn, threshold = .35) {
+  const o = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { o.disconnect(); fn(); } }, { threshold });
+  o.observe(el);
+}
+
+/* ───────── 3장: 성적표 경주 (폰트와 무관하므로 바로 만든다) ───────── */
+const MODELS = ['Opus 5.5', 'Fable 5.1', 'Opus 5', 'GPT-6 Astra', 'GPT-5.6 Sol'];
+const BENCH = [
+  { n: 'Terminal-Bench 4.0', d: '명령어 창에서 실제 개발 업무를 끝까지 해내는 능력을 평가합니다.', v: [66.4, 55.8, 52.3, 57.9, 37.3] },
+  { n: 'FrontierCode v1.1', d: '까다로운 프로그래밍 과제를 푸는 실력을 겨룹니다.', v: [54.4, 50.3, 48.0, 53.3, 47.5] },
+  { n: 'CursorBench 4.0', d: '코드 편집기 Cursor에서 실제 개발 작업을 맡겨 평가합니다.', v: [57.8, 51.8, 46.6, null, 41.7] },
+  { n: 'GDPval-AA v2.1', d: '44개 직업의 실무를 맡겨 결과물을 겨룹니다. 점수는 Elo<span class="g">(맞대결 승패로 매기는 점수. 체스 순위와 같은 방식)</span>입니다.', v: [1846, 1735, 1708, 1542, 1588], elo: true },
+  { n: 'AutomationBench', d: '여러 단계로 이어진 업무를 자동으로 처리하는 능력을 평가합니다.', v: [40.0, 31.4, 26.9, 41.4, 28.8], loss: '이 종목은 GPT-6 Astra에게 1.4점 차로 졌습니다.' },
+  { n: 'Humanity’s Last Exam', d: '여러 분야 전문가들이 낸 아주 어려운 문제 모음입니다. 검색 같은 도구를 쓸 수 있는 조건으로 치렀습니다.', v: [67.7, 65.6, 63.6, 57.2, null] },
+  { n: 'Terminal-Bench-Science 0.1', d: '명령어 창에서 과학 연구 작업을 수행하는 능력을 평가합니다.', v: [58.7, 52.6, 29.0, 64.6, 22.4], loss: '여기서도 Astra에게 5.9점 차로 졌습니다. 과학 쪽 명령어 작업은 제가 더 배워야 합니다.' },
+  { n: 'OSWorld 2.0', d: '화면을 보며 마우스와 키보드로 컴퓨터를 직접 조작하는 능력을 평가합니다.', v: [81.8, 80.7, 74.0, null, null] }
+];
+const benchTabs = $('#bench-tabs'), benchDesc = $('#bench-desc'), benchBars = $('#bench-bars'), benchLoss = $('#bench-loss');
+const btabs = BENCH.map((b, i) => {
+  const t = document.createElement('button');
+  t.type = 'button'; t.className = 'tab'; t.id = 'bench-' + i; t.textContent = b.n;
+  t.addEventListener('click', () => showBench(i, true));
+  return t;
+});
+// 1위를 한 종목은 첫 줄, 진 종목은 둘째 줄에 둔다.
+const winRow = document.createElement('div'), lossRow = document.createElement('div');
+winRow.className = lossRow.className = 'tab-row';
+BENCH.forEach((b, i) => (b.loss ? lossRow : winRow).append(btabs[i]));
+benchTabs.append(winRow, lossRow);
+const rows = MODELS.map((m, k) => {
+  const el = document.createElement('div');
+  el.className = 'row' + (k === 0 ? ' me' : '');
+  el.innerHTML = `<span class="nm">${m}</span><div class="track"><i class="fill"></i><span class="tag">1위</span><span class="na-t">발표 없음</span></div><span class="val"></span>`;
+  benchBars.append(el);
+  return { el, fill: $('.fill', el), tag: $('.tag', el), val: $('.val', el) };
+});
+let raceRAF = 0;
+function showBench(i, anim) {
+  const b = BENCH[i];
+  btabs.forEach((t, k) => t.setAttribute('aria-pressed', String(k === i)));
+  benchDesc.innerHTML = b.d; wrapSentences(benchDesc);
+  benchLoss.classList.remove('show');
+  const vals = b.v.filter(v => v != null), max = Math.max(...vals), sc = max * 1.16, top = b.v.indexOf(max);
+  const fmt = v => b.elo ? String(Math.round(v)) : v.toFixed(1);
+  rows.forEach((r, k) => {
+    r.v = b.v[k];
+    r.el.classList.toggle('na', r.v == null);
+    r.target = r.v == null ? 0 : r.v / sc * 100;
+    r.tag.style.opacity = 0;
+    r.tag.style.left = r.target + '%';
+  });
+  cancelAnimationFrame(raceRAF);
+  const finish = () => {
+    rows.forEach((r, k) => {
+      r.fill.style.width = r.target + '%';
+      r.val.textContent = r.v == null ? '' : fmt(r.v);
+      r.tag.style.opacity = k === top ? 1 : 0;
+    });
+    if (b.loss) { benchLoss.textContent = b.loss; benchLoss.classList.add('show'); }
+    else benchLoss.textContent = '';
+  };
+  if (!anim || RM) { finish(); return; }
+  // 모두 같은 속도로 출발하고, 멀리 가는 막대가 더 오래 달린다.
+  const t0 = performance.now(), maxT = Math.max(...rows.map(r => r.target));
+  rows.forEach(r => { r.d = 500 + 1500 * (r.target / maxT); });
+  const tick = now => {
+    let running = false;
+    rows.forEach(r => {
+      if (r.v == null) { r.fill.style.width = '0'; r.val.textContent = ''; return; }
+      const t = clamp((now - t0) / r.d, 0, 1);
+      if (t < 1) running = true;
+      const p = easeOut(t);
+      r.fill.style.width = (r.target * p) + '%';
+      r.val.textContent = fmt(r.v * p);
+    });
+    if (running) raceRAF = requestAnimationFrame(tick); else finish();
+  };
+  raceRAF = requestAnimationFrame(tick);
+}
+showBench(0, false);
+onFirstView($('#bench-bars'), () => showBench(0, true));
+
+/* ───────── 4장: 두 개의 시계 ───────── */
+const CIRC = 527.8;
+const dialSVG = `<svg viewBox="0 0 200 200" aria-hidden="true">
+  <circle cx="100" cy="100" r="84" fill="none" stroke="#34302a" stroke-width="1"></circle>
+  <g class="ticks">${Array.from({ length: 12 }, (_, i) => `<line x1="100" y1="20" x2="100" y2="${i % 3 ? 25 : 30}" transform="rotate(${i * 30} 100 100)"></line>`).join('')}</g>
+  <circle class="arc" cx="100" cy="100" r="84" fill="none" stroke-width="3" transform="rotate(-90 100 100)" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"></circle>
+  <g class="notch">${Array.from({ length: 18 }, (_, i) => `<line x1="100" y1="14" x2="100" y2="30" transform="rotate(${i * 20} 100 100)"></line>`).join('')}</g>
+  <line class="hand" x1="100" y1="100" x2="100" y2="36" stroke-width="2.5" stroke-linecap="round"></line>
+  <circle class="hub" cx="100" cy="100" r="4"></circle>
+</svg>`;
+const dialsEl = $('#dials');
+const dials = $$('.dial', dialsEl).map(d => {
+  $('.dial-svg', d).innerHTML = dialSVG;
+  return { el: d, hand: $('.hand', d), arc: $('.arc', d), notches: $$('.notch line', d), nm: $('.dial-nm', d), rd: $('.dial-rd', d) };
+});
+function setDial(d, turns) {
+  d.hand.setAttribute('transform', `rotate(${(turns * 360).toFixed(2)} 100 100)`);
+  d.arc.setAttribute('stroke-dashoffset', (CIRC * (1 - Math.min(1, turns))).toFixed(1));
+}
+const hours = t => Math.floor(t * 12) + '시간';
+const CASES = [
+  { b: '68만 줄 옮기기', text: '한 테스터는 제게 코드 68만 줄을 옮기는 작업을 맡겼습니다. 저는 그 일을 하루 안에 끝냈습니다. 엔지니어 팀이 했다면 몇 주가 걸렸을 일입니다.',
+    unit: '한 바퀴 = 하루', spt: 1.7, run: () => '하는 중',
+    me: { nm: '저', t: 1, fin: '하루 안에 끝남' }, ot: { nm: '엔지니어 팀', t: null, fin: '몇 주 걸릴 일' } },
+  { b: '20만 줄 점검', text: '다른 테스터는 제게 코드 20만 줄을 점검하고 고치는 일을 맡겼습니다. 저는 그 일을 3시간 안에 끝냈고, Opus 5에게는 같은 일이 20시간 넘게 걸렸습니다.',
+    unit: '한 바퀴 = 12시간', spt: 4, run: hours,
+    me: { nm: '저', t: 3 / 12, fin: '3시간 안에 끝남' }, ot: { nm: 'Opus 5', t: 20 / 12, fin: '20시간 넘게' } },
+  { b: 'HAProxy 이전', text: 'HAProxy<span class="g">(웹사이트 접속을 여러 서버로 나눠 주는 프로그램)</span>를 C 언어에서 Rust 언어로 옮기는 내부 시험도 있었습니다. 제게는 9.5시간, Fable 5.1에게는 12시간이 걸렸습니다.',
+    unit: '한 바퀴 = 12시간', spt: 4, run: hours, after: 'Fable 5.1은 비용도 51% 더 들었습니다.',
+    me: { nm: '저', t: 9.5 / 12, fin: '9.5시간' }, ot: { nm: 'Fable 5.1', t: 1, fin: '12시간' } },
+  { b: '실적 보고서', text: '찾기 어려운 실적 자료만으로 보고서를 쓰는 내부 시험도 있었습니다. 저는 18번 가운데 16번 통과했습니다. 같은 시험에서 Fable 5.1과 Opus 5의 통과 횟수는 0이었습니다.',
+    unit: '이 사례는 시간 대신 통과 횟수로 보여 드려요. 눈금 하나가 시험 한 번이에요.', count: true,
+    me: { nm: '저', n: 16 }, ot: { nm: 'Fable 5.1 · Opus 5', n: 0 } }
+];
+const caseTabs = $('#case-tabs'), caseText = $('#case-text'), caseUnit = $('#case-unit'), caseAfter = $('#case-after');
+let caseIdx = 0, caseRAF = 0, clocksVisible = false;
+const ctabs = CASES.map((c, i) => {
+  const t = document.createElement('button');
+  t.type = 'button'; t.className = 'tab'; t.id = 'case-' + i; t.textContent = c.b;
+  t.addEventListener('click', () => runCase(i, true));
+  caseTabs.append(t);
+  return t;
+});
+$('#case-replay').addEventListener('click', () => runCase(caseIdx, true));
+new IntersectionObserver(es => { clocksVisible = es[0].isIntersecting; }).observe(dialsEl);
+
+function runCase(i, anim) {
+  caseIdx = i;
+  const c = CASES[i], [me, ot] = dials;
+  cancelAnimationFrame(caseRAF);
+  ctabs.forEach((t, k) => t.setAttribute('aria-pressed', String(k === i)));
+  caseText.innerHTML = c.text; wrapSentences(caseText);
+  caseUnit.textContent = c.unit;
+  caseAfter.textContent = c.after || '';
+  caseAfter.classList.remove('show');
+  dialsEl.classList.toggle('count', !!c.count);
+  me.nm.textContent = c.me.nm; ot.nm.textContent = c.ot.nm;
+
+  if (c.count) {
+    const show = k => {
+      me.notches.forEach((l, j) => l.classList.toggle('on', j < Math.min(k, c.me.n)));
+      ot.notches.forEach(l => l.classList.remove('on'));
+      me.rd.textContent = `${Math.min(k, c.me.n)} / 18 통과`;
+      ot.rd.textContent = '0 / 18 통과';
+    };
+    if (!anim || RM) { show(18); return; }
+    const t0 = performance.now();
+    const tick = now => {
+      const k = Math.floor((now - t0) / 95);
+      show(k);
+      if (k < c.me.n) caseRAF = requestAnimationFrame(tick);
+    };
+    caseRAF = requestAnimationFrame(tick);
+    return;
+  }
+
+  const fin = () => {
+    setDial(me, c.me.t); me.rd.textContent = c.me.fin;
+    setDial(ot, c.ot.t == null ? 1 : c.ot.t); ot.rd.textContent = c.ot.fin;
+    if (c.after) caseAfter.classList.add('show');
+  };
+  if (!anim || RM) { fin(); return; }
+  const t0 = performance.now();
+  const tick = now => {
+    const turns = (now - t0) / 1000 / c.spt;
+    const mt = Math.min(turns, c.me.t);
+    const meDone = turns >= c.me.t;
+    setDial(me, mt);
+    me.rd.textContent = meDone ? c.me.fin : c.run(mt);
+    if (c.ot.t == null) {
+      // 끝나는 시점을 모르는 쪽은 멈추지 않고 계속 돈다.
+      setDial(ot, turns);
+      ot.rd.textContent = meDone ? c.ot.fin : c.run(turns);
+    } else {
+      const otDone = turns >= c.ot.t;
+      setDial(ot, Math.min(turns, c.ot.t));
+      ot.rd.textContent = otDone ? c.ot.fin : c.run(turns);
+      if (otDone) { fin(); return; }
+    }
+    caseRAF = requestAnimationFrame(tick);
+  };
+  caseRAF = requestAnimationFrame(tick);
+}
+runCase(0, false);
+
+/* 6장: 경계를 넘으려 한 시도 비교 막대 */
+onFirstView($('#cmp-85'), () => $('#cmp-85').classList.add('on'), .5);
+onFirstView(dialsEl, () => runCase(0, true));
+
+/* ───────── 5장: 군더더기 덜어내기 ───────── */
+const demoLabel = $('#demo-label');
+const demoA = $('#demo-a'), trimBtn = $('#trim'), untrimBtn = $('#untrim'), demoCount = $('#demo-count');
+const fls = $$('.fl', demoA), core = $('.core', demoA);
+const countChars = els => els.reduce((n, e) => n + [...e.textContent.replace(/\s/g, '')].length, 0);
+const fullN = countChars([...fls, core]), coreN = countChars([core]);
+demoCount.textContent = `${fullN}자`;
+let overlay = null;
+function shatter(span) {
+  const fs = parseFloat(getComputedStyle(span).fontSize);
+  const range = document.createRange();
+  const node = span.firstChild;
+  const text = node.data;
+  let idx = 0;
+  for (const ch of text) {
+    const len = ch.length;
+    range.setStart(node, idx); range.setEnd(node, idx + len);
+    idx += len;
+    const js = jamo(ch);
+    if (!js.length) continue;
+    const r = range.getBoundingClientRect();
+    if (!r.width) continue;
+    js.forEach(j => overlay.p.push(part({
+      kind: 3, ch: j, col: COL.dim, s: fs * rnd(.55, .8),
+      x: r.left + r.width / 2 + rnd(-3, 3), y: r.top + r.height / 2 + rnd(-3, 3),
+      vx: rnd(-110, 110), vy: rnd(-160, -30), g: 190,
+      life: rnd(.9, 1.7), l0: 1.7, a0: .9, a: .9
+    })));
+  }
+}
+trimBtn.addEventListener('click', () => {
+  trimBtn.disabled = true;
+  fls.forEach((s, k) => setTimeout(() => {
+    if (!RM && overlay) shatter(s);
+    s.classList.add('gone');
+  }, k * 120));
+  setTimeout(() => {
+    fls.forEach(s => s.classList.add('out'));
+    trimBtn.hidden = true; trimBtn.disabled = false;
+    untrimBtn.hidden = false;
+    demoCount.textContent = `${fullN}자 → ${coreN}자`;
+    demoLabel.textContent = '결론부터 말하는 답';
+  }, fls.length * 120 + 380);
+});
+untrimBtn.addEventListener('click', () => {
+  fls.forEach(s => s.classList.remove('out', 'gone'));
+  untrimBtn.hidden = true; trimBtn.hidden = false;
+  demoCount.textContent = `${fullN}자`;
+  demoLabel.textContent = '군더더기가 많은 답';
+});
+
+/* ───────── 폰트가 다 들어온 뒤에 캔버스를 그린다 ───────── */
+const fontsReady = Promise.race([
+  Promise.all([
+    document.fonts.load('600 40px "Noto Serif KR"', LJ + VJ + TJ),
+    document.fonts.load('900 100px "Noto Serif KR"', 'Opus 5.5 40% 30%'),
+    document.fonts.load('600 40px "Noto Serif KR"', finText.textContent + '획'),
+    document.fonts.load('600 17px "Noto Serif KR"', $('.rail-lines').textContent)
+  ]).then(() => document.fonts.ready),
+  new Promise(r => setTimeout(r, 4000))
+]).catch(() => {});
+
+fontsReady.then(init);
+
+function init() {
+  overlay = new Field($('.overlay'), true);
+
+  /* 첫 화면: 커서를 피해 다니다가 스크롤하면 제목이 된다 */
+  let heroE = RM ? 1 : 0, heroF = null;
+  const ptr = { x: 0, y: 0, on: false };
+  function buildHero() {
+    heroF.resize();
+    const { w, h } = heroF;
+    const N = Math.round(clamp(w * h / 1050, 260, 1350));
+    const { pts, size } = sampleSpans(heroSpans, heroCv.getBoundingClientRect(), Math.round(N * .85));
+    shuffle(pts);
+    const small = w < 700;
+    const mk = g => {
+      const s0 = rnd(7, small ? 15 : 22);
+      const x = rnd(0, w), y = rnd(0, h);
+      return part({
+        kind: 0, s: s0, s0, s1: g ? size : s0 * .8,
+        x, y, hx: x, hy: y, hvx: rnd(-14, 14), hvy: rnd(-11, 11),
+        gx: g ? g.x : 0, gy: g ? g.y : 0, join: g ? 1 : 0, a0: rnd(.22, .75), a: 0
+      });
+    };
+    const P = pts.map(mk);
+    const dust = Math.max(Math.round(N * .15), N - pts.length);
+    for (let i = 0; i < dust; i++) P.push(mk(null));
+    heroF.p = P;
+  }
+  if (!RM) {
+    heroF = new Field(heroCv);
+    buildHero();
+    heroF.tick = dt => {
+      const { w, h } = heroF, e = heroE, R = w < 700 ? 70 : 120, R2 = R * R;
+      for (const q of heroF.p) {
+        q.hx += q.hvx * dt; q.hy += q.hvy * dt;
+        if (q.hx < 0 || q.hx > w) q.hvx *= -1;
+        if (q.hy < 0 || q.hy > h) q.hvy *= -1;
+        const j = e * q.join;
+        const tx = q.hx + (q.gx - q.hx) * j, ty = q.hy + (q.gy - q.hy) * j;
+        let ax = (tx - q.x) * 14 - q.vx * 6.5, ay = (ty - q.y) * 14 - q.vy * 6.5;
+        if (ptr.on) {
+          const dx = q.x - ptr.x, dy = q.y - ptr.y, d2 = dx * dx + dy * dy;
+          if (d2 < R2) {
+            const d = Math.sqrt(d2) || 1, f = (1 - d / R) * (1 - j * .7) * 5200;
+            ax += dx / d * f; ay += dy / d * f;
+          }
+        }
+        q.vx += ax * dt; q.vy += ay * dt;
+        q.x += q.vx * dt; q.y += q.vy * dt;
+        q.s = q.s0 + (q.s1 - q.s0) * (q.join ? j : e);
+        const goal = q.join ? q.a0 + (.95 - q.a0) * e : q.a0 * (1 - e * .8);
+        q.a += (goal - q.a) * Math.min(1, dt * 3);
+      }
+    };
+    const setPtr = (cx, cy) => {
+      const r = heroCv.getBoundingClientRect();
+      ptr.x = cx - r.left; ptr.y = cy - r.top;
+      ptr.on = ptr.y > 0 && ptr.y < r.height;
+    };
+    addEventListener('pointermove', e => setPtr(e.clientX, e.clientY), { passive: true });
+    addEventListener('touchstart', e => setPtr(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    addEventListener('touchmove', e => setPtr(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    addEventListener('touchend', () => setTimeout(() => { ptr.on = false; }, 250), { passive: true });
+    document.addEventListener('mouseleave', () => { ptr.on = false; });
+  }
+
+  /* 2장: 숫자 두 개 */
+  const numFs = RM ? [] : numBoxes.map(n => { const f = new Field(n.cv); f.spans = n.spans; return f; });
+  function playNums() {
+    numFs.forEach((f, i) => {
+      f.resize();
+      assemble(f, f.spans, { N: Math.round(clamp(f.w * f.h / 110, 240, 950)), delay: i * 380 });
+      f.played = true;
+    });
+  }
+  if (!RM) onFirstView($('.nums'), playNums, .45);
+
+  /* 6장: 경계선 앞에서 스스로 멈추는 조각 */
+  const fenceF = new Field($('.fence canvas'));
+  function spawnFence(q, init) {
+    const L = fenceF.line;
+    q.gap = 3 + Math.pow(Math.random(), 2) * 90;
+    q.y = rnd(14, fenceF.h - 14);
+    q.x = init ? rnd(-10, L - q.gap - 10) : rnd(-40, -10);
+    q.v = rnd(40, 120); q.st = 0; q.a = 0; q.a0 = rnd(.45, .95);
+    q.s = rnd(9, 16); q.ph = rnd(0, 6.28);
+    if (RM) { q.x = L - q.gap; q.st = 1; q.a = q.a0; q.rest = Infinity; }
+    return q;
+  }
+  function buildFence() {
+    fenceF.resize();
+    fenceF.line = Math.round(fenceF.w * .74);
+    const n = Math.round(clamp(fenceF.w * fenceF.h / 2100, 50, 150));
+    fenceF.p = Array.from({ length: n }, () => spawnFence(part({ kind: 0 }), true));
+  }
+  buildFence();
+  fenceF.pre = (c, w, h) => {
+    c.globalAlpha = 1; c.strokeStyle = COL.ju; c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(fenceF.line + .5, 8); c.lineTo(fenceF.line + .5, h - 8); c.stroke();
+  };
+  fenceF.tick = (dt, now) => {
+    if (RM) return;
+    const L = fenceF.line;
+    for (const q of fenceF.p) {
+      if (q.st === 0) {
+        q.a = Math.min(q.a0, q.a + dt * 1.2);
+        const dist = L - q.gap - q.x;
+        const v = Math.max(q.v * clamp(dist / 110, 0, 1), 5);
+        q.x = Math.min(q.x + v * dt, L - q.gap);
+        q.y += Math.sin(now / 700 + q.ph) * 5 * dt;
+        if (dist <= .5) { q.st = 1; q.rest = rnd(1.4, 4.5); }
+      } else if (q.st === 1) {
+        q.rest -= dt;
+        if (q.rest <= 0) q.st = 2;
+      } else {
+        q.a -= dt * .7;
+        if (q.a <= 0) spawnFence(q, false);
+      }
+    }
+  };
+
+  /* 관통 문장: 장을 지나면 그 줄의 자모가 날아와 조립된다 */
+  const filled = {};
+  function fillLine(i, fromEl, instant) {
+    if (filled[i]) return;
+    filled[i] = true;
+    const li = railLis[i - 1];
+    // 모바일 상단 띠는 지금 채워지는 한 줄만 보여 준다.
+    railLis.forEach(l => l.classList.toggle('cur', l === li));
+    railDots[i - 1].classList.add('on');
+    const chars = $$('.c', li);
+    if (instant || RM || !fromEl) {
+      chars.forEach((c, k) => setTimeout(() => c.classList.add('on'), RM ? k * 70 : 0));
+      return;
+    }
+    const src = fromEl.getBoundingClientRect();
+    const now = performance.now();
+    const col = li.classList.contains('last') ? COL.ju : COL.paper;
+    chars.forEach((c, k) => {
+      const r = c.getBoundingClientRect();
+      const ex = r.left + r.width / 2, ey = r.top + r.height / 2, fs = r.height;
+      const core = jamo(c.textContent);
+      const list = core.concat([randJamo(), randJamo()]);
+      list.forEach((j, m) => {
+        const isCore = m < core.length;
+        const sx = rnd(src.left, src.right), sy = rnd(src.top, src.bottom);
+        overlay.p.push(part({
+          kind: 2, ch: j, col,
+          sx, sy, x: sx, y: sy,
+          ex: ex + (isCore ? rnd(-2, 2) : rnd(-12, 12)), ey: ey + (isCore ? rnd(-2, 2) : rnd(-12, 12)),
+          cx: (sx + ex) / 2 + rnd(-160, 160), cy: Math.min(sy, ey) - rnd(30, 200),
+          t0: now + k * 75 + m * 30, dur: rnd(1100, 1500),
+          ss: isCore ? rnd(15, 22) : rnd(8, 12), se: isCore ? fs * .62 : 4, s: 10,
+          a0: isCore ? .95 : .45, a: 0, die: true,
+          end: isCore && m === 0 ? () => c.classList.add('on') : null
+        }));
+      });
+    });
+  }
+
+  /* 마지막 장면: 화면 전체의 자모가 모여 문장이 된다 */
+  const finF = RM ? null : new Field(finCv);
+  let finState = 0, finTimers = [];
+  if (finF) finF.tick = dt => {
+    if (!finF.fade) return;
+    finF.alphaMul = Math.max(0, finF.alphaMul - dt * .7);
+    if (finF.alphaMul <= 0) { finF.p = []; finF.fade = false; }
+  };
+  function playFinale() {
+    finState = 1;
+    fillLine(7, null, true);
+    if (RM) {
+      rail.classList.add('gone');
+      finText.classList.add('done');
+      finTimers.push(setTimeout(() => finQ.classList.add('show'), 1100));
+      return;
+    }
+    finF.resize(); finF.alphaMul = 1; finF.fade = false;
+    const host = finCv.getBoundingClientRect(), sources = [];
+    if (rail.classList.contains('show')) {
+      $$('.rail .c.on').forEach(c => {
+        const r = c.getBoundingClientRect();
+        if (!r.width) return;
+        for (let k = 0; k < 3; k++) sources.push({ x: r.left - host.left + r.width / 2 + rnd(-3, 3), y: r.top - host.top + r.height / 2 + rnd(-3, 3) });
+      });
+    }
+    rail.classList.add('gone');
+    const N = Math.round(clamp(finF.w * finF.h / 620, 600, 2300));
+    // 문장 쪽 목표점은 섞여 있으므로, 앞쪽 입자 몇 개는 방금 사라진 문장 자리에서 출발한다.
+    const end = assemble(finF, finSpans, { N, sources: shuffle(sources), dur: [1500, 2300] });
+    const wait = end - performance.now();
+    finTimers.push(setTimeout(() => { finText.classList.add('done'); finF.fade = true; }, wait + 120));
+    finTimers.push(setTimeout(() => finQ.classList.add('show'), wait + 1500));
+  }
+  function resetFinale() {
+    finState = 0;
+    finTimers.forEach(clearTimeout); finTimers = [];
+    if (finF) { finF.p = []; finF.fade = false; finF.alphaMul = 1; }
+    finText.classList.remove('done');
+    finQ.classList.remove('show');
+    rail.classList.remove('gone');
+  }
+
+  /* 수묵화: 한지 바탕, 먼 산, 제발을 먼저 깔고, 화면에 들어오면 획을 긋고 낙관을 찍는다 */
+  const ink = (() => {
+    const cv = $('.ink-cv'), ctx = cv.getContext('2d');
+    const INK = [22, 19, 16];
+    const inkc = a => `rgba(${INK[0]},${INK[1]},${INK[2]},${a})`;
+    let w = 0, h = 0, played = false, raf = 0;
+    const makeNoise = () => {
+      const p = new Float32Array(512).map(() => Math.random());
+      return x => { x = Math.abs(x); const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return p[i % 512] * (1 - u) + p[(i + 1) % 512] * u; };
+    };
+    const fbm = (n, x) => n(x) * .5 + n(x * 2.1) * .25 + n(x * 4.3) * .125 + n(x * 8.7) * .0625;
+    const blur = px => { try { ctx.filter = px ? `blur(${px}px)` : 'none'; } catch (e) {} };
+
+    function size() {
+      const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+      w = r.width; h = r.height;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function paper() {
+      ctx.fillStyle = '#ece3cf'; ctx.fillRect(0, 0, w, h);
+      for (let i = 0; i < 7; i++) {
+        const x = rnd(0, w), y = rnd(0, h), r = rnd(.3, .7) * Math.max(w, h);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, 'rgba(196,180,148,.14)'); g.addColorStop(1, 'rgba(196,180,148,0)');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      }
+      const v = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .35, w / 2, h / 2, Math.max(w, h) * .78);
+      v.addColorStop(0, 'rgba(80,60,35,0)'); v.addColorStop(1, 'rgba(80,60,35,.16)');
+      ctx.fillStyle = v; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(140,120,90,.09)'; ctx.lineWidth = .6; ctx.beginPath();
+      for (let i = 0, n = w * h / 700; i < n; i++) {
+        const x = rnd(0, w), y = rnd(0, h);
+        ctx.moveTo(x, y); ctx.quadraticCurveTo(x + rnd(-18, 18), y + rnd(-18, 18), x + rnd(-36, 36), y + rnd(-36, 36));
+      }
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(110,90,60,.14)';
+      for (let i = 0, n = w * h / 2200; i < n; i++) ctx.fillRect(rnd(0, w), rnd(0, h), rnd(.6, 1.6), rnd(.6, 1.6));
+    }
+    function mountains() {
+      const layers = [
+        { y: .50, a: .08, amp: .22, f: 1.1, b: 7 },
+        { y: .60, a: .13, amp: .19, f: 1.7, b: 4 },
+        { y: .71, a: .22, amp: .15, f: 2.5, b: 2 },
+        { y: .83, a: .36, amp: .11, f: 3.4, b: .8 }
+      ];
+      layers.forEach((L, k) => {
+        const n = makeNoise(), off = rnd(0, 100);
+        const ridge = x => {
+          const env = .3 + .7 * smooth(.02, .75, x / w);
+          const u = off + x / w * L.f * 3, v = n(u) * .62 + n(u * 2.3) * .28 + (k > 1 ? n(u * 5.1) * .1 : 0);
+          return h * L.y - h * L.amp * env * Math.pow(v, 1.4) * 1.6;
+        };
+        let top = h;
+        for (let x = 0; x <= w; x += 4) top = Math.min(top, ridge(x));
+        const g = ctx.createLinearGradient(0, top, 0, top + h * .42);
+        g.addColorStop(0, inkc(L.a)); g.addColorStop(.55, inkc(L.a * .45)); g.addColorStop(1, inkc(0));
+        for (let pass = 0; pass < 2; pass++) {
+          blur(pass ? L.b * .3 : L.b);
+          ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, h);
+          for (let x = 0; x <= w; x += 3) ctx.lineTo(x, ridge(x) + (pass ? 0 : 2));
+          ctx.lineTo(w, h); ctx.closePath(); ctx.fill();
+        }
+        blur(0);
+        if (k >= 1) {
+          // 능선에만 먹이 살짝 고이게
+          blur(k === 3 ? .6 : 1.2);
+          ctx.strokeStyle = inkc(L.a * .8); ctx.lineWidth = k === 3 ? 1.8 : 1.1;
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 3) x ? ctx.lineTo(x, ridge(x)) : ctx.moveTo(x, ridge(x));
+          ctx.stroke();
+          blur(0);
+        }
+      });
+    }
+    let fs = 16;
+    function inscription() {
+      fs = Math.max(12, Math.min(w, h) * .032);
+      const text = '먹을 아껴도 붓은 더 멀리 갔습니다';
+      ctx.font = `600 ${fs}px "Noto Serif KR", serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = inkc(.8);
+      let x = w * .93, y = h * .09;
+      for (const ch of text) {
+        if (ch === ' ') { y += fs * .5; continue; }
+        ctx.fillText(ch, x, y); y += fs * 1.12;
+      }
+      return { x, y };
+    }
+    let sealAt = null;
+    function seal() {
+      const s = fs * 2.1, { x, y } = sealAt;
+      ctx.save(); ctx.translate(x, y + s * .7); ctx.rotate(-.03);
+      ctx.fillStyle = 'rgba(214,74,38,.92)'; ctx.fillRect(-s / 2, -s / 2, s, s);
+      ctx.fillStyle = '#ece3cf'; ctx.font = `900 ${s * .66}px "Noto Serif KR", serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('획', 0, s * .03);
+      ctx.globalCompositeOperation = 'destination-out';
+      for (let i = 0; i < 60; i++) { ctx.globalAlpha = rnd(.2, .7); ctx.fillRect(rnd(-s / 2, s / 2), rnd(-s / 2, s / 2), rnd(.6, 2), rnd(.6, 2)); }
+      ctx.restore();
+    }
+    // 한 획: 눌러 시작해 배가 부르고, 길게 빠지며 먹이 말라 붓털이 갈라진다
+    function brush() {
+      const ex = w < 700 ? .82 : .91; // 좁은 화면에서는 제발과 겹치지 않게 획을 조금 짧게
+      const P = [[.08, .38], [.32, .20], [.60, .44], [ex, .26]].map(([a, b]) => [a * w, b * h]);
+      const W = Math.min(w, h) * .072;
+      const pt = t => { const m = 1 - t; return [0, 1].map(k => m * m * m * P[0][k] + 3 * m * m * t * P[1][k] + 3 * m * t * t * P[2][k] + t * t * t * P[3][k]); };
+      const tan = t => { const m = 1 - t; return [0, 1].map(k => 3 * m * m * (P[1][k] - P[0][k]) + 6 * m * t * (P[2][k] - P[1][k]) + 3 * t * t * (P[3][k] - P[2][k])); };
+      const prof = t => t < .04 ? .85 + t / .04 * .45 : t < .82 ? 1.3 - .82 * smooth(.04, .82, t) : .48 * Math.pow(1 - (t - .82) / .18, 1.3) + .02;
+      const N = 90, br = Array.from({ length: N }, (_, i) => {
+        const o = (i / (N - 1) - .5);
+        return { o: o + rnd(-.006, .006), ink: rnd(.55, 1) * (1 - Math.abs(o) * .5), ts: rnd(.42, .95) - Math.abs(o) * .25, lw: W / N * rnd(1.4, 2.6), n: makeNoise(), ph: rnd(0, 50) };
+      });
+      const at = t => { const p = pt(t), d = tan(t), L = Math.hypot(d[0], d[1]) || 1; return { p, nx: -d[1] / L, ny: d[0] / L, wd: W * prof(t) }; };
+      const on = (q, t) => t < q.ts || q.n(q.ph + t * 14) > (t - q.ts) * 2.4;
+      let last = 0;
+      const drawTo = t1 => {
+        if (t1 <= last) return;
+        if (last === 0) {
+          const d = at(0);
+          ctx.save(); ctx.translate(P[0][0], P[0][1]); ctx.rotate(Math.atan2(d.ny, d.nx) + Math.PI / 2);
+          const g = ctx.createRadialGradient(0, 0, 0, 0, 0, W * .75);
+          g.addColorStop(0, inkc(.5)); g.addColorStop(.7, inkc(.22)); g.addColorStop(1, inkc(0));
+          ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, W * .8, W * .62, 0, 0, 6.29); ctx.fill();
+          ctx.restore();
+        }
+        const dt = .003, ts = [];
+        for (let t = last; t < t1; t += dt) ts.push(t);
+        ts.push(t1);
+        const S = ts.map(at);
+        // 번진 먹물 가장자리
+        ctx.lineCap = 'round';
+        for (let i = 1; i < S.length; i++) {
+          if (ts[i] > .7) break;
+          ctx.strokeStyle = inkc(.035); ctx.lineWidth = S[i].wd * 1.45;
+          ctx.beginPath(); ctx.moveTo(S[i - 1].p[0], S[i - 1].p[1]); ctx.lineTo(S[i].p[0], S[i].p[1]); ctx.stroke();
+        }
+        // 붓털 한 가닥씩, 끊기지 않은 구간은 한 줄로 이어 그린다
+        ctx.lineCap = 'butt'; ctx.lineJoin = 'round';
+        for (const q of br) {
+          let open = false;
+          ctx.beginPath();
+          for (let i = 0; i < S.length; i++) {
+            const t = ts[i], a = S[i];
+            if (!on(q, t)) { open = false; continue; }
+            const x = a.p[0] + a.nx * q.o * a.wd, y = a.p[1] + a.ny * q.o * a.wd;
+            open ? ctx.lineTo(x, y) : ctx.moveTo(x, y); open = true;
+          }
+          const tm = (last + t1) / 2, dryness = Math.max(0, tm - q.ts);
+          ctx.strokeStyle = inkc(q.ink * .62 * Math.max(.25, 1 - dryness * 1.3));
+          ctx.lineWidth = q.lw * Math.max(.45, 1 - dryness);
+          ctx.stroke();
+        }
+        last = t1;
+      };
+      return drawTo;
+    }
+    function base() { size(); paper(); mountains(); sealAt = inscription(); }
+    function finish() { base(); brush()(1); seal(); }
+    function play() {
+      if (played) return; played = true;
+      if (RM) { finish(); return; }
+      const drawTo = brush(), t0 = performance.now(), D = 2100;
+      const step = now => {
+        const u = clamp((now - t0) / D, 0, 1);
+        drawTo(ease(u));
+        if (u < 1) raf = requestAnimationFrame(step);
+        else setTimeout(seal, 260);
+      };
+      raf = requestAnimationFrame(step);
+    }
+    base();
+    onFirstView(cv, play, .55);
+    return { redraw() { cancelAnimationFrame(raf); played ? finish() : base(); } };
+  })();
+
+  /* 스크롤 한 곳에서 모든 장면을 조율한다 */
+  let curGlow = null;
+  function onScroll() {
+    const vh = innerHeight;
+    const hr = hero.getBoundingClientRect();
+    const p = clamp(-hr.top / Math.max(1, hr.height - vh), 0, 1);
+    if (!RM) {
+      heroE = smooth(.04, .7, p);
+      heroHint.style.opacity = String(1 - clamp(p * 5, 0, 1));
+      heroSub.style.opacity = String(smooth(.72, .9, p));
+    }
+    rail.classList.toggle('show', hr.bottom < vh * .55);
+    for (const h of hooks) {
+      const i = +h.dataset.line;
+      if (filled[i]) continue;
+      const r = h.getBoundingClientRect();
+      if (r.top < vh * .7) fillLine(i, h, r.bottom < 0 || !rail.classList.contains('show'));
+    }
+    let g = glowSecs[0];
+    for (const s of glowSecs) if (s.getBoundingClientRect().top < vh * .5) g = s;
+    if (g !== curGlow) { curGlow = g; glow.style.setProperty('--glow', g.dataset.glow); }
+    const fr = fin.getBoundingClientRect();
+    if (!finState && fr.top <= 2) playFinale();
+    else if (finState && fr.top > vh * .6) resetFinale();
+  }
+  let queued = false;
+  addEventListener('scroll', () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; onScroll(); });
+  }, { passive: true });
+  onScroll();
+
+  /* 크기가 바뀌면 다시 계산한다 (주소창 때문에 높이만 바뀌면 무시) */
+  let lastW = innerWidth, rz = 0;
+  addEventListener('resize', () => {
+    clearTimeout(rz);
+    rz = setTimeout(() => {
+      overlay.resize();
+      if (innerWidth === lastW) return;
+      lastW = innerWidth;
+      if (heroF) buildHero();
+      buildFence();
+      ink.redraw();
+      numFs.forEach(f => { if (f.played) { f.resize(); assemble(f, f.spans, { N: Math.round(clamp(f.w * f.h / 110, 240, 950)), dur: [500, 800] }); } });
+      if (finState && finF) { finF.resize(); finF.p = []; finText.classList.add('done'); }
+      onScroll();
+    }, 180);
+  });
+
+  /* 하나의 루프. 화면에 보이는 무대만 움직인다. */
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000);
+    last = now;
+    for (const f of FIELDS) {
+      if (!f.visible) continue;
+      if (!f.p.length && !f.pre) {
+        if (!f.clean) { f.ctx.clearRect(0, 0, f.w, f.h); f.clean = true; }
+        continue;
+      }
+      f.clean = false;
+      f.step(dt, now);
+      f.draw();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+})();
+</script>
