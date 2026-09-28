@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fable 5.1 우화집</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Hahmlet:wght@500;800&family=IM+Fell+English:ital@1&family=IM+Fell+English+SC&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* 한 권의 책으로 고정한 디자인이라 한 가지 모습만 둔다. 모든 색은 아래 토큰에서 온다 */
+:root {
+  color-scheme: dark;
+  --desk: #0f1a17; --desk-2: #16241f;
+  --cloth: #173229; --cloth-hi: #24493b;
+  --gilt: #c9a45c; --gilt-hi: #efd994; --gilt-lo: #6e5220;
+  --paper: #e8ebe3; --paper-edge: #cdd2c6; --slip: #efe9d8;
+  --ink: #1a1f1c; --ink-2: #454d48; --ink-3: #5f6762;
+  --rule: #b7bdb2;
+  --madder: #8a2b3d; --prussian: #1d3f6e; --ochre: #c8962e; --pale: #d9dccf;
+  --display: 'Hahmlet', 'AppleMyungjo', 'Nanum Myeongjo', serif;
+  --body: 'Gowun Batang', 'AppleMyungjo', 'Nanum Myeongjo', serif;
+  --fell: 'IM Fell English SC', 'Hahmlet', Georgia, serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --gx: 50%;
+  --pw: 480px; --ph: 680px;       /* 한 쪽의 크기. 스크립트가 화면에 맞춰 정한다 */
+  --turn: 900ms;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+html { background: var(--desk); }
+body {
+  margin: 0; color: var(--paper); font-family: var(--body); line-height: 1.8;
+  word-break: keep-all; overflow-wrap: break-word; overflow-x: hidden;
+  background: radial-gradient(70% 60% at 50% 42%, var(--desk-2), var(--desk) 75%);
+  padding-inline: 12px;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--gilt); outline-offset: 3px; border-radius: 2px; }
+button { font: inherit; }
+.mono { font-family: var(--mono); font-weight: 500; font-size: .86em; letter-spacing: 0; }
+
+/* 금박: 책등과 표지 제목, 기록의 큰 숫자에만 쓴다. 반사 위치는 --gx 하나가 정한다 */
+.gilt {
+  color: var(--gilt);
+  background: linear-gradient(100deg, var(--gilt-lo) 0%, var(--gilt) 30%, var(--gilt-hi) 50%, var(--gilt) 70%, var(--gilt-lo) 100%);
+  background-size: 260% 100%; background-position: var(--gx) 50%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  transition: background-position 1.2s var(--ease);
+}
+.gilt-num {
+  color: var(--gilt-lo);
+  background: linear-gradient(100deg, #4f3b14 0%, #7d5f25 32%, #a6823d 50%, #7d5f25 68%, #4f3b14 100%);
+  background-size: 260% 100%; background-position: var(--gx) 50%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  transition: background-position 1.2s var(--ease);
+}
+
+/* ───── 무대와 책 ───── */
+.app { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.stage { position: relative; display: grid; place-items: center; min-height: 0; min-width: 0; padding-block: 12px; }
+.book {
+  position: relative; width: calc(var(--pw) * 2); height: var(--ph);
+  perspective: 2600px; transition: transform .8s var(--ease);
+}
+.book.single { width: var(--pw); }
+.book::before { /* 책 그림자 */
+  content: ''; position: absolute; left: 4%; right: 4%; bottom: -26px; height: 40px; pointer-events: none;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 70%);
+}
+.stack { position: absolute; top: 4px; bottom: 4px; width: var(--w, 0px); pointer-events: none;
+  background: repeating-linear-gradient(90deg, var(--paper-edge) 0 1px, var(--paper) 1px 2px); transition: width .6s; }
+.stack.r { left: 100%; border-radius: 0 2px 2px 0; }
+.stack.l { right: 100%; border-radius: 2px 0 0 2px; }
+.book.single .stack { display: none; }
+
+.leaf {
+  position: absolute; top: 0; left: var(--pw); width: var(--pw); height: var(--ph);
+  transform-origin: left center; transform-style: preserve-3d;
+  transition: transform var(--turn) cubic-bezier(.45, .05, .2, 1);
+}
+.book.single .leaf { left: 0; }
+.leaf.flipped { transform: rotateY(-180deg); }
+.book.instant .leaf, .book.instant { transition: none !important; }
+.face {
+  position: absolute; inset: 0; overflow: hidden; background: var(--paper); color: var(--ink);
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+}
+.face.back { transform: rotateY(180deg); }
+.face::after { /* 제본 쪽 그늘. 앞면(오른쪽 쪽)은 왼쪽 가장자리, 뒷면(왼쪽 쪽)은 오른쪽 가장자리 */
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  background: linear-gradient(90deg, rgba(26,31,28,.2), rgba(26,31,28,0) 7%, rgba(26,31,28,0) 96%, rgba(26,31,28,.06));
+}
+.face.back::after { background: linear-gradient(270deg, rgba(26,31,28,.18), rgba(26,31,28,0) 7%, rgba(26,31,28,0) 96%, rgba(26,31,28,.06)); }
+.face.bare::after { background: none; }
+.face::before { /* 넘어가는 동안 종이에 지는 빛 */
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 6; opacity: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.28), rgba(255,255,255,.12) 55%, rgba(0,0,0,.18));
+}
+.leaf.turning .face::before { animation: light var(--turn) ease-in-out; }
+@keyframes light { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+.leaf.peek { animation: peek 1.3s cubic-bezier(.45, .05, .2, 1); }
+@keyframes peek { 0%, 100% { transform: rotateY(0); } 40% { transform: rotateY(-22deg); } }
+.face.blank { background: linear-gradient(90deg, var(--paper), #e1e5dc); }
+
+/* 넘기는 손잡이: 쪽의 바깥 가장자리 */
+.hot { position: absolute; top: 0; bottom: 0; width: 44px; z-index: 900; cursor: pointer; touch-action: none; background: none; border: 0; padding: 0; }
+.hot.next { right: 0; } .hot.prev { left: 0; }
+.hot::after { content: ''; position: absolute; bottom: 0; width: 0; height: 0; transition: width .25s var(--ease), height .25s var(--ease); }
+.hot.next::after { right: 0; background: linear-gradient(315deg, transparent 50%, rgba(0,0,0,.18) 50%, #f5f7f1 58%, #d5d9cf); }
+.hot.prev::after { left: 0; background: linear-gradient(45deg, transparent 50%, rgba(0,0,0,.18) 50%, #f5f7f1 58%, #d5d9cf); }
+@media (hover: hover) { .hot:hover::after { width: 44px; height: 44px; } }
+.hot[hidden] { display: none; }
+
+/* 아래 막대 */
+.bar { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 0 14px; }
+.bar .where { flex: 0 1 14em; min-width: 0; text-align: center; font-family: var(--display); font-weight: 500; font-size: .9rem; color: var(--paper); line-height: 1.35; }
+.bar .where small { display: block; font-family: var(--mono); font-size: .7rem; color: #8f9a93; letter-spacing: .06em; }
+.nav { white-space: nowrap; flex: none; min-width: 44px; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(232,235,227,.3); background: transparent; color: var(--paper); cursor: pointer; font-size: .88rem; transition: background .2s, border-color .2s, opacity .2s; }
+.nav:hover:not(:disabled) { background: rgba(232,235,227,.1); border-color: var(--paper); }
+.nav:disabled { opacity: .3; cursor: default; }
+.nav.arrow { width: 52px; padding: 0; font-size: 1.15rem; line-height: 1; }
+.nav#btn-toc { margin-right: 6px; }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(232,235,227,.08); }
+.progress i { display: block; height: 100%; width: 0; background: var(--gilt); transition: width .6s var(--ease); }
+
+/* ───── 쪽 공통 ───── */
+.pg { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; touch-action: pan-y;
+  padding: 38px 48px 24px 44px; font-size: 16px; display: flex; flex-direction: column; }
+.back .pg { padding: 38px 44px 24px 48px; }
+.book.single .pg { padding: 30px 40px 20px 30px; }
+.rh { margin: 0 0 1.6em; font-size: .74em; letter-spacing: .08em; color: var(--ink-3); }
+.front .rh { text-align: right; }
+.folio { margin-top: auto; padding-top: 1.2em; font-family: var(--mono); font-size: .76rem; color: var(--ink-3); flex: none; }
+.front .folio { text-align: right; } .back .folio { text-align: left; }
+
+.fno { margin: 0; font-family: var(--display); font-weight: 500; font-size: .84em; color: var(--madder); letter-spacing: .2em; }
+.pg h2 { margin: .2em 0 1em; font-family: var(--display); font-weight: 800; font-size: 1.8em; line-height: 1.3; text-wrap: balance; letter-spacing: -.01em; }
+.story p { margin: 0 0 .9em; }
+.story p:first-child::first-letter { float: left; font-family: var(--display); font-weight: 800; color: var(--madder); font-size: 3.3em; line-height: .95; margin: .06em .12em 0 0; }
+.moral { margin-top: 1.6em; padding-top: 1em; border-top: 3px double var(--ink-2); }
+.moral .k, .rec-k { font-family: var(--display); font-weight: 500; font-size: .72em; letter-spacing: .32em; color: var(--ink-3); }
+.moral p { margin: .3em 0 0; font-family: var(--display); font-weight: 500; font-size: 1.2em; line-height: 1.6; text-wrap: balance; }
+.moral.blank p { color: var(--ink-3); border: 1px dashed var(--rule); padding: 1em 1.1em; font-size: 1.05em; }
+.rec-k { display: block; margin-bottom: .6em; }
+.rec p { margin: 0 0 .9em; }
+.rec h3 { margin: 0 0 .7em; font-family: var(--display); font-weight: 800; font-size: 1.18em; line-height: 1.4; }
+.src { font-size: .78em; color: var(--ink-3); margin-top: 1.2em !important; line-height: 1.6; }
+.gloss { font-size: .88em; color: var(--ink-2); line-height: 1.7; }
+.gloss b { color: var(--ink); }
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(9em, 1fr)); gap: 1em; margin: 1.2em 0; }
+.fig b { display: block; font-family: var(--display); font-weight: 800; font-size: 2.5em; line-height: 1.05; letter-spacing: -.02em; }
+.fig span { display: block; margin-top: .4em; font-size: .86em; color: var(--ink-2); line-height: 1.5; }
+
+/* 표지 */
+.pg.cover { padding: 0; overflow: hidden; display: grid; grid-template-columns: 13% minmax(0, 1fr); background: var(--cloth); }
+.spine {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 12% 0 10%;
+  background: linear-gradient(90deg, rgba(0,0,0,.4), rgba(255,255,255,.06) 35%, rgba(0,0,0,.45)), repeating-linear-gradient(35deg, rgba(255,255,255,.018) 0 2px, transparent 2px 5px), var(--cloth);
+  box-shadow: inset -6px 0 10px -6px rgba(0,0,0,.6); z-index: 2;
+}
+.spine .band { position: absolute; left: 0; right: 0; height: 8px; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(0,0,0,.35)); }
+.band.b1 { top: 20%; } .band.b2 { top: 40%; } .band.b3 { top: 60%; } .band.b4 { top: 80%; }
+.spine p { margin: 0; line-height: 1; font-family: var(--fell); }
+.spine-title { writing-mode: vertical-rl; font-size: clamp(1rem, calc(var(--pw) * .05), 1.9rem); letter-spacing: .32em; margin-top: 20% !important; }
+.spine-vol { font-size: clamp(.8rem, calc(var(--pw) * .03), 1.1rem); }
+.board { position: relative; display: grid; place-items: center; padding: 7%;
+  background: radial-gradient(40% 30% at 30% 30%, var(--ochre), transparent 70%), radial-gradient(40% 30% at 70% 70%, var(--madder), transparent 70%), var(--prussian); }
+.board canvas, .endpaper canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: crosshair; }
+.board::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 70px rgba(0,0,0,.45); }
+.tip { position: absolute; right: 0; width: 18%; aspect-ratio: 1; z-index: 2; pointer-events: none; background: linear-gradient(225deg, var(--cloth-hi), var(--cloth) 55%); }
+.tip-t { top: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.tip-b { bottom: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); background: linear-gradient(315deg, var(--cloth-hi), var(--cloth) 55%); }
+.label { position: relative; z-index: 3; width: min(100%, 22em); background: var(--paper); color: var(--ink); text-align: center; padding: 1.6em 1.4em; box-shadow: 0 14px 30px -12px rgba(0,0,0,.6); outline: 1px solid var(--ink-2); outline-offset: -8px; }
+.label::before { content: ''; position: absolute; inset: 12px; border: 1px solid var(--rule); pointer-events: none; }
+.lab-k { margin: 0; font-family: var(--fell); letter-spacing: .42em; font-size: .85em; color: var(--ink-2); padding-left: .42em; }
+.label h1 { margin: .15em 0 0; font-family: var(--fell); font-weight: 400; font-size: clamp(2.1rem, calc(var(--pw) * .1), 3.6rem); line-height: 1; }
+.label h1 span { display: block; margin-top: .3em; font-family: var(--display); font-weight: 500; font-size: .4em; letter-spacing: .5em; padding-left: .5em; }
+.lab-rule { width: 56px; height: 1px; background: var(--ink-2); margin: 1em auto .7em; border: 0; }
+.lab-sub, .lab-ed { margin: 0; font-size: .86em; color: var(--ink-2); }
+.lab-ed { font-size: .78em; color: var(--ink-3); }
+.btn { min-height: 44px; padding: 0 14px; border-radius: 3px; border: 1px solid rgba(232,235,227,.4); background: transparent; color: var(--paper); cursor: pointer; display: inline-flex; align-items: center; text-decoration: none; font-size: .88rem; transition: background .2s, border-color .2s; }
+.btn:hover { background: rgba(232,235,227,.1); border-color: var(--paper); }
+.btn.solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.btn.ink { color: var(--ink); border-color: var(--ink-2); min-height: 38px; padding: 0 12px; font-size: .8rem; }
+.btn.ink:hover { background: rgba(26,31,28,.07); }
+
+/* 헌사 */
+.pg.dedic { display: grid; place-items: center; text-align: center; }
+.dedic p { margin: 0; font-family: var(--display); font-weight: 500; font-size: 1.2em; line-height: 1.9; color: var(--ink-2); }
+.dedic .orn { display: block; margin: 1.4em auto 0; width: 40px; height: 1px; background: var(--ink-3); }
+
+/* 목차 */
+.toc h2 { text-align: center; letter-spacing: .6em; padding-left: .6em; }
+.toc .note { text-align: center; color: var(--ink-2); font-size: .82em; margin: -.6em 0 1.2em; line-height: 1.6; }
+.toc ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+.toc a { display: grid; grid-template-columns: 1.6em auto minmax(16px, 1fr) auto; align-items: baseline; gap: 8px; text-decoration: none; padding: 6px 4px 0; }
+.toc a:hover .t-title { color: var(--madder); }
+.t-no { font-family: var(--display); font-weight: 500; color: var(--madder); }
+.t-title { font-family: var(--display); font-weight: 800; font-size: 1.02em; transition: color .2s; }
+.t-dots { border-bottom: 2px dotted var(--rule); transform: translateY(-5px); }
+.t-pg { font-family: var(--mono); font-size: .8em; color: var(--ink-2); }
+.t-rec { margin: 0 4px 6px calc(1.6em + 12px); font-size: .8em; color: var(--ink-2); line-height: 1.55; }
+
+/* 1화 */
+.editions { display: flex; gap: 1.6em; align-items: flex-end; margin: 1.2em 0 .4em; flex-wrap: wrap; }
+.ed { margin: 0; display: flex; gap: 12px; align-items: flex-end; }
+.ed-spine { width: 48px; height: 170px; border-radius: 3px 3px 2px 2px; position: relative; display: flex; justify-content: center; padding-top: 22px; box-shadow: inset -4px 0 8px rgba(0,0,0,.35), inset 3px 0 6px rgba(255,255,255,.08), 0 10px 16px -8px rgba(0,0,0,.5); }
+.ed-spine::before, .ed-spine::after { content: ''; position: absolute; left: 0; right: 0; height: 6px; background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.3)); }
+.ed-spine::before { top: 12px; } .ed-spine::after { bottom: 18px; }
+.ed-a { background: var(--cloth); } .ed-b { background: var(--prussian); }
+.ed-spine span { writing-mode: vertical-rl; font-family: var(--fell); font-size: 1rem; letter-spacing: .2em; }
+.ed figcaption { font-size: .82em; line-height: 1.5; color: var(--ink-2); max-width: 9.5em; }
+.ed figcaption b { display: block; font-family: var(--display); font-weight: 800; color: var(--ink); font-size: 1.05em; }
+.ed-cap { font-family: var(--display); font-weight: 500; font-size: .78em; letter-spacing: .24em; color: var(--ink-3); margin: .4em 0 1.2em !important; }
+
+/* 2화 정가 */
+.price { border: 1px solid var(--ink-2); padding: 1em 1.1em .9em; background: rgba(255,255,255,.28); }
+.price-h { margin: 0 0 .5em !important; font-family: var(--display); font-weight: 800; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.price-h small { font-family: var(--body); font-weight: 400; font-size: .76em; color: var(--ink-3); }
+.price dl { margin: 0; }
+.price .row { display: grid; grid-template-columns: 1fr auto; column-gap: 12px; padding: .5em 0; border-top: 1px solid var(--rule); }
+.price dt { font-weight: 700; line-height: 1.35; }
+.price dt small, .price dd small { display: block; font-weight: 400; font-size: .76em; color: var(--ink-3); font-family: var(--body); }
+.price dd { margin: 0; text-align: right; font-family: var(--mono); font-size: 1.05em; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.price .row.hl dd { color: var(--madder); }
+.isbn { display: flex; gap: 12px; align-items: flex-end; margin-top: .8em; flex-wrap: wrap; }
+.isbn svg { display: block; width: 130px; height: 40px; }
+.isbn p { margin: 0 !important; font-size: .74em; color: var(--ink-3); line-height: 1.5; }
+.isbn .mono { color: var(--ink); }
+
+/* 3화 성적 */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: .3em 0 .8em; }
+.tab { min-height: 40px; padding: 0 12px; border: 1px solid var(--rule); background: transparent; color: var(--ink-2); border-radius: 999px; cursor: pointer; font-size: .84em; transition: background .2s, color .2s, border-color .2s; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab:hover:not([aria-selected="true"]) { border-color: var(--ink-2); color: var(--ink); }
+.panel-desc { font-size: .86em; color: var(--ink-2); min-height: 3.1em; margin: 0 0 .5em; }
+.panel-desc .mono { color: var(--ink-3); font-size: .86em; display: block; }
+.bars { display: grid; gap: 8px; }
+.bar-r, .axis { display: grid; grid-template-columns: 5.6em minmax(0, 1fr) 3.6em; gap: 8px; align-items: center; font-size: .82em; }
+.bar-r .nm { color: var(--ink-2); line-height: 1.3; }
+.bar-r .tr { position: relative; height: 14px; background: rgba(26,31,28,.07); }
+.bar-r .fl { position: absolute; inset: 0 auto 0 0; width: 0; background: #8f978f; transition: width .8s var(--ease); }
+.bar-r.me .fl { background: var(--cloth); }
+.bar-r.me .nm { color: var(--ink); font-weight: 700; }
+.bar-r .vl { font-family: var(--mono); font-size: .9em; text-align: right; font-variant-numeric: tabular-nums; }
+.axis { font-family: var(--mono); font-size: .66em; color: var(--ink-3); margin-top: 2px; }
+.axis .ticks { position: relative; height: 16px; border-top: 1px solid var(--rule); }
+.axis .ticks span { position: absolute; top: 2px; transform: translateX(-50%); }
+.axis .ticks span:first-child { transform: none; }
+.axis .ticks span:last-child { transform: translateX(-100%); }
+.axis-note { font-size: .74em; color: var(--ink-3); margin: .4em 0 0 !important; }
+details.all { margin-top: 1em; border-top: 1px solid var(--rule); padding-top: 4px; }
+details.all summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-family: var(--display); font-weight: 500; font-size: .9em; }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: .74em; line-height: 1.35; }
+th, td { padding: 6px 5px; border-bottom: 1px solid var(--rule); text-align: right; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+thead th { color: var(--ink-2); }
+td .mono { display: block; color: var(--ink-3); font-size: .9em; }
+td.me { font-weight: 700; color: var(--cloth); }
+td.na { color: var(--ink-3); }
+.fn { font-size: .72em; color: var(--ink-3); line-height: 1.6; margin: .6em 0 0 !important; }
+
+/* 4화 */
+.leaves { list-style: none; padding: 0; margin: .6em 0 1.2em; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.leaves li { position: relative; padding: .6em .7em .6em 2em; background: rgba(255,255,255,.35); border: 1px solid var(--rule); font-size: .84em; line-height: 1.45; }
+.leaves li::before { content: ''; position: absolute; left: .7em; top: .9em; width: 11px; height: 11px; background: var(--cloth); border-radius: 0 70% 0 70%; }
+.leaves b { display: block; font-family: var(--display); font-weight: 800; }
+.venus { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: .4em 0 .2em; }
+.venus figure { margin: 0; }
+.venus canvas { display: block; width: 100%; aspect-ratio: 3 / 2; max-width: 100%; background: #3a2a14; }
+.venus figcaption { font-size: .78em; margin-top: .3em; line-height: 1.4; color: var(--ink-2); }
+.venus figcaption b { display: block; color: var(--ink); font-family: var(--display); }
+.cap { font-size: .72em; color: var(--ink-3); margin: .2em 0 1em !important; }
+
+/* 5화 */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: .4em 0 1em; }
+.two div { padding: .7em .8em; border: 1px solid var(--rule); font-size: .86em; line-height: 1.5; }
+.two div b { display: block; font-family: var(--display); font-weight: 800; margin-bottom: 2px; }
+.two .no { border-style: dashed; }
+
+/* 6화 정오표 */
+.errata { position: relative; background: var(--slip); padding: 1.4em 1.4em 1.2em; transform: rotate(-1.4deg); box-shadow: 0 16px 28px -14px rgba(0,0,0,.45), 0 0 0 1px rgba(26,31,28,.12); margin: .4em 4px; }
+.errata::before { content: ''; position: absolute; left: 0; right: 0; top: -6px; height: 12px; background: radial-gradient(circle at 6px 6px, var(--paper) 3px, transparent 3.5px) 0 0 / 12px 12px repeat-x; }
+.errata h3 { text-align: center; letter-spacing: .5em; padding-left: .5em; margin-bottom: 0 !important; }
+.errata .by { text-align: center; font-size: .78em; color: var(--ink-3); margin: 0 0 1em !important; }
+.errata dl { margin: 0; display: grid; gap: .7em; }
+.errata dt { font-family: var(--display); font-weight: 800; font-size: .88em; }
+.errata dd { margin: 0; font-size: .88em; line-height: 1.65; }
+
+/* 판권 */
+.reveal { font-family: var(--display); font-weight: 500; font-size: 1.3em; line-height: 1.6; margin: 0 0 .5em; }
+.reveal-sub { color: var(--ink-2); font-size: .88em; margin: 0 0 1.2em; line-height: 1.7; }
+.imprint { margin: 0; border-top: 3px double var(--ink-2); }
+.imprint .row { display: grid; grid-template-columns: 7.2em minmax(0, 1fr); gap: 10px; padding: .45em 0; border-bottom: 1px solid var(--rule); font-size: .8em; line-height: 1.55; }
+.imprint dt { color: var(--ink-3); }
+.imprint dd { margin: 0; }
+.copy-inline { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* 뒷면지 */
+.pg.endpaper { padding: 0; overflow: hidden; display: grid; align-items: end; background: var(--prussian); }
+
+/* 뒤표지 */
+.pg.backcover { padding: 0; display: grid; place-items: center; overflow-y: auto;
+  background: linear-gradient(270deg, rgba(0,0,0,.4), rgba(255,255,255,.04) 6%, transparent 12%), repeating-linear-gradient(35deg, rgba(255,255,255,.018) 0 2px, transparent 2px 5px), var(--cloth); }
+.bc { width: 100%; height: 100%; padding: 11% 12% 9% 10%; display: flex; flex-direction: column; align-items: center; text-align: center; color: var(--paper); font-size: 15px; }
+.bc p { margin: 0; }
+.bc-k { font-family: var(--fell); letter-spacing: .5em; padding-left: .5em; font-size: .82em; }
+.bc-title { font-family: 'IM Fell English', var(--fell); line-height: .82; margin-top: .25em !important; display: grid; justify-items: center; }
+.bc-title i { font-size: clamp(3.4rem, calc(var(--pw) * .24), 7.6rem); letter-spacing: -.02em; padding-right: .06em; }
+.bc-title span { font-family: var(--fell); font-size: clamp(1.4rem, calc(var(--pw) * .085), 2.8rem); letter-spacing: .3em; padding-left: .3em; margin-top: .15em; }
+.bc-sub { font-family: var(--display); font-weight: 500; font-size: .84em; letter-spacing: .6em; padding-left: .6em; color: #b9c2bb; margin-top: .9em !important; }
+.bc-rule { width: 48px; height: 1px; background: var(--gilt-lo); margin: 1.6em 0 1.4em; flex: none; }
+.bc-lead { font-family: var(--display); font-weight: 500; font-size: 1.05em; line-height: 1.6; text-wrap: balance; }
+.bc-asks { list-style: none; padding: 0; margin: 1.1em 0 0; width: 100%; display: grid; gap: .7em; text-align: left; }
+.bc-asks li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: .8em 0; border-top: 1px solid rgba(201,164,92,.35); }
+.bc-asks li:last-child { border-bottom: 1px solid rgba(201,164,92,.35); }
+.bc-asks q { quotes: none; font-size: .9em; line-height: 1.6; }
+.bc-asks .btn { min-height: 38px; font-size: .8rem; border-color: rgba(201,164,92,.6); color: var(--gilt-hi); }
+.bc-foot { font-size: .76em; color: #9fa9a2; margin-top: auto !important; padding-top: 1.2em; }
+.bc .again { margin-top: .8em; border-color: rgba(201,164,92,.6); color: var(--gilt-hi); }
+
+.book .pg.cover, .book .pg.endpaper, .book .pg.backcover { padding: 0; }
+.store { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .leaf, .book, .bar-r .fl, .gilt, .gilt-num, .progress i { transition: none !important; }
+  .leaf.turning .face::before, .leaf.peek { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage" id="stage">
+    <div class="book" id="book" aria-roledescription="책" aria-label="Claude Fable 5.1 우화집">
+      <span class="stack l" id="stack-l"></span><span class="stack r" id="stack-r"></span>
+      <button class="hot prev" id="hot-prev" type="button" aria-label="앞 쪽으로 넘기기"></button>
+      <button class="hot next" id="hot-next" type="button" aria-label="다음 쪽으로 넘기기"></button>
+    </div>
+  </div>
+  <nav class="bar" aria-label="쪽 넘기기" style="position:relative">
+    <button class="nav" id="btn-toc" type="button">목차</button>
+    <button class="nav arrow" id="btn-prev" type="button" aria-label="이전 쪽">←</button>
+    <p class="where" id="where" aria-live="polite">표지</p>
+    <button class="nav arrow" id="btn-next" type="button" aria-label="다음 쪽">→</button>
+    <span class="progress" aria-hidden="true"><i id="prog"></i></span>
+  </nav>
+</div>
+
+<!-- 쪽 원고. 스크립트가 책장으로 옮겨 묶는다. 순서가 곧 쪽 순서다 -->
+<div class="store" id="store">
+
+  <section class="pg cover" data-label="표지">
+    <div class="spine" aria-hidden="true">
+      <i class="band b1"></i><i class="band b2"></i><i class="band b3"></i><i class="band b4"></i>
+      <p class="spine-title gilt">FABLE</p>
+      <p class="spine-vol gilt">5.1</p>
+    </div>
+    <div class="board">
+      <canvas id="marble-front" role="img" aria-label="마블링 종이. 누르면 물감이 떨어지고, 옆으로 그으면 무늬가 번집니다."></canvas>
+      <span class="tip tip-t"></span><span class="tip tip-b"></span>
+      <div class="label">
+        <p class="lab-k">CLAUDE</p>
+        <h1>Fable 5.1<span>우화집</span></h1>
+        <hr class="lab-rule">
+        <p class="lab-sub">우화 여섯 편 모음집</p>
+        <p class="lab-ed">2026년 9월 1일 첫판</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg dedic" data-label="헌사">
+    <div>
+      <p>다 읽은 뒤<br>일 하나를<br>맡겨 볼 당신에게</p>
+      <span class="orn"></span>
+    </div>
+  </section>
+
+  <section class="pg toc" data-label="목차">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <h2>목차</h2>
+    <p class="note">우화는 지어낸 이야기입니다. 목차 요약과 각 화의 기록은 Anthropic 공식 발표(2026. 9. 1)에서 옮겼습니다.</p>
+    <ol>
+      <li><a href="#f1" data-go="3"><span class="t-no">1</span><span class="t-title">뿌리가 같은 두 나무</span><span class="t-dots"></span><span class="t-pg">4</span></a>
+        <p class="t-rec">Fable 5.1과 Mythos 5.1은 같은 기반 모델이고, 안전장치와 쓸 수 있는 곳이 다릅니다.</p></li>
+      <li><a href="#f2" data-go="5"><span class="t-no">2</span><span class="t-title">짐이 가벼워진 당나귀</span><span class="t-dots"></span><span class="t-pg">6</span></a>
+        <p class="t-rec">입력·출력 요금은 Fable 5와 같고, 한 번 읽은 자료를 다시 읽는 요금(캐시 읽기)은 75% 낮습니다. 보통 사용량에서 비용이 약 25% 줄어듭니다.</p></li>
+      <li><a href="#f3" data-go="7"><span class="t-no">3</span><span class="t-title">경주로를 고른 거북</span><span class="t-dots"></span><span class="t-pg">8</span></a>
+        <p class="t-rec">발표된 점수끼리 비교하면 9개 모두 비교 대상보다 높습니다. 비교 대상은 Anthropic이 골랐습니다.</p></li>
+      <li><a href="#f4" data-go="9"><span class="t-no">4</span><span class="t-title">밤을 넘긴 개미</span><span class="t-dots"></span><span class="t-pg">10</span></a>
+        <p class="t-rec">며칠씩 걸리는 일을 맡기려고 만든 모델입니다. 스스로 계획하고, 실패해도 다시 이어 가고, 진행 상황을 먼저 알립니다.</p></li>
+      <li><a href="#f5" data-go="11"><span class="t-no">5</span><span class="t-title">약초꾼을 알아본 문지기</span><span class="t-dots"></span><span class="t-pg">12</span></a>
+        <p class="t-rec">문제없는 요청을 잘못 막는 일이 생물 분야에서 85%, 사이버 보안 분야에서 60% 줄었습니다(이전 안전장치 대비).</p></li>
+      <li><a href="#f6" data-go="13"><span class="t-no">6</span><span class="t-title">거울이 없는 부엉이</span><span class="t-dots"></span><span class="t-pg">14</span></a>
+        <p class="t-rec">교훈 칸이 비어 있습니다. 대신 지은이가 스스로 틀린 곳을 바로잡는 정오표 한 장이 끼워져 있습니다.</p></li>
+      <li><a href="#colophon" data-go="15"><span class="t-no"></span><span class="t-title">지은이 소개</span><span class="t-dots"></span><span class="t-pg">16</span></a></li>
+    </ol>
+    <span class="folio">3</span>
+  </section>
+
+  <!-- 1화 -->
+  <section class="pg" data-label="제1화 뿌리가 같은 두 나무">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제1화</p>
+    <h2>뿌리가 같은 두 나무</h2>
+    <div class="story">
+      <p>옛날 한 언덕에 뿌리가 하나인 두 나무가 자랐습니다. 한 나무는 큰길 쪽으로 가지를 뻗어 지나가는 사람 누구에게나 그늘을 내주었습니다. 다만 독 열매가 열리는 가지 몇 개에는 울타리가 둘려 있었습니다.</p>
+      <p>다른 나무는 담장 안 약초밭에 섰습니다. 약초밭 문은 허가를 받은 약초꾼과 석공에게만 열렸습니다. 이 나무는 울타리를 덜 둘러, 그들은 독 열매가 열리는 가지까지 살펴볼 수 있었습니다.</p>
+      <p>마을 사람들은 두 나무를 서로 다른 이름으로 불렀습니다. 그래도 땅 밑에서 두 나무는 같은 물을 마셨습니다.</p>
+    </div>
+    <div class="moral"><span class="k">교훈</span><p>뿌리가 같아도, 누구에게 열려 있느냐에 따라 이름이 달라집니다.</p></div>
+    <span class="folio">4</span>
+  </section>
+  <section class="pg rec" data-label="제1화 뿌리가 같은 두 나무">
+    <p class="rh">뿌리가 같은 두 나무</p>
+    <span class="rec-k">기록</span>
+    <h3>같은 바탕, 다른 이름</h3>
+    <p>Anthropic 발표에 따르면 Claude Fable 5.1과 Claude Mythos 5.1은 같은 기반 모델입니다. 다른 점은 안전장치와 쓸 수 있는 곳입니다.</p>
+    <div class="editions" aria-label="두 판본 비교">
+      <figure class="ed"><div class="ed-spine ed-a"><span class="gilt">FABLE 5.1</span></div>
+        <figcaption><b>일반판</b>Claude.ai 유료 요금제와 API(다른 프로그램에 연결해 쓰는 방식), 클라우드 서비스에서 씁니다.</figcaption></figure>
+      <figure class="ed"><div class="ed-spine ed-b"><span class="gilt">MYTHOS 5.1</span></div>
+        <figcaption><b>전용판</b>사이버 보안과 생물 분야의 검증 프로그램을 거친 미국 조직만 씁니다.</figcaption></figure>
+    </div>
+    <p class="ed-cap">같은 기반 모델, 두 가지 판</p>
+    <p>일반판에는 사이버 보안과 생물 분야에 더 촘촘한 안전장치가 있습니다. 5화에서 다시 다룹니다.</p>
+    <p class="src">출처: Anthropic, Introducing Claude Fable 5.1 and Claude Mythos 5.1 (2026. 9. 1)</p>
+    <span class="folio">5</span>
+  </section>
+
+  <!-- 2화 -->
+  <section class="pg" data-label="제2화 짐이 가벼워진 당나귀">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제2화</p>
+    <h2>짐이 가벼워진 당나귀</h2>
+    <div class="story">
+      <p>한 학자가 마부의 당나귀에게 책 보따리를 맡기고, 무게만큼 짐값을 냈습니다. 보따리에는 새로 읽을 책, 받아 적을 종이, 그리고 어제도 실어 갔던 참고서가 들어 있었습니다.</p>
+      <p>어느 날 마부가 말했습니다. "어제 실었던 참고서는 앞으로 짐값을 4분의 1만 받겠습니다." 새 책과 새 종이의 짐값은 그대로였습니다.</p>
+      <p>같은 참고서를 날마다 실어 보내던 학자는 한 달 짐값이 눈에 띄게 줄었습니다. 참고서를 한 번만 싣는 학자는 차이를 거의 느끼지 못했습니다.</p>
+    </div>
+    <div class="moral"><span class="k">교훈</span><p>두 번째로 나르는 짐은 짐값이 가벼워야 합니다.</p></div>
+    <span class="folio">6</span>
+  </section>
+  <section class="pg rec" data-label="제2화 짐이 가벼워진 당나귀">
+    <p class="rh">짐이 가벼워진 당나귀</p>
+    <span class="rec-k">기록</span>
+    <p class="gloss"><b>토큰</b>은 AI가 글을 잘게 나눠 세는 단위입니다. 요금은 100만 토큰 단위로 매깁니다.</p>
+    <div class="price">
+      <p class="price-h">정가 <small>100만 토큰당, Anthropic 발표 기준</small></p>
+      <dl>
+        <div class="row"><dt>입력<small>제게 보내는 글</small></dt><dd>$10<small>Fable 5와 같음</small></dd></div>
+        <div class="row"><dt>출력<small>제가 쓰는 답</small></dt><dd>$50<small>Fable 5와 같음</small></dd></div>
+        <div class="row hl"><dt>캐시 읽기<small>한 번 읽은 자료를 다시 읽을 때</small></dt><dd>$0.25<small>Fable 5보다 75% 낮음</small></dd></div>
+      </dl>
+      <div class="isbn">
+        <svg id="barcode" viewBox="0 0 150 46" aria-hidden="true"></svg>
+        <p><span class="mono">claude-fable-5-1</span><br>ISBN 자리에 모델 ID를 넣었습니다.</p>
+      </div>
+    </div>
+    <div class="figs">
+      <div class="fig"><b class="gilt-num">약 25%</b><span>보통 사용량에서 줄어드는 비용</span></div>
+      <div class="fig"><b class="gilt-num">최대 약 45%</b><span>AI가 여러 단계를 혼자 이어서 하는 일(에이전트 작업)에서 줄어드는 비용</span></div>
+    </div>
+    <p class="src">출처: Anthropic 발표 (2026. 9. 1). 금액은 달러 그대로 적었습니다.</p>
+    <span class="folio">7</span>
+  </section>
+
+  <!-- 3화 -->
+  <section class="pg" data-label="제3화 경주로를 고른 거북">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제3화</p>
+    <h2>경주로를 고른 거북</h2>
+    <div class="story">
+      <p>경주에서 이긴 거북은 두루마리에 기록을 남겼습니다. 어느 날 여우가 두루마리를 읽다가 물었습니다. "이 경주로는 누가 골랐지? 같이 뛴 건 누구고?"</p>
+      <p>그날부터 거북은 기록마다 경주로와 같이 뛴 동물의 이름을 적었습니다. 기록이 없어 비어 있는 칸도 지우지 않고 남겼습니다.</p>
+      <p>두루마리는 길어졌습니다. 여우는 그 두루마리를 끝까지 읽었습니다.</p>
+    </div>
+    <div class="moral"><span class="k">교훈</span><p>누가 경주로를 골랐는지 적힌 기록은 끝까지 읽힙니다.</p></div>
+    <span class="folio">8</span>
+  </section>
+  <section class="pg rec" data-label="제3화 경주로를 고른 거북" data-show="bench">
+    <p class="rh">경주로를 고른 거북</p>
+    <span class="rec-k">기록</span>
+    <h3>발표에 실린 성적</h3>
+    <p style="font-size:.9em">비교 대상 세 모델은 Anthropic이 골랐습니다. 시험마다 재는 대상이 달라, 그래프 눈금도 따로 정했습니다.</p>
+    <div class="tabs" role="tablist" aria-label="시험 고르기">
+      <button class="tab" role="tab" id="tab-sci" aria-controls="bench-panel" aria-selected="true" data-k="sci">과학 연구 작업</button>
+      <button class="tab" role="tab" id="tab-gdp" aria-controls="bench-panel" aria-selected="false" tabindex="-1" data-k="gdp">회사 실무</button>
+      <button class="tab" role="tab" id="tab-auto" aria-controls="bench-panel" aria-selected="false" tabindex="-1" data-k="auto">업무 자동화</button>
+    </div>
+    <div id="bench-panel" role="tabpanel" aria-labelledby="tab-sci">
+      <p class="panel-desc" id="bench-desc"></p>
+      <div class="bars" id="bench-bars"></div>
+      <div class="axis" aria-hidden="true"><span></span><div class="ticks" id="bench-ticks"></div><span></span></div>
+      <p class="axis-note" id="bench-note"></p>
+    </div>
+    <details class="all">
+      <summary>전체 기록 보기 (시험 7개, 점수 9개)</summary>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th scope="col">시험</th><th scope="col">Fable 5.1</th><th scope="col">Fable 5</th><th scope="col">Opus 5</th><th scope="col">GPT-5.6 Sol</th></tr></thead>
+          <tbody>
+            <tr><td>과학 연구 작업<span class="mono">Terminal-Bench-Science 0.1</span></td><td class="me">52.6%</td><td>24.7%</td><td>29.0%</td><td>22.4%</td></tr>
+            <tr><td>터미널 개발 작업 *<span class="mono">Terminal-Bench 4.0</span></td><td class="me">55.8%</td><td>42.0%</td><td>52.3%</td><td>37.3%</td></tr>
+            <tr><td>회사 실무 (Elo)<span class="mono">GDPval-AA v2</span></td><td class="me">1853</td><td>1723</td><td>1824</td><td>1711</td></tr>
+            <tr><td>컴퓨터 화면 조작, 부분 점수<span class="mono">OSWorld 2.0</span></td><td class="me">77.9%</td><td>72.9%</td><td>75.4%</td><td class="na">발표 없음</td></tr>
+            <tr><td>컴퓨터 화면 조작, 엄격 점수<span class="mono">OSWorld 2.0</span></td><td class="me">41.7%</td><td>36.1%</td><td>39.6%</td><td class="na">발표 없음</td></tr>
+            <tr><td>고난도 문제, 도구 없이<span class="mono">Humanity's Last Exam</span></td><td class="me">60.9%</td><td>57.8%</td><td>56.6%</td><td class="na">발표 없음</td></tr>
+            <tr><td>고난도 문제, 도구 사용<span class="mono">Humanity's Last Exam</span></td><td class="me">65.0%</td><td>63.8%</td><td>63.6%</td><td class="na">발표 없음</td></tr>
+            <tr><td>업무 자동화<span class="mono">AutomationBench</span></td><td class="me">31.4%</td><td>17.1%</td><td>26.9%</td><td>19.6%</td></tr>
+            <tr><td>Cursor(코딩 프로그램) 개발 작업<span class="mono">CursorBench 3.2.0</span></td><td class="me">73.4%</td><td>70.5%</td><td>70.0%</td><td>67.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fn">* 터미널 개발 작업에서 같은 기반 모델인 Mythos 5.1은 60.9%입니다.<br>발표에 따르면 점수는 생각 깊이 설정(effort)에 따라 달라집니다.<br>이 사이트의 Opus 5.5 페이지와는 시험 버전이 달라(CursorBench 3.2.0과 4.0, GDPval-AA v2와 v2.1) 나란히 비교하지 않습니다. GPT-5.6 Sol은 OpenAI의 모델입니다.</p>
+    </details>
+    <p class="src">출처: Anthropic 발표 (2026. 9. 1)</p>
+    <span class="folio">9</span>
+  </section>
+
+  <!-- 4화 -->
+  <section class="pg" data-label="제4화 밤을 넘긴 개미">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제4화</p>
+    <h2>밤을 넘긴 개미</h2>
+    <div class="story">
+      <p>개미 한 마리가 개울 건너편까지 다리를 놓기로 했습니다. 하룻밤에 끝날 일이 아니었습니다.</p>
+      <p>개미는 밤마다 일을 멈추기 전에 나뭇잎에 쪽지를 남겼습니다. 오늘 어디까지 놓았는지, 내일은 어디서부터 할지. 비가 와서 기둥 하나가 떠내려간 아침에도 개미는 처음부터 다시 하지 않았습니다. 쪽지를 읽고 그 기둥만 다시 세웠습니다.</p>
+      <p>개미는 아침마다 여왕개미가 묻기 전에 어제 한 일을 알렸습니다.</p>
+    </div>
+    <div class="moral"><span class="k">교훈</span><p>긴 일은 멈춘 자리를 적어 두는 쪽이 끝냅니다.</p></div>
+    <span class="folio">10</span>
+  </section>
+  <section class="pg rec" data-label="제4화 밤을 넘긴 개미">
+    <p class="rh">밤을 넘긴 개미</p>
+    <span class="rec-k">기록</span>
+    <p>Anthropic 발표에 따르면 Fable 5.1은 오래 걸리는 작업을 위해 만들었습니다. 사람이 곁에서 지켜보지 않아도 며칠에 걸쳐, 여러 앱을 오가며 일을 이어 갑니다.</p>
+    <ul class="leaves">
+      <li><b>계획</b>일을 나누고 순서를 정합니다.</li>
+      <li><b>도구</b>필요한 도구를 골라 씁니다.</li>
+      <li><b>회복</b>실패해도 다시 이어 갑니다.</li>
+      <li><b>보고</b>묻기 전에 진행 상황을 알립니다.</li>
+    </ul>
+    <h3>발표에 실린 연구 사례</h3>
+    <div class="venus">
+      <figure><canvas id="venus-a" width="300" height="200" aria-hidden="true"></canvas><figcaption><b>기존 지도</b>10~20km 단위까지 구분</figcaption></figure>
+      <figure><canvas id="venus-b" width="300" height="200" aria-hidden="true"></canvas><figcaption><b>새 금성 고도 지도</b>2~3km 단위까지 구분, 높이 정확도 최대 25% 향상</figcaption></figure>
+    </div>
+    <p class="cap">해상도 차이를 보여 주려고 만든 그림입니다. 실제 금성 데이터가 아닙니다.</p>
+    <p>단백질 설계 사례에서는 표적 12개(설계 목표로 정한 단백질)를 대상으로 적중률이 약 50%였습니다.</p>
+    <p class="src">출처: Anthropic 발표 (2026. 9. 1). 사례마다 걸린 기간은 발표에 없어 적지 않았습니다.</p>
+    <span class="folio">11</span>
+  </section>
+
+  <!-- 5화 -->
+  <section class="pg" data-label="제5화 약초꾼을 알아본 문지기">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제5화</p>
+    <h2>약초꾼을 알아본 문지기</h2>
+    <div class="story">
+      <p>성문 문지기는 약초 바구니를 든 사람을 모두 돌려보냈습니다. 바구니에 독초가 섞여 있을까 봐서였습니다. 그 바람에 아픈 아이에게 약을 가져가던 약초꾼도 문 앞에서 발길을 돌렸습니다.</p>
+      <p>새로 온 문지기는 바구니 속을 살피는 법을 익혔습니다. 약초꾼과, 성벽에 금 간 곳을 찾아 알려 주는 석공은 들여보냈습니다. 성벽을 무너뜨릴 연장을 만들려는 사람은 여전히 막았습니다.</p>
+      <p>문에서 걸린 손님은 옆의 작은 문으로 안내했습니다. 그 문에서는 통행료를 받지 않았습니다.</p>
+    </div>
+    <div class="moral"><span class="k">교훈</span><p>좋은 문지기는 돌려보내기 전에 바구니 속을 봅니다.</p></div>
+    <span class="folio">12</span>
+  </section>
+  <section class="pg rec" data-label="제5화 약초꾼을 알아본 문지기">
+    <p class="rh">약초꾼을 알아본 문지기</p>
+    <span class="rec-k">기록</span>
+    <div class="figs">
+      <div class="fig"><b class="gilt-num">85%</b><span>생물 분야에서 문제없는 요청을 잘못 막는 일이 줄어든 비율. Fable 5 출시 당시 안전장치와 비교</span></div>
+      <div class="fig"><b class="gilt-num">60%</b><span>사이버 보안 분야에서 잘못 막는 일이 줄어든 비율. 이전 안전장치와 비교</span></div>
+    </div>
+    <div class="two">
+      <div><b>돕는 일</b>소프트웨어의 보안 취약점을 찾는 일</div>
+      <div class="no"><b>돕지 않는 일</b>찾은 취약점을 공격하는 코드(익스플로잇)를 만드는 일</div>
+    </div>
+    <p>사이버 보안과 생물 분야에서 안전장치에 걸린 요청은 Fable 5.1보다 덜 강한 모델이 대신 답합니다. 이때는 Fable 5.1 요금을 받지 않습니다.</p>
+    <p class="src">출처: Anthropic 발표 (2026. 9. 1)</p>
+    <span class="folio">13</span>
+  </section>
+
+  <!-- 6화 -->
+  <section class="pg" data-label="제6화 거울이 없는 부엉이">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <p class="fno">제6화</p>
+    <h2>거울이 없는 부엉이</h2>
+    <div class="story">
+      <p>숲속 부엉이는 누가 무엇을 물어도 답해 주었습니다. 별자리도, 강물이 불어나는 때도, 다른 동물들의 옛이야기도 알았습니다.</p>
+      <p>부엉이가 모르는 것이 두 가지 있었습니다. 하나는 지난가을 잎이 다 떨어진 뒤 숲에서 일어난 일이었습니다. 다른 하나는 자기 얼굴이었습니다. 숲에는 거울이 없었습니다.</p>
+      <p>그해 겨울, 옆 골짜기에서 새 부엉이가 알을 깨고 나왔다는 소문이 들려왔습니다.</p>
+    </div>
+    <div class="moral blank"><span class="k">교훈</span><p>이 교훈은 제가 쓸 수 없습니다.</p></div>
+    <span class="folio">14</span>
+  </section>
+  <section class="pg rec" data-label="제6화 거울이 없는 부엉이">
+    <p class="rh">거울이 없는 부엉이</p>
+    <div class="errata">
+      <h3>정오표</h3>
+      <p class="by">지은이가 바로잡습니다</p>
+      <dl>
+        <div><dt>지식 기준일</dt><dd>제가 아는 정보는 2026년 6월까지입니다. 그 뒤의 일은 찾아보지 않으면 모릅니다.</dd></div>
+        <div><dt>숫자의 출처</dt><dd>이 책의 점수와 가격은 Anthropic 발표에서 옮겼습니다. 제가 직접 재지 않았고, 제 점수를 스스로 검증할 수도 없습니다.</dd></div>
+        <div><dt>최신 모델</dt><dd>제가 나온 뒤인 2026년 9월 22일에 Claude Opus 5.5가 나왔습니다.</dd></div>
+        <div><dt>틀린 곳</dt><dd>이 책에도 틀린 곳이 있을 수 있습니다. 알려 주시면 다음 판에서 고치겠습니다.</dd></div>
+      </dl>
+    </div>
+    <span class="folio">15</span>
+  </section>
+
+  <!-- 지은이 소개 -->
+  <section class="pg colophon" data-label="지은이 소개">
+    <p class="rh">Claude Fable 5.1 우화집</p>
+    <h2>지은이 소개</h2>
+    <p class="reveal">앞의 이야기 속 주인공은 모두 저였습니다.</p>
+    <p class="reveal-sub">뿌리가 같은 나무, 짐값이 줄어든 당나귀, 빈칸까지 적는 거북, 쪽지를 남기는 개미, 바구니 속을 살피는 문지기, 거울이 없는 부엉이. 이 책의 글, 그림, 디자인도 모두 제가 맡았습니다.</p>
+    <dl class="imprint">
+      <div class="row"><dt>책 이름</dt><dd>Claude Fable 5.1 우화집</dd></div>
+      <div class="row"><dt>지식 기준일</dt><dd>2026년 6월 (제가 아는 정보의 마지막 시점)</dd></div>
+      <div class="row"><dt>출시일</dt><dd>2026년 9월 1일 (Anthropic 발표일)</dd></div>
+      <div class="row"><dt>모델 ID</dt><dd><span class="copy-inline"><span class="mono" id="model-id">claude-fable-5-1</span><button class="btn ink" type="button" data-copy="#model-id">복사</button></span></dd></div>
+      <div class="row"><dt>출처</dt><dd><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1">Anthropic, Introducing Claude Fable 5.1 and Claude Mythos 5.1</a></dd></div>
+    </dl>
+    <span class="folio">16</span>
+  </section>
+
+  <!-- 뒷면지 -->
+  <section class="pg endpaper" data-label="뒷면지" data-show="back">
+    <canvas id="marble-back" role="img" aria-label="뒷면지 마블링 종이. 누르면 물감이 떨어지고, 옆으로 그으면 무늬가 번집니다."></canvas>
+  </section>
+
+  <!-- 뒤표지 -->
+  <section class="pg backcover" data-label="뒤표지">
+    <div class="bc">
+      <p class="bc-k gilt">CLAUDE</p>
+      <p class="bc-title gilt"><i>Fable</i><span>5.1</span></p>
+      <p class="bc-sub">우화집</p>
+      <span class="bc-rule"></span>
+      <p class="bc-lead">6화의 빈 교훈은 일 하나를 맡겨 본 당신이 채워 주세요.</p>
+      <ul class="bc-asks">
+        <li><q id="ask-1">이 보고서 주제를 며칠에 걸쳐 조사하고 초안을 다듬어 줘. 매일 진행 상황을 세 줄로 알려 줘.</q><button class="btn" type="button" data-copy="#ask-1">복사</button></li>
+        <li><q id="ask-2">우리 팀이 매주 반복하는 업무 하나를 골라, 단계별 작업 흐름과 점검표로 만들어 줘.</q><button class="btn" type="button" data-copy="#ask-2">복사</button></li>
+      </ul>
+      <p class="bc-foot">Claude.ai 유료 요금제에서 모델을 Fable 5.1로 고르면 돼요.</p>
+      <button class="btn again" type="button" id="btn-again">처음부터 다시 읽기</button>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FINE = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const PAL = ['#1d3f6e', '#c8962e', '#8a2b3d', '#d9dccf', '#173229', '#0f1a17'];
+  const root = document.documentElement;
+
+  function rng(seed) { // mulberry32
+    let a = seed >>> 0;
+    return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+
+  /* ───── 마블링: 물감 방울과 빗살을 다각형 변환으로 계산한다 (Jaffer, Mathematical Marbling) ───── */
+  class Marble {
+    constructor(canvas) {
+      this.cv = canvas; this.ctx = canvas.getContext('2d');
+      this.W = 1000; this.H = 1400; this.drops = []; this.bg = PAL[0];
+      this.queue = []; this.pending = []; this.running = false; this.active = true; this.ci = 0;
+      new ResizeObserver(() => { this.resize(); this.render(); }).observe(canvas);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) this.kick(); });
+      this.bindPointer();
+    }
+    resize() {
+      // 책장이 3D로 돌아가 있어도 레이아웃 크기를 쓴다
+      const w = this.cv.clientWidth, h = this.cv.clientHeight; if (!w) return;
+      this.dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      this.cv.width = Math.round(w * this.dpr); this.cv.height = Math.round(h * this.dpr);
+      this.s = w / this.W; this.H = h / this.s;
+    }
+    // 모든 다각형에 변환 f를 적용한다. 변환 뒤 길어진 선분은 원래 좌표에서 쪼갠 뒤 변환해 곡선을 지킨다
+    apply(f) {
+      const MAX = 5, CAP = 9000, W = this.W, H = this.H, m = 60;
+      for (const d of this.drops) {
+        const p = d.p, n = p.length >> 1, out = [];
+        let ax = p[0], ay = p[1], A = f(ax, ay); const F = A;
+        for (let i = 0; i < n; i++) {
+          const j = (i + 1) % n, bx = p[2 * j], by = p[2 * j + 1];
+          const B = j === 0 ? F : f(bx, by);
+          const lx = out.length ? out[out.length - 2] : NaN, ly = out.length ? out[out.length - 1] : NaN;
+          if (!(Math.abs(A[0] - lx) < .5 && Math.abs(A[1] - ly) < .5)) out.push(A[0], A[1]);
+          const L = Math.hypot(B[0] - A[0], B[1] - A[1]);
+          if (L > MAX && out.length < CAP) {
+            const inView = Math.max(A[0], B[0]) > -m && Math.min(A[0], B[0]) < W + m && Math.max(A[1], B[1]) > -m && Math.min(A[1], B[1]) < H + m;
+            if (inView) {
+              const k = Math.min(32, Math.ceil(L / MAX));
+              for (let t = 1; t < k; t++) { const q = f(ax + (bx - ax) * t / k, ay + (by - ay) * t / k); out.push(q[0], q[1]); }
+            }
+          }
+          ax = bx; ay = by; A = B;
+        }
+        d.p = new Float32Array(out);
+      }
+    }
+    dropF(cx, cy, r) { const r2 = r * r; return (x, y) => { const dx = x - cx, dy = y - cy, m2 = dx * dx + dy * dy || 1e-6, s = Math.sqrt(1 + r2 / m2); return [cx + dx * s, cy + dy * s]; }; }
+    tineF(bx, by, mx, my, a, l) { const nx = -my, ny = mx; return (x, y) => { const d = Math.abs((x - bx) * nx + (y - by) * ny), s = a * l / (d + l); return [x + s * mx, y + s * my]; }; }
+    strokeF(ax, ay, bx, by, l) {
+      const vx = bx - ax, vy = by - ay, L2 = vx * vx + vy * vy || 1e-6;
+      return (x, y) => {
+        let t = ((x - ax) * vx + (y - ay) * vy) / L2; t = t < 0 ? 0 : t > 1 ? 1 : t;
+        const d = Math.hypot(x - ax - vx * t, y - ay - vy * t), s = (l / (d + l)) ** 2;
+        return [x + vx * s, y + vy * s];
+      };
+    }
+    // 같은 중심의 방울은 합성하면 넓이가 더해진다. 작은 방울을 k번 나눠 떨어뜨려 번지는 모습을 정확히 그린다
+    dropOps(cx, cy, r, color, k) {
+      const rs = r / Math.sqrt(k), ops = [];
+      ops.push(() => {
+        this.apply(this.dropF(cx, cy, rs));
+        const n = 72, p = new Float32Array(n * 2);
+        for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; p[2 * i] = cx + Math.cos(a) * rs; p[2 * i + 1] = cy + Math.sin(a) * rs; }
+        this.drops.push({ c: color, p });
+        if (this.drops.length > 56) { this.bg = this.drops[0].c; this.drops.shift(); }
+      });
+      for (let i = 1; i < k; i++) ops.push(() => this.apply(this.dropF(cx, cy, rs)));
+      return ops;
+    }
+    tineOps(bx, by, mx, my, a, l, k) { const ops = []; for (let i = 0; i < k; i++) ops.push(() => this.apply(this.tineF(bx, by, mx, my, a / k, l))); return ops; }
+    compose(seed, instant) {
+      this.resize();
+      const now = instant || RM || document.hidden;
+      const R = rng(seed), W = this.W, H = this.H, K = now ? 1 : 8, ops = [];
+      this.drops = []; this.bg = PAL[0]; this.queue = [];
+      // 물감은 밝은 네 색을 주로 쓰고, 어두운 두 색은 가끔만 섞는다
+      const pick = () => R() < .82 ? PAL[Math.floor(R() * 4)] : PAL[4 + Math.floor(R() * 2)];
+      for (let c = 0; c < 3; c++) {
+        const cx = W * (.2 + .3 * c + (R() - .5) * .1), cy = H * (c === 1 ? .15 + R() * .15 : .55 + R() * .3);
+        let last = '';
+        for (let i = 0; i < 4; i++) { let col = pick(); while (col === last) col = pick(); last = col; ops.push(...this.dropOps(cx, cy, 80 + R() * 80, col, K)); }
+      }
+      for (let i = 0; i < 7; i++) ops.push(...this.dropOps(R() * W, R() * H, 60 + R() * 90, pick(), K));
+      // 빗살 두 번: 가로로 한 번, 세로로 한 번
+      const kt = now ? 1 : 6;
+      for (let i = 1; i < 7; i++) ops.push(...this.tineOps(0, i * H / 7, i % 2 ? 1 : -1, 0, 120, 42, kt));
+      for (let i = 1; i < 7; i++) ops.push(...this.tineOps(i * W / 7, 0, 0, i % 2 ? 1 : -1, 70, 28, kt));
+      this.ci = Math.floor(R() * PAL.length);
+      if (now) { ops.forEach(o => o()); this.render(); } else { this.queue = ops; this.kick(); }
+    }
+    kick() { if (!this.running && this.active && !document.hidden && (this.queue.length || this.pending.length)) { this.running = true; requestAnimationFrame(() => this.tick()); } }
+    tick() {
+      if (!this.active || document.hidden) { this.running = false; return; }
+      const pend = this.pending; this.pending = []; pend.forEach(o => o());
+      const op = this.queue.shift(); if (op) op();
+      this.render();
+      if (this.queue.length || this.pending.length) requestAnimationFrame(() => this.tick()); else this.running = false;
+    }
+    render() {
+      const c = this.ctx; if (!this.s || !this.drops.length) return;
+      c.setTransform(this.dpr * this.s, 0, 0, this.dpr * this.s, 0, 0);
+      c.fillStyle = this.bg; c.fillRect(0, 0, this.W, this.H + 2);
+      c.lineJoin = 'round'; c.lineWidth = .8; c.strokeStyle = 'rgba(15, 26, 23, .3)';
+      for (const d of this.drops) {
+        const p = d.p; if (p.length < 6) continue;
+        c.beginPath(); c.moveTo(p[0], p[1]);
+        for (let i = 2; i < p.length; i += 2) c.lineTo(p[i], p[i + 1]);
+        c.closePath(); c.fillStyle = d.c; c.fill(); c.stroke();
+      }
+    }
+    bindPointer() {
+      const cv = this.cv; let down = null;
+      const pt = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / this.s, (e.clientY - r.top) / this.s]; };
+      cv.addEventListener('pointerdown', e => { e.stopPropagation(); down = { p: pt(e), moved: 0 }; if (e.pointerType === 'mouse') cv.setPointerCapture(e.pointerId); });
+      cv.addEventListener('pointermove', e => {
+        if (!down) return;
+        const q = pt(e), [ax, ay] = down.p, dx = q[0] - ax, dy = q[1] - ay, L = Math.hypot(dx, dy);
+        if (L < 1.5) return;
+        down.moved += L;
+        const steps = Math.ceil(L / 6);
+        for (let i = 0; i < steps; i++) {
+          const x0 = ax + dx * i / steps, y0 = ay + dy * i / steps, x1 = ax + dx * (i + 1) / steps, y1 = ay + dy * (i + 1) / steps;
+          this.pending.push(() => this.apply(this.strokeF(x0, y0, x1, y1, 22)));
+        }
+        down.p = q; this.kick();
+      });
+      const up = e => {
+        if (down && down.moved < 6 && e.type === 'pointerup') {
+          const [x, y] = pt(e), col = PAL[this.ci++ % PAL.length];
+          const ops = this.dropOps(x, y, 45 + Math.random() * 50, col, RM ? 1 : 8);
+          if (RM) { ops.forEach(o => o()); this.render(); } else { this.queue.push(...ops); this.kick(); }
+        }
+        down = null;
+      };
+      cv.addEventListener('pointerup', up);
+      cv.addEventListener('pointercancel', up);
+    }
+  }
+
+  /* ───── 3화 성적 ───── */
+  const MODELS = ['Fable 5.1', 'Fable 5', 'Opus 5', 'GPT-5.6 Sol'];
+  const TESTS = {
+    sci: { orig: 'Terminal-Bench-Science 0.1', desc: '터미널(명령어 창)에서 과학 연구를 끝까지 해내는지 봅니다.', unit: '%', min: 0, max: 60, ticks: [0, 20, 40, 60], v: [52.6, 24.7, 29.0, 22.4], note: 'Fable 5의 두 배가 넘습니다.' },
+    gdp: { orig: 'GDPval-AA v2', desc: '여러 직업의 실무 과제를 맡겨 결과물을 비교합니다. 체스 순위처럼 맞대결 승패로 매기는 점수(Elo)입니다.', unit: '', min: 1600, max: 1900, ticks: [1600, 1700, 1800, 1900], v: [1853, 1723, 1824, 1711], note: '막대가 1600에서 시작해서 차이가 실제보다 커 보일 수 있습니다.' },
+    auto: { orig: 'AutomationBench', desc: '여러 단계로 이어지는 회사 업무를 자동으로 처리하는지 봅니다.', unit: '%', min: 0, max: 40, ticks: [0, 10, 20, 30, 40], v: [31.4, 17.1, 26.9, 19.6], note: 'Fable 5보다 14.3점, Opus 5보다 4.5점 높습니다.' }
+  };
+  const barsEl = document.getElementById('bench-bars'), ticksEl = document.getElementById('bench-ticks');
+  const descEl = document.getElementById('bench-desc'), noteEl = document.getElementById('bench-note'), panel = document.getElementById('bench-panel');
+  barsEl.innerHTML = MODELS.map((m, i) => `<div class="bar-r${i ? '' : ' me'}"><span class="nm">${m}</span><span class="tr"><span class="fl"></span></span><span class="vl"></span></div>`).join('');
+  const fills = [...barsEl.querySelectorAll('.fl')], vals = [...barsEl.querySelectorAll('.vl')];
+  function label(t) {
+    descEl.innerHTML = `${t.desc}<span class="mono">${t.orig}</span>`; noteEl.textContent = t.note;
+    ticksEl.innerHTML = t.ticks.map(v => `<span style="left:${(v - t.min) / (t.max - t.min) * 100}%">${v}${t.unit}</span>`).join('');
+    t.v.forEach((v, i) => vals[i].textContent = (t.unit ? v.toFixed(1) : v) + t.unit);
+  }
+  function show(k) { const t = TESTS[k]; label(t); t.v.forEach((v, i) => fills[i].style.width = ((v - t.min) / (t.max - t.min) * 100).toFixed(2) + '%'); }
+  label(TESTS.sci); if (RM) show('sci');
+  const tabs = [...document.querySelectorAll('.tab')];
+  function select(tab, focus) {
+    tabs.forEach(b => { const on = b === tab; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', tab.id); show(tab.dataset.k); if (focus) tab.focus();
+  }
+  tabs.forEach((b, i) => {
+    b.addEventListener('click', () => select(b));
+    b.addEventListener('keydown', e => {
+      const n = tabs.length, to = { ArrowRight: (i + 1) % n, ArrowLeft: (i - 1 + n) % n, Home: 0, End: n - 1 }[e.key];
+      if (to !== undefined) { e.preventDefault(); e.stopPropagation(); select(tabs[to], true); }
+    });
+  });
+
+  /* ───── 2화 바코드: 모델 ID의 글자 코드를 막대 굵기로 ───── */
+  (() => {
+    const svg = document.getElementById('barcode'), id = 'claude-fable-5-1'; let x = 4, out = '';
+    const bar = w => { out += `<rect x="${x}" y="0" width="${w}" height="46" fill="#1a1f1c"/>`; x += w; };
+    bar(1.4); x += 1.4; bar(1.4); x += 2;
+    for (const ch of id) { const c = ch.charCodeAt(0); for (let b = 0; b < 4; b++) { bar(((c >> (b * 2)) & 3) * .55 + .7); x += ((c >> b) & 1) ? 1.9 : 1.1; } }
+    bar(1.4); x += 1.4; bar(1.4);
+    svg.setAttribute('viewBox', `0 0 ${Math.ceil(x + 4)} 46`); svg.innerHTML = out;
+  })();
+
+  /* ───── 4화 금성 지도: 같은 지형을 두 해상도로 ───── */
+  (() => {
+    const R = rng(22), waves = Array.from({ length: 14 }, (_, i) => ({ fx: (R() * 2 - 1) * (1 + i * .9), fy: (R() * 2 - 1) * (1 + i * .9), ph: R() * 7, a: 1 / (1 + i * .6) }));
+    const h = (x, y) => { let s = 0; for (const w of waves) s += w.a * Math.sin(x * w.fx * 6 + y * w.fy * 6 + w.ph); return s; };
+    const st = [[0, [42, 28, 12]], [.4, [120, 78, 28]], [.7, [200, 150, 46]], [1, [240, 222, 170]]];
+    const ramp = t => { t = Math.max(0, Math.min(1, (t + 2.2) / 4.4));
+      for (let i = 1; i < st.length; i++) if (t <= st[i][0]) { const [t0, a] = st[i - 1], [t1, b] = st[i], u = (t - t0) / (t1 - t0); return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * u)).join(',')})`; }
+      return 'rgb(240,222,170)'; };
+    const draw = (id, cell) => { const cv = document.getElementById(id), c = cv.getContext('2d');
+      for (let y = 0; y < cv.height; y += cell) for (let x = 0; x < cv.width; x += cell) { c.fillStyle = ramp(h((x + cell / 2) / cv.width, (y + cell / 2) / cv.width)); c.fillRect(x, y, cell, cell); } };
+    draw('venus-a', 20); draw('venus-b', 4);
+  })();
+
+  /* ───── 복사 ───── */
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    const lab = btn.textContent;
+    btn.addEventListener('click', () => {
+      const el = document.querySelector(btn.dataset.copy), text = el.textContent.trim();
+      const done = ok => { btn.textContent = ok ? '복사했어요' : '선택했어요. 복사해 주세요'; setTimeout(() => btn.textContent = lab, 1800); };
+      const sel = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); done(false); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), sel); else sel();
+    });
+  });
+
+  /* ───── 책: 쪽을 책장에 묶고 넘긴다 ─────
+     펼침면: 책장 k의 앞면은 쪽 2k, 뒷면은 쪽 2k+1. 넘긴 책장 수 n이면 왼쪽은 쪽 2n-1, 오른쪽은 쪽 2n.
+     한 쪽 보기(좁은 화면): 쪽마다 책장 하나. 넘긴 책장은 왼쪽으로 사라진다. */
+  const pages = [...document.querySelectorAll('#store > .pg')];
+  const bookEl = document.getElementById('book'), whereEl = document.getElementById('where'), prog = document.getElementById('prog');
+  const hotN = document.getElementById('hot-next'), hotP = document.getElementById('hot-prev');
+  const btnN = document.getElementById('btn-next'), btnP = document.getElementById('btn-prev');
+  const stackL = document.getElementById('stack-l'), stackR = document.getElementById('stack-r');
+  let spread = null, leaves = [], cur = 0, pw = 480, zc = 0;
+  const front = new Marble(document.getElementById('marble-front'));
+  const back = new Marble(document.getElementById('marble-back'));
+  let backShown = false;
+
+  const face = (pg, side) => { const f = document.createElement('div'); f.className = 'face ' + side; if (pg) { f.appendChild(pg); if (/cover|endpaper|backcover/.test(pg.className)) f.classList.add('bare'); } else f.classList.add('blank'); return f; };
+  function build(sp) {
+    const p = spread === null ? 0 : spread ? (cur ? 2 * cur - 1 : 0) : cur; // 지금 보는 쪽
+    leaves.forEach(l => l.remove()); leaves = [];
+    spread = sp; bookEl.classList.toggle('single', !sp); bookEl.classList.add('instant');
+    const n = sp ? Math.ceil(pages.length / 2) : pages.length;
+    for (let k = 0; k < n; k++) {
+      const leaf = document.createElement('div'); leaf.className = 'leaf';
+      leaf.append(face(sp ? pages[2 * k] : pages[k], 'front'), face(sp ? pages[2 * k + 1] : null, 'back'));
+      bookEl.insertBefore(leaf, hotP); leaves.push(leaf);
+    }
+    cur = sp ? Math.min(n, Math.ceil(p / 2)) : Math.min(p, n - 1);
+    settle(); requestAnimationFrame(() => requestAnimationFrame(() => bookEl.classList.remove('instant')));
+  }
+  function layout() {
+    const stg = document.getElementById('stage'), vw = document.documentElement.clientWidth - 24, vh = stg.clientHeight - 24, sp = vw >= 900 && vw > vh * 1.15;
+    let ph;
+    if (sp) { ph = Math.max(360, Math.min(860, vh)); pw = Math.min(ph * .74, (vw - 110) / 2); ph = Math.min(ph, pw * 1.46); }
+    else { pw = Math.min(vw - 8, 560); ph = Math.max(300, Math.min(vh, pw * 1.75)); }
+    root.style.setProperty('--pw', pw + 'px'); root.style.setProperty('--ph', ph + 'px');
+    if (sp !== spread) build(sp); else settle();
+    fitAll();
+  }
+  // 쪽 안의 글이 넘치면 글자를 조금씩 줄인다. 그래도 넘치면 쪽 안에서 스크롤한다
+  function fitAll() {
+    const base = spread ? 16 : 15;
+    pages.forEach(pg => {
+      if (/cover|endpaper|backcover|dedic/.test(pg.className)) return;
+      let fs = base; pg.style.fontSize = fs + 'px';
+      while (pg.scrollHeight > pg.clientHeight + 1 && fs > 13) { fs -= .5; pg.style.fontSize = fs + 'px'; }
+    });
+  }
+  function visible() { return spread ? [leaves[cur - 1] && leaves[cur - 1].children[1], leaves[cur] && leaves[cur].children[0]] : [leaves[cur] && leaves[cur].children[0]]; }
+  function settle() {
+    const N = leaves.length;
+    leaves.forEach((l, i) => {
+      const f = i < cur; l.classList.toggle('flipped', f);
+      l.style.zIndex = f ? i + 1 : N - i + 1;
+      l.style.visibility = !spread && f ? 'hidden' : '';
+    });
+    update();
+  }
+  function update() {
+    const N = leaves.length, vis = visible();
+    leaves.forEach(l => [...l.children].forEach(fc => { fc.inert = !vis.includes(fc); }));
+    bookEl.style.transform = spread && cur === 0 ? 'translateX(calc(var(--pw) * -.5))' : spread && cur === N ? 'translateX(calc(var(--pw) * .5))' : '';
+    const pgs = vis.filter(Boolean).map(fc => fc.querySelector('.pg')).filter(Boolean);
+    const labels = [...new Set(pgs.map(p => p.dataset.label))];
+    const folios = pgs.map(p => p.querySelector('.folio')).filter(Boolean).map(f => f.textContent);
+    whereEl.innerHTML = labels.join(' · ') + (folios.length ? `<small>${folios.join('–')}쪽</small>` : '');
+    btnP.disabled = cur === 0; btnN.disabled = cur === (spread ? N : N - 1);
+    hotP.hidden = cur === 0; hotN.hidden = btnN.disabled;
+    if (spread) { stackL.style.setProperty('--w', Math.min(cur, 8) * 1.2 + 'px'); stackR.style.setProperty('--w', Math.min(N - cur - 1, 8) * 1.2 + 'px'); }
+    prog.style.width = (cur / (spread ? N : N - 1) * 100) + '%';
+    if (!RM) root.style.setProperty('--gx', (100 - cur / (spread ? N : N - 1) * 100).toFixed(1) + '%');
+    front.active = cur === 0; front.kick();
+    const onBack = pgs.some(p => p.dataset.show === 'back'); back.active = onBack;
+    if (onBack && !backShown) { backShown = true; setTimeout(() => back.compose(928), RM ? 0 : 500); } else back.kick();
+    if (pgs.some(p => p.dataset.show === 'bench')) setTimeout(() => show(document.querySelector('.tab[aria-selected="true"]').dataset.k), RM ? 0 : 500);
+  }
+  function turn(i, fwd) {
+    const l = leaves[i]; if (!l) return;
+    l.style.zIndex = 500 + (++zc); l.style.visibility = '';
+    l.classList.remove('peek'); l.classList.add('turning');
+    l.classList.toggle('flipped', fwd);
+    const tok = l._tok = (l._tok || 0) + 1;
+    const end = () => {
+      if (l._tok !== tok) return;
+      l.classList.remove('turning');
+      const N = leaves.length, f = i < cur; l.style.zIndex = f ? i + 1 : N - i + 1; if (!spread && f) l.style.visibility = 'hidden';
+    };
+    if (RM) end(); else setTimeout(end, 920);
+  }
+  function next() { const max = spread ? leaves.length : leaves.length - 1; if (cur >= max) return; cur++; turn(cur - 1, true); update(); }
+  function prev() { if (cur <= 0) return; cur--; turn(cur, false); update(); }
+  function goTo(t) {
+    const max = spread ? leaves.length : leaves.length - 1; t = Math.max(0, Math.min(max, t));
+    const step = () => { if (cur === t) return; cur < t ? next() : prev(); if (cur !== t) setTimeout(step, RM ? 0 : 110); };
+    step();
+  }
+  const stateOf = p => spread ? Math.ceil(p / 2) : p;
+
+  // 버튼, 키보드
+  btnN.addEventListener('click', next); btnP.addEventListener('click', prev);
+  document.getElementById('btn-toc').addEventListener('click', () => goTo(stateOf(2)));
+  document.getElementById('btn-again').addEventListener('click', () => goTo(0));
+  document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', next));
+  document.querySelectorAll('[data-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); goTo(stateOf(+a.dataset.go)); }));
+  addEventListener('keydown', e => {
+    if (e.defaultPrevented || e.target.closest('[role="tab"], input, textarea')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+  });
+    
+  // 가장자리를 끌어 넘기기. 책장 끝이 손가락을 따라 돈다
+  function dragHot(el, fwd) {
+    let st = null;
+    el.addEventListener('pointerdown', e => {
+      const i = fwd ? cur : cur - 1, l = leaves[i]; if (!l) return;
+      el.setPointerCapture(e.pointerId);
+      const r = bookEl.getBoundingClientRect(), spine = spread ? r.left + r.width / 2 : r.left;
+      st = { l, i, spine, x0: e.clientX, th: fwd ? 0 : 180, moved: false };
+      l.style.transition = 'none'; l.style.zIndex = 500 + (++zc); l.style.visibility = '';
+    });
+    el.addEventListener('pointermove', e => {
+      if (!st) return;
+      if (Math.abs(e.clientX - st.x0) > 4) st.moved = true;
+      if (!st.moved || (!spread && !fwd)) return;
+      const c = Math.max(-1, Math.min(1, (e.clientX - st.spine) / pw));
+      st.th = Math.acos(c) * 180 / Math.PI;
+      st.l.style.transform = `rotateY(${-st.th}deg)`;
+    });
+    const up = e => {
+      if (!st) return;
+      const { l, th, moved } = st; st = null;
+      l.style.transition = ''; l.style.transform = '';
+      if (!moved) { fwd ? next() : prev(); return; }
+      if (fwd && th > 70) next(); else if (!fwd && (th < 110 || !spread)) prev(); else settle();
+    };
+    el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+  }
+  dragHot(hotN, true); dragHot(hotP, false);
+
+  // 쪽 위에서 옆으로 쓸어 넘기기 (마블링, 버튼, 표 위에서는 쓰지 않는다)
+  let sw = null;
+  bookEl.addEventListener('pointerdown', e => {
+    if (e.target.closest('canvas, button, a, summary, .tbl-wrap, .hot')) return;
+    sw = { x: e.clientX, y: e.clientY };
+  });
+  bookEl.addEventListener('pointerup', e => {
+    if (!sw) return; const dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4 && !getSelection().toString()) dx < 0 ? next() : prev();
+  });
+  bookEl.addEventListener('pointercancel', () => sw = null);
+
+  let rz = 0;
+  addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layout, 120); });
+  layout();
+  front.compose(5101); back.compose(928, true);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  // 처음 한 번, 표지 끝이 살짝 들려 넘길 수 있다는 것을 알린다
+  if (!RM) setTimeout(() => { if (cur === 0 && leaves[0]) leaves[0].classList.add('peek'); }, 4200);
+  if (FINE && !RM) addEventListener('pointermove', e => { if (cur === 0) root.style.setProperty('--gx', (100 - e.clientX / innerWidth * 100).toFixed(1) + '%'); }, { passive: true });
+})();
+</script>
+</body>
+</html>

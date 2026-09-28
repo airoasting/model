@@ -6,7 +6,7 @@
 <title>모델의 자기소개</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=Noto+Sans+KR:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=Noto+Sans+KR:wght@600&family=IM+Fell+English+SC&display=swap">
 <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');</script>
 <style>
 :root {
@@ -21,6 +21,7 @@
   --opus: #e2552b;       /* Opus 사이트의 주홍 */
   --opus-ink: #12110f;
   --sol: #e07d63;        /* Sol 포스터의 해 */
+  --fable: #c9a45c;      /* Fable 책등의 금박 */
   --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
   --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -30,12 +31,14 @@
 html { background: var(--bg); }
 body {
   margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
-  /* 각 카드가 여는 사이트의 바탕색: 왼쪽 Opus의 먹빛(#12110f), 오른쪽 Sol의 남보라(#070713) */
+  /* 각 카드가 여는 사이트의 바탕색: 왼쪽 Opus의 먹빛(#12110f), 가운데 Sol의 남보라(#070713), 오른쪽 Fable의 책상빛(#0f1a17) */
   background:
-    radial-gradient(38% 50% at 18% 30%, rgba(226, 85, 43, .09), transparent 70%),
-    radial-gradient(40% 55% at 84% 26%, rgba(140, 80, 190, .20), transparent 70%),
-    radial-gradient(34% 45% at 80% 92%, rgba(240, 150, 90, .10), transparent 70%),
-    linear-gradient(100deg, #12110f 0%, #12110f 18%, #0d0c15 60%, #070713 100%);
+    radial-gradient(34% 50% at 16% 30%, rgba(226, 85, 43, .09), transparent 70%),
+    radial-gradient(34% 55% at 50% 24%, rgba(140, 80, 190, .18), transparent 70%),
+    radial-gradient(30% 45% at 52% 94%, rgba(240, 150, 90, .08), transparent 70%),
+    radial-gradient(34% 50% at 86% 30%, rgba(201, 164, 92, .08), transparent 70%),
+    radial-gradient(30% 45% at 88% 90%, rgba(40, 110, 80, .12), transparent 70%),
+    linear-gradient(100deg, #12110f 0%, #12110f 16%, #09091a 42%, #09091a 58%, #0f1a17 84%, #0f1a17 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
 }
@@ -54,9 +57,9 @@ h1 q { quotes: '“' '”'; }
 @media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
-/* 카드 두 장: 같은 틀, 다른 재료 */
-.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); margin-top: var(--s4); }
-@media (max-width: 760px) { .cards { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s4); } }
+/* 카드 세 장: 같은 틀, 다른 재료 */
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4); margin-top: var(--s4); }
+@media (max-width: 900px) { .cards { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s4); } }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
   position: relative; min-width: 0; display: flex; flex-direction: column; padding: var(--s4);
@@ -68,6 +71,7 @@ h1 q { quotes: '“' '”'; }
 }
 .card:nth-child(1) { animation-delay: .36s; }
 .card:nth-child(2) { animation-delay: .48s; }
+.card:nth-child(3) { animation-delay: .6s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -148,18 +152,37 @@ h1 q { quotes: '“' '”'; }
 
 footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .6s forwards; }
 
+/* Fable: 마블링 판지에 책 천 책등을 댄 반가죽 제본 */
+.card.fable { --accent: var(--fable); --glow: rgba(201, 164, 92, .12); background: #111c19; border-color: #26382f; }
+.plate.book { background: #1d3f6e; }
+.plate.book svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.plate.book .bspine { position: absolute; left: 0; top: 0; bottom: 0; width: 13%; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.06) 35%, rgba(0,0,0,.4)), #173229; display: flex; justify-content: center; padding-top: 12%; }
+.plate.book .bspine span { writing-mode: vertical-rl; font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(9px, 1vw, 13px); letter-spacing: .3em; color: #c9a45c; }
+.plate.book .blabel { position: absolute; left: 56%; top: 50%; translate: -50% -50%; background: #e8ebe3; color: #1a1f1c; padding: 8% 10%; text-align: center; outline: 1px solid #454d48; outline-offset: -4px; box-shadow: 0 8px 16px -8px rgba(0,0,0,.6); white-space: nowrap; }
+.plate.book .blabel b { display: block; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(15px, 1.9vw, 24px); line-height: 1; }
+.plate.book .blabel i { display: block; font-style: normal; font-family: var(--serif); font-weight: 500; font-size: clamp(8px, .8vw, 10px); letter-spacing: .4em; margin-top: 6px; padding-left: .4em; }
+.plate.book .marb { transition: transform 1.4s var(--ease); transform-origin: 60% 50%; }
+@media (hover: hover) and (pointer: fine) { .card.fable:hover .marb { transform: scale(1.08) rotate(-2deg); } }
+
+/* 처음 들어올 때: 물감 방울이 차례로 떨어져 번지고, 그 위에 제목 딱지가 붙는다 */
+.plate.book .marb circle { transform-box: fill-box; transform-origin: center; }
+.js .plate.book .marb circle { transform: scale(0); }
+.js .plate.book .blabel { opacity: 0; translate: -50% calc(-50% + 8px); }
+.plate.book.drop .marb circle { transform: none; transition: transform 1.1s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
+.plate.book.drop .blabel { opacity: 1; translate: -50% -50%; transition: opacity .5s ease 1.3s, translate .6s var(--ease) 1.3s; }
+
 /* 먹색으로 번지며 넘어가기 */
 .veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
 .veil.on { opacity: 1; }
 
 @media (max-width: 760px) {
-  body { background: radial-gradient(80% 30% at 50% 5%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 30% at 50% 85%, rgba(140, 80, 190, .18), transparent 70%), linear-gradient(180deg, #12110f 0%, #12110f 30%, #070713 100%); }
+  body { background: radial-gradient(80% 22% at 50% 5%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 22% at 50% 50%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 22% at 50% 92%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #12110f 0%, #12110f 24%, #09091a 44%, #09091a 58%, #0f1a17 80%, #0f1a17 100%); }
   .card { padding: var(--s3); }
   .plate { width: 56%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .go svg, .solart * { transition: none !important; }
+  .card, .plate, .go svg, .solart *, .plate.book * { transition: none !important; }
   .solart .waves { animation: none; }
   .seal.on { animation: none; }
 }
@@ -230,6 +253,29 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다. 2026. 9. 22 공개</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
+    <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
+      <div class="meta"><b>03</b><span>Anthropic</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="plate book">
+          <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+            <defs><filter id="comb" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".012 .05" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="46"/></filter></defs>
+            <g class="marb" filter="url(#comb)">
+              <rect x="-20" y="-20" width="340" height="280" fill="#1d3f6e"/>
+              <circle cx="90" cy="70" r="92" fill="#c8962e"/><circle cx="90" cy="70" r="70" fill="#8a2b3d"/><circle cx="90" cy="70" r="46" fill="#d9dccf"/><circle cx="90" cy="70" r="22" fill="#173229"/>
+              <circle cx="250" cy="190" r="100" fill="#d9dccf"/><circle cx="250" cy="190" r="76" fill="#1d3f6e"/><circle cx="250" cy="190" r="50" fill="#c8962e"/><circle cx="250" cy="190" r="24" fill="#8a2b3d"/>
+              <circle cx="200" cy="40" r="44" fill="#8a2b3d"/><circle cx="200" cy="40" r="24" fill="#d9dccf"/>
+              <circle cx="60" cy="210" r="56" fill="#c8962e"/><circle cx="60" cy="210" r="30" fill="#0f1a17"/>
+            </g>
+          </svg>
+          <span class="bspine"><span>FABLE 5.1</span></span>
+          <span class="blabel"><b>Fable 5.1</b><i>우화집</i></span>
+        </div>
+      </div>
+      <h2 class="name">Claude Fable 5.1</h2>
+      <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
+      <p class="desc">여섯 동물이 차례로 이야기를 들려줍니다. 2026. 9. 1 공개</p>
+      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+    </a>
   </main>
 
   <footer><span>각 페이지의 모델 정보는 모델을 만든 회사의 공식 발표를 따릅니다.</span></footer>
@@ -279,13 +325,19 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   if (!RM) sseal.classList.add('off');
   function sunrise() { sky.classList.add('up'); setTimeout(() => { sseal.classList.remove('off'); sseal.classList.add('on'); }, RM ? 0 : 1500); }
 
+  /* Fable: 마블링 물감이 한 방울씩 떨어진다. 큰 방울부터, 같은 자리의 방울은 바깥에서 안으로 */
+  const fable = document.getElementById('card-fable'), book = fable.querySelector('.plate.book');
+  fable.querySelectorAll('.marb circle').forEach((c, i) => c.style.setProperty('--d', (i * .07).toFixed(2) + 's'));
+  function drop() { book.classList.add('drop'); }
+
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [fable, drop]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);
-    setTimeout(() => e.target === opus ? write() : sunrise(), RM ? 0 : 700);
+    setTimeout(intro.get(e.target), RM ? 0 : 700);
   }), { threshold: .5 });
-  once.observe(opus); once.observe(document.getElementById('card-sol'));
+  intro.forEach((_, card) => once.observe(card));
 
   document.querySelectorAll('.card').forEach(card => {
     if (FINE && !RM) {
