@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://model.airoasting.com/">
+<meta property="og:title" content="모델의 자기소개">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<meta property="og:image" content="https://model.airoasting.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="모델 세 개의 자기소개 카드. Claude Opus 5.5, GPT-6 Sol, Claude Fable 5.1">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=Noto+Sans+KR:wght@600&family=IM+Fell+English+SC&display=swap">
@@ -134,6 +145,7 @@ h1 q { quotes: '“' '”'; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 .name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; letter-spacing: -.01em; }
 .tag { margin: var(--s1) 0 0; font-family: var(--serif); font-weight: 500; font-size: 1rem; color: var(--paper); }
+.desc .date { white-space: nowrap; }
 .desc { margin: 4px 0 0; font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
 .go { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .9rem; font-weight: 500; color: var(--accent); }
 .go svg { width: 14px; height: 14px; transition: transform .3s var(--ease); }
@@ -155,10 +167,10 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 /* Fable: 마블링 판지에 책 천 책등을 댄 반가죽 제본 */
 .card.fable { --accent: var(--fable); --glow: rgba(201, 164, 92, .12); background: #111c19; border-color: #26382f; }
 .plate.book { background: #1d3f6e; }
-.plate.book svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.plate.book .bspine { position: absolute; left: 0; top: 0; bottom: 0; width: 13%; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.06) 35%, rgba(0,0,0,.4)), #173229; display: flex; justify-content: center; padding-top: 12%; }
+.plate.book svg { position: absolute; top: 0; bottom: 0; left: 13%; width: 87%; height: 100%; z-index: 0; }
+.plate.book .bspine { position: absolute; left: 0; top: 0; bottom: 0; width: 13%; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.06) 35%, rgba(0,0,0,.4)), #173229; display: flex; justify-content: center; padding-top: 12%; z-index: 2; box-shadow: 3px 0 6px -2px rgba(0,0,0,.5); }
 .plate.book .bspine span { writing-mode: vertical-rl; font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(9px, 1vw, 13px); letter-spacing: .3em; color: #c9a45c; }
-.plate.book .blabel { position: absolute; left: 56%; top: 50%; translate: -50% -50%; background: #e8ebe3; color: #1a1f1c; padding: 8% 10%; text-align: center; outline: 1px solid #454d48; outline-offset: -4px; box-shadow: 0 8px 16px -8px rgba(0,0,0,.6); white-space: nowrap; }
+.plate.book .blabel { position: absolute; left: 56%; top: 50%; translate: -50% -50%; background: #e8ebe3; color: #1a1f1c; padding: 8% 10%; text-align: center; outline: 1px solid #454d48; outline-offset: -4px; box-shadow: 0 8px 16px -8px rgba(0,0,0,.6); white-space: nowrap; z-index: 3; }
 .plate.book .blabel b { display: block; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(15px, 1.9vw, 24px); line-height: 1; }
 .plate.book .blabel i { display: block; font-style: normal; font-family: var(--serif); font-weight: 500; font-size: clamp(8px, .8vw, 10px); letter-spacing: .4em; margin-top: 6px; padding-left: .4em; }
 .plate.book .marb { transition: transform 1.4s var(--ease); transform-origin: 60% 50%; }
@@ -214,7 +226,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">Claude Opus 5.5</h2>
       <p class="tag">시 「획」으로 쓴 자기소개</p>
-      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다. 2026. 9. 22 공개</p>
+      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.<br><span class="date">2026. 9. 22 공개</span></p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
 
@@ -273,7 +285,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">Claude Fable 5.1</h2>
       <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
-      <p class="desc">여섯 동물이 차례로 이야기를 들려줍니다. 2026. 9. 1 공개</p>
+      <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.<br><span class="date">2026. 9. 1 공개</span></p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
   </main>
