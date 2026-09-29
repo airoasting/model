@@ -17,19 +17,18 @@ body::after { position: absolute; }
 header { padding-bottom: 26px; }
 .eyebrow { font-size: 15px; margin-bottom: 14px; }
 h1 { font-size: 44px; }
-.cards { margin-top: 28px; gap: 28px; }
-.card { padding: 24px 28px 26px; }
+.cards { margin-top: 28px; gap: 22px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card { padding: 20px 22px 22px; }
 .meta { font-size: 13px; }
 .art { padding: 16px 0 18px; }
-.plate { width: 80%; }
-.name { font-size: 29px; }
-.tag { font-size: 16px; margin-top: 6px; }
+.plate { width: 86%; }
+.tag { font-size: 14px; margin-top: 6px; }
 .desc, .go, footer { display: none; }
 """
 
 with sync_playwright() as p:
     browser = p.chromium.launch(channel="chrome")
-    # reduced motion: 모든 등장 애니메이션을 건너뛰고 완성된 상태(획, 해, 마블링)로 바로 그린다
+    # reduced motion: 모든 등장 애니메이션을 건너뛰고 완성된 상태(새 떼, 획, 해, 마블링)로 바로 그린다
     page = browser.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1, reduced_motion="reduce")
     page.goto((ROOT / "index.html").as_uri())
     page.wait_for_load_state("networkidle")

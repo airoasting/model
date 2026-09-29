@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
-<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
 <!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://model.airoasting.com/">
 <meta property="og:title" content="모델의 자기소개">
-<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
 <meta property="og:image" content="https://model.airoasting.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="모델 세 개의 자기소개 카드. Claude Opus 5.5, GPT-6 Sol, Claude Fable 5.1">
+<meta property="og:image:alt" content="모델 네 개의 자기소개 카드. Claude Sonnet 5.5, Claude Opus 5.5, GPT-6 Sol, Claude Fable 5.1">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +33,7 @@
   --opus-ink: #12110f;
   --sol: #e07d63;        /* Sol 포스터의 해 */
   --fable: #c9a45c;      /* Fable 책등의 금박 */
+  --sonnet: #a58cff;     /* Sonnet 오로라의 보라 */
   --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
   --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -42,18 +43,20 @@
 html { background: var(--bg); }
 body {
   margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
-  /* 각 카드가 여는 사이트의 바탕색: 왼쪽 Opus의 먹빛(#12110f), 가운데 Sol의 남보라(#070713), 오른쪽 Fable의 책상빛(#0f1a17) */
+  /* 각 카드가 여는 사이트의 바탕색: 최신 모델부터 Sonnet의 밤하늘(#07060b), Opus의 먹빛(#12110f), Sol의 남보라(#070713), Fable의 책상빛(#0f1a17) */
   background:
-    radial-gradient(34% 50% at 16% 30%, rgba(226, 85, 43, .09), transparent 70%),
-    radial-gradient(34% 55% at 50% 24%, rgba(140, 80, 190, .18), transparent 70%),
-    radial-gradient(30% 45% at 52% 94%, rgba(240, 150, 90, .08), transparent 70%),
-    radial-gradient(34% 50% at 86% 30%, rgba(201, 164, 92, .08), transparent 70%),
-    radial-gradient(30% 45% at 88% 90%, rgba(40, 110, 80, .12), transparent 70%),
-    linear-gradient(100deg, #12110f 0%, #12110f 16%, #09091a 42%, #09091a 58%, #0f1a17 84%, #0f1a17 100%);
+    radial-gradient(26% 50% at 12% 28%, rgba(139, 108, 255, .14), transparent 70%),
+    radial-gradient(24% 45% at 10% 92%, rgba(79, 214, 208, .07), transparent 70%),
+    radial-gradient(26% 50% at 38% 30%, rgba(226, 85, 43, .09), transparent 70%),
+    radial-gradient(26% 55% at 62% 24%, rgba(140, 80, 190, .18), transparent 70%),
+    radial-gradient(24% 45% at 62% 94%, rgba(240, 150, 90, .08), transparent 70%),
+    radial-gradient(26% 50% at 88% 30%, rgba(201, 164, 92, .08), transparent 70%),
+    radial-gradient(24% 45% at 88% 90%, rgba(40, 110, 80, .12), transparent 70%),
+    linear-gradient(100deg, #07060b 0%, #07060b 12%, #12110f 32%, #12110f 42%, #09091a 58%, #09091a 68%, #0f1a17 88%, #0f1a17 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
 }
-.wrap { width: 100%; max-width: 1120px; margin: 0 auto; }
+.wrap { width: 100%; max-width: 1280px; margin: 0 auto; }
 body::after { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
 /* 머리: 질문과 안내를 한 줄 기준선 위에 */
@@ -68,12 +71,14 @@ h1 q { quotes: '“' '”'; }
 @media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
-/* 카드 세 장: 같은 틀, 다른 재료 */
-.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4); margin-top: var(--s4); }
-@media (max-width: 900px) { .cards { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s4); } }
+/* 카드 네 장: 같은 틀, 다른 재료. 넓으면 한 줄, 태블릿은 두 줄, 휴대폰은 한 장씩 */
+.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); }
+@media (max-width: 1180px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .cards { grid-template-columns: minmax(0, 1fr); } }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
-  position: relative; min-width: 0; display: flex; flex-direction: column; padding: var(--s4);
+  container-type: inline-size; /* 이름 글자 크기를 카드 폭에 맞춘다 */
+  position: relative; min-width: 0; display: flex; flex-direction: column; padding: var(--s3);
   background: var(--card); border: 1px solid var(--line); border-radius: 0;
   color: inherit; text-decoration: none; overflow: hidden;
   transform: perspective(1400px) rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
@@ -83,6 +88,7 @@ h1 q { quotes: '“' '”'; }
 .card:nth-child(1) { animation-delay: .36s; }
 .card:nth-child(2) { animation-delay: .48s; }
 .card:nth-child(3) { animation-delay: .6s; }
+.card:nth-child(4) { animation-delay: .72s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -98,7 +104,7 @@ h1 q { quotes: '“' '”'; }
 
 .art { display: grid; place-items: center; padding: var(--s3) 0; }
 .plate {
-  position: relative; width: min(66%, 300px); aspect-ratio: 5 / 4; overflow: hidden;
+  position: relative; width: min(76%, 300px); aspect-ratio: 5 / 4; overflow: hidden;
   box-shadow: 0 24px 48px -12px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .04);
   translate: calc(var(--ry) * -1.2px) calc(var(--rx) * 1.2px); transition: translate .6s var(--ease);
 }
@@ -143,11 +149,11 @@ h1 q { quotes: '“' '”'; }
 .plate.solp.up .solword { opacity: 1; transform: rotate(-4deg); transform-box: fill-box; transition: opacity .6s ease .55s, transform .9s var(--ease) .55s; }
 .solart .solword { transform-box: fill-box; transform-origin: center; }
 @keyframes orbit { to { transform: rotate(360deg); } }
-.name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; letter-spacing: -.01em; }
+.name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1rem, 9.4cqi, 1.75rem); line-height: 1.2; white-space: nowrap; letter-spacing: -.01em; }
 .tag { margin: var(--s1) 0 0; font-family: var(--serif); font-weight: 500; font-size: 1rem; color: var(--paper); }
 .desc .date { white-space: nowrap; }
-.desc { margin: 4px 0 0; font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
-.go { display: flex; justify-content: space-between; align-items: center; margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .9rem; font-weight: 500; color: var(--accent); }
+.desc { margin: 4px 0 var(--s3); font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
+.go { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .9rem; font-weight: 500; color: var(--accent); }
 .go svg { width: 14px; height: 14px; transition: transform .3s var(--ease); }
 
 /* 마우스가 있는 기기에서만 호버 */
@@ -162,7 +168,7 @@ h1 q { quotes: '“' '”'; }
 }
 .card:focus-visible .go svg { transform: translateX(6px); }
 
-footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .6s forwards; }
+footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .72s forwards; }
 
 /* Fable: 마블링 판지에 책 천 책등을 댄 반가죽 제본 */
 .card.fable { --accent: var(--fable); --glow: rgba(201, 164, 92, .12); background: #111c19; border-color: #26382f; }
@@ -183,18 +189,33 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .plate.book.drop .marb circle { transform: none; transition: transform 1.1s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
 .plate.book.drop .blabel { opacity: 1; translate: -50% -50%; transition: opacity .5s ease 1.3s, translate .6s var(--ease) 1.3s; }
 
+/* Sonnet: 밤하늘의 오로라와 찌르레기 군무 (Sonnet 페이지의 배경을 카드 크기로) */
+.card.sonnet { --accent: var(--sonnet); --glow: rgba(139, 108, 255, .15); background: #0e0c16; border-color: #2a2638; }
+.plate.flock { background: #0b0912; }
+.plate.flock svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.plate.flock .birds { transform-box: view-box; transform-origin: 50% 50%; }
+.plate.flock .note { position: absolute; left: 7%; top: 9%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(9px, .9vw, 12px); letter-spacing: .28em; color: rgba(246, 243, 236, .72); }
+.card.sonnet .seal { background: #8b6cff; color: #f6f3ec; font-size: clamp(7px, .8vw, 10px); box-shadow: 0 0 0 2px #0b0912, 0 0 0 3px rgba(139, 108, 255, .55); }
+@keyframes sway { from { transform: rotate(-3deg) translateX(-4px); } to { transform: rotate(3deg) translateX(4px); } }
+@media (hover: hover) and (pointer: fine) { .card.sonnet:hover .birds { animation: sway 3.2s ease-in-out infinite alternate; } }
+
+/* 처음 들어올 때: 흩어져 있던 새들이 차례로 날아와 한 무리가 된다 */
+.js .plate.flock .b { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.4); }
+.plate.flock.gather .b { opacity: 1; transform: none; transition: opacity .5s ease var(--d, 0s), transform 1.3s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
+
 /* 먹색으로 번지며 넘어가기 */
 .veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
 .veil.on { opacity: 1; }
 
 @media (max-width: 760px) {
-  body { background: radial-gradient(80% 22% at 50% 5%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 22% at 50% 50%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 22% at 50% 92%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #12110f 0%, #12110f 24%, #09091a 44%, #09091a 58%, #0f1a17 80%, #0f1a17 100%); }
+  body { background: radial-gradient(80% 16% at 50% 4%, rgba(139, 108, 255, .13), transparent 70%), radial-gradient(80% 16% at 50% 36%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 16% at 50% 62%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 16% at 50% 90%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #07060b 0%, #07060b 16%, #12110f 32%, #12110f 44%, #09091a 56%, #09091a 68%, #0f1a17 84%, #0f1a17 100%); }
   .card { padding: var(--s3); }
-  .plate { width: 56%; }
 }
+@media (max-width: 640px) { .plate { width: 56%; } }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .go svg, .solart *, .plate.book * { transition: none !important; }
+  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock * { transition: none !important; }
+  .card.sonnet .birds { animation: none !important; }
   .solart .waves { animation: none; }
   .seal.on { animation: none; }
 }
@@ -210,8 +231,33 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   </header>
 
   <main class="cards">
-    <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
+    <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
       <div class="meta"><b>01</b><span>Anthropic</span></div>
+      <div class="art" aria-hidden="true">
+        <div class="plate flock">
+          <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <filter id="aur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+            </defs>
+            <g filter="url(#aur)" opacity=".62">
+              <circle cx="60" cy="40" r="80" fill="#d97757"/>
+              <circle cx="250" cy="70" r="85" fill="#8b6cff"/>
+              <circle cx="160" cy="230" r="70" fill="#4fd6d0" opacity=".7"/>
+            </g>
+            <g class="birds"></g>
+          </svg>
+          <span class="note">찌르레기 군무</span>
+          <span class="seal">Sonnet<br>5.5</span>
+        </div>
+      </div>
+      <h2 class="name">Claude Sonnet 5.5</h2>
+      <p class="tag">성적표로 쓴 자기소개</p>
+      <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다. 2026. 9. 28 공개</p>
+      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+    </a>
+
+    <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
+      <div class="meta"><b>02</b><span>Anthropic</span></div>
       <div class="art" aria-hidden="true">
         <div class="plate hanji">
           <svg viewBox="0 -60 1024 1080"><g transform="translate(0, 900) scale(1, -1)" filter="url(#rough)"><g class="ghost"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z"/></g><g class="ink"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z" mask="url(#mk0)"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z" mask="url(#mk1)"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z" mask="url(#mk2)"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z" mask="url(#mk3)"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z" mask="url(#mk4)"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z" mask="url(#mk5)"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z" mask="url(#mk6)"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z" mask="url(#mk7)"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z" mask="url(#mk8)"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z" mask="url(#mk9)"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z" mask="url(#mk10)"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z" mask="url(#mk11)"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z" mask="url(#mk12)"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z" mask="url(#mk13)"/></g></g>
@@ -231,7 +277,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
     </a>
 
     <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
-      <div class="meta"><b>02</b><span>OpenAI</span></div>
+      <div class="meta"><b>03</b><span>OpenAI</span></div>
       <div class="art" aria-hidden="true">
         <div class="plate solp">
           <svg class="solart" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
@@ -265,8 +311,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다. 2026. 9. 22 공개</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
+
     <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
-      <div class="meta"><b>03</b><span>Anthropic</span></div>
+      <div class="meta"><b>04</b><span>Anthropic</span></div>
       <div class="art" aria-hidden="true">
         <div class="plate book">
           <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
@@ -342,8 +389,33 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   fable.querySelectorAll('.marb circle').forEach((c, i) => c.style.setProperty('--d', (i * .07).toFixed(2) + 's'));
   function drop() { book.classList.add('drop'); }
 
+  /* Sonnet: 찌르레기가 S자 무리로 모인다. 자리는 고정 시드로 뽑아 매번 같은 모양이 된다 */
+  const sonnet = document.getElementById('card-sonnet'), flock = sonnet.querySelector('.plate.flock');
+  const birds = flock.querySelector('.birds'), NS = 'http://www.w3.org/2000/svg';
+  let seed = 28;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 120; i++) {
+    const t = rnd(), cx = 34 + 236 * t, cy = 124 + 42 * Math.sin(t * Math.PI * 2.1 + .4);
+    const th = 34 * Math.pow(Math.sin(Math.PI * t), .7) + 4, off = (rnd() + rnd() + rnd() - 1.5) * th;
+    const dy = 42 * Math.PI * 2.1 * Math.cos(t * Math.PI * 2.1 + .4) / 236, n = Math.hypot(1, dy);
+    const x = cx - dy / n * off, y = cy + off / n, ang = Math.atan2(dy, 1) * 57.3 + (rnd() - .5) * 40;
+    const gold = i % 9 === 0, k = gold ? 1.7 : 1.25;
+    const pos = document.createElementNS(NS, 'g'); pos.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    const b = document.createElementNS(NS, 'g'); b.setAttribute('class', 'b');
+    b.style.setProperty('--sx', ((rnd() - .5) * 360).toFixed(0) + 'px'); b.style.setProperty('--sy', ((rnd() - .5) * 260).toFixed(0) + 'px');
+    b.style.setProperty('--d', (t * .7 + rnd() * .25).toFixed(2) + 's');
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', `M${3.4 * k} 0L${-2.4 * k} ${1.9 * k}L${-1 * k} 0L${-2.4 * k} ${-1.9 * k}Z`);
+    p.setAttribute('transform', `rotate(${ang.toFixed(0)})`);
+    p.setAttribute('fill', gold ? '#f2c66d' : 'rgba(244, 241, 234, .82)');
+    b.appendChild(p); pos.appendChild(b); birds.appendChild(pos);
+  }
+  const sseal2 = sonnet.querySelector('.seal');
+  if (!RM) sseal2.classList.add('off');
+  function gather() { flock.classList.add('gather'); setTimeout(() => { sseal2.classList.remove('off'); sseal2.classList.add('on'); }, RM ? 0 : 1600); }
+
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
-  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [fable, drop]]);
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [fable, drop], [sonnet, gather]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);
