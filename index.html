@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
-<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://model.airoasting.com/">
 <meta property="og:title" content="모델의 자기소개">
-<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, Fable 5.1의 답">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <meta property="og:image" content="https://model.airoasting.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="모델 네 개의 자기소개 카드. Claude Sonnet 5.5, Claude Opus 5.5, GPT-6 Sol, Claude Fable 5.1">
+<meta property="og:image:alt" content="모델 다섯 개의 자기소개 카드. Claude Sonnet 5.5, Claude Opus 5.5, GPT-6 Sol, GPT-6 Astra, Claude Fable 5.1">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +34,7 @@
   --sol: #e07d63;        /* Sol 포스터의 해 */
   --fable: #c9a45c;      /* Fable 책등의 금박 */
   --sonnet: #a58cff;     /* Sonnet 오로라의 보라 */
+  --astra: #c8b0ff;      /* Astra 성운의 라일락 */
   --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
   --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
   --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -43,16 +44,17 @@
 html { background: var(--bg); }
 body {
   margin: 0; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
-  /* 각 카드가 여는 사이트의 바탕색: 최신 모델부터 Sonnet의 밤하늘(#07060b), Opus의 먹빛(#12110f), Sol의 남보라(#070713), Fable의 책상빛(#0f1a17) */
+  /* 각 카드 뒤에 그 카드가 여는 사이트의 빛을 깐다. 위 두 장은 Sonnet의 오로라(보라), Opus의 주홍. 아래 세 장은 Sol의 남보라, Astra의 라일락, Fable의 금박과 초록 */
   background:
-    radial-gradient(26% 50% at 12% 28%, rgba(139, 108, 255, .14), transparent 70%),
-    radial-gradient(24% 45% at 10% 92%, rgba(79, 214, 208, .07), transparent 70%),
-    radial-gradient(26% 50% at 38% 30%, rgba(226, 85, 43, .09), transparent 70%),
-    radial-gradient(26% 55% at 62% 24%, rgba(140, 80, 190, .18), transparent 70%),
-    radial-gradient(24% 45% at 62% 94%, rgba(240, 150, 90, .08), transparent 70%),
-    radial-gradient(26% 50% at 88% 30%, rgba(201, 164, 92, .08), transparent 70%),
-    radial-gradient(24% 45% at 88% 90%, rgba(40, 110, 80, .12), transparent 70%),
-    linear-gradient(100deg, #07060b 0%, #07060b 12%, #12110f 32%, #12110f 42%, #09091a 58%, #09091a 68%, #0f1a17 88%, #0f1a17 100%);
+    radial-gradient(30% 34% at 25% 30%, rgba(139, 108, 255, .14), transparent 70%),
+    radial-gradient(24% 26% at 16% 50%, rgba(79, 214, 208, .06), transparent 70%),
+    radial-gradient(30% 34% at 75% 30%, rgba(226, 85, 43, .09), transparent 70%),
+    radial-gradient(22% 34% at 17% 76%, rgba(140, 80, 190, .17), transparent 70%),
+    radial-gradient(20% 26% at 20% 96%, rgba(240, 150, 90, .07), transparent 70%),
+    radial-gradient(22% 34% at 50% 76%, rgba(200, 176, 255, .13), transparent 70%),
+    radial-gradient(22% 34% at 83% 76%, rgba(201, 164, 92, .08), transparent 70%),
+    radial-gradient(20% 26% at 88% 96%, rgba(40, 110, 80, .14), transparent 70%),
+    linear-gradient(180deg, #0c0b0e 0%, #100f10 45%, #09091a 60%, #08080f 80%, #0c1512 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
 }
@@ -71,13 +73,15 @@ h1 q { quotes: '“' '”'; }
 @media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
-/* 카드 네 장: 같은 틀, 다른 재료. 넓으면 한 줄, 태블릿은 두 줄, 휴대폰은 한 장씩 */
-.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); }
-@media (max-width: 1180px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* 카드 다섯 장: 같은 틀, 다른 재료. 넓으면 위에 두 장, 아래에 세 장(6칸 격자). 좁은 태블릿은 두 장씩, 휴대폰은 한 장씩 */
+.cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); }
+.card { grid-column: span 2; }
+.card:nth-child(-n+2) { grid-column: span 3; }
+@media (max-width: 860px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .card, .card:nth-child(-n+2) { grid-column: auto; } }
 @media (max-width: 640px) { .cards { grid-template-columns: minmax(0, 1fr); } }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
-  container-type: inline-size; /* 이름 글자 크기를 카드 폭에 맞춘다 */
+  container-type: inline-size; /* 이름과 판 안의 글자 크기를 카드 폭(cqi)에 맞춘다 */
   position: relative; min-width: 0; display: flex; flex-direction: column; padding: var(--s3);
   background: var(--card); border: 1px solid var(--line); border-radius: 0;
   color: inherit; text-decoration: none; overflow: hidden;
@@ -89,6 +93,7 @@ h1 q { quotes: '“' '”'; }
 .card:nth-child(2) { animation-delay: .48s; }
 .card:nth-child(3) { animation-delay: .6s; }
 .card:nth-child(4) { animation-delay: .72s; }
+.card:nth-child(5) { animation-delay: .84s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -99,8 +104,9 @@ h1 q { quotes: '“' '”'; }
 .card:active { scale: .985; }
 .card:focus-visible { outline: 1px solid var(--paper-2); outline-offset: 6px; }
 
-.meta { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); font-size: .8rem; letter-spacing: .12em; color: var(--paper-3); }
-.meta b { font-weight: 500; color: var(--paper-2); letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+/* 카드 머리: 회사명과 공개일을 알약 두 개로 가운데에 나란히 */
+.meta { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--s1); }
+.pill { display: inline-flex; align-items: center; height: 26px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; font-size: .76rem; line-height: 1; letter-spacing: .06em; color: var(--paper-2); background: rgba(255, 255, 255, .03); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .art { display: grid; place-items: center; padding: var(--s3) 0; }
 .plate {
@@ -119,8 +125,8 @@ h1 q { quotes: '“' '”'; }
 .plate.hanji .ink { fill: #16130f; }
 .plate.hanji .ghost { fill: #16130f; opacity: 0; transition: opacity .2s; }
 .plate.hanji.retrace .ghost { opacity: .12; }
-.plate.hanji .note { position: absolute; left: 7%; bottom: 7%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(11px, 1.1vw, 13px); letter-spacing: .28em; color: rgba(22, 19, 15, .82); }
-.card.opus .seal { background: var(--opus); color: #ece3cf; font-size: clamp(8px, .95vw, 11px); }
+.plate.hanji .note { position: absolute; left: 7%; bottom: 7%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(11px, 5.2cqi, 13px); letter-spacing: .28em; color: rgba(22, 19, 15, .82); }
+.card.opus .seal { background: var(--opus); color: #ece3cf; font-size: clamp(8px, 4.5cqi, 11px); }
 
 /* Sol: 종이 위의 해, 궤도, 물결 (Sol 페이지의 포스터를 카드 크기로) */
 .plate.solp { background: #ebe3d6; }
@@ -131,9 +137,9 @@ h1 q { quotes: '“' '”'; }
 .solart .waves { animation: drift 18s linear infinite; }
 @keyframes drift { to { transform: translateX(-500px); } }
 .solart .orb, .solart .glow { transform-box: fill-box; transform-origin: center; }
-.plate.solp .vcol { position: absolute; top: 9%; writing-mode: vertical-rl; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; font-size: clamp(7px, .72vw, 9px); letter-spacing: .12em; color: #2c2722; padding-left: 5px; border-left: 1px solid rgba(40, 30, 20, .28); }
+.plate.solp .vcol { position: absolute; top: 9%; writing-mode: vertical-rl; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; font-size: clamp(7px, 3.4cqi, 9px); letter-spacing: .12em; color: #2c2722; padding-left: 5px; border-left: 1px solid rgba(40, 30, 20, .28); }
 .plate.solp .c1 { right: 6%; } .plate.solp .c2 { right: 12%; } .plate.solp .c3 { right: 18%; }
-.card.sol .seal { right: 5%; bottom: 7%; width: 17%; background: #d45a3b; color: #f4ece0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(7px, .8vw, 10px); line-height: 1; box-shadow: 0 0 0 2px #ebe3d6, 0 0 0 3px rgba(212, 90, 59, .6); }
+.card.sol .seal { right: 5%; bottom: 7%; width: 17%; background: #d45a3b; color: #f4ece0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(7px, 3.8cqi, 10px); line-height: 1; box-shadow: 0 0 0 2px #ebe3d6, 0 0 0 3px rgba(212, 90, 59, .6); }
 .card.sol .seal { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
 .card.sol .seal i { font-style: normal; letter-spacing: .04em; }
 .card.sol .seal b { font-size: 2.1em; line-height: .85; }
@@ -151,7 +157,8 @@ h1 q { quotes: '“' '”'; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 .name { margin: 0; font-family: var(--serif); font-weight: 700; font-size: clamp(1rem, 9.4cqi, 1.75rem); line-height: 1.2; white-space: nowrap; letter-spacing: -.01em; }
 .tag { margin: var(--s1) 0 0; font-family: var(--serif); font-weight: 500; font-size: 1rem; color: var(--paper); }
-.desc .date { white-space: nowrap; }
+/* 이름, 한 줄 소개, 설명은 판 아래 가운데에 */
+.name, .tag, .desc { text-align: center; text-wrap: balance; }
 .desc { margin: 4px 0 var(--s3); font-size: .88rem; line-height: 1.7; color: var(--paper-2); }
 .go { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .9rem; font-weight: 500; color: var(--accent); }
 .go svg { width: 14px; height: 14px; transition: transform .3s var(--ease); }
@@ -168,17 +175,17 @@ h1 q { quotes: '“' '”'; }
 }
 .card:focus-visible .go svg { transform: translateX(6px); }
 
-footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .72s forwards; }
+footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .84s forwards; }
 
 /* Fable: 마블링 판지에 책 천 책등을 댄 반가죽 제본 */
 .card.fable { --accent: var(--fable); --glow: rgba(201, 164, 92, .12); background: #111c19; border-color: #26382f; }
 .plate.book { background: #1d3f6e; }
 .plate.book svg { position: absolute; top: 0; bottom: 0; left: 13%; width: 87%; height: 100%; z-index: 0; }
 .plate.book .bspine { position: absolute; left: 0; top: 0; bottom: 0; width: 13%; background: linear-gradient(90deg, rgba(0,0,0,.35), rgba(255,255,255,.06) 35%, rgba(0,0,0,.4)), #173229; display: flex; justify-content: center; padding-top: 12%; z-index: 2; box-shadow: 3px 0 6px -2px rgba(0,0,0,.5); }
-.plate.book .bspine span { writing-mode: vertical-rl; font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(9px, 1vw, 13px); letter-spacing: .3em; color: #c9a45c; }
+.plate.book .bspine span { writing-mode: vertical-rl; font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(9px, 4.8cqi, 13px); letter-spacing: .3em; color: #c9a45c; }
 .plate.book .blabel { position: absolute; left: 56%; top: 50%; translate: -50% -50%; background: #e8ebe3; color: #1a1f1c; padding: 8% 10%; text-align: center; outline: 1px solid #454d48; outline-offset: -4px; box-shadow: 0 8px 16px -8px rgba(0,0,0,.6); white-space: nowrap; z-index: 3; }
-.plate.book .blabel b { display: block; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(15px, 1.9vw, 24px); line-height: 1; }
-.plate.book .blabel i { display: block; font-style: normal; font-family: var(--serif); font-weight: 500; font-size: clamp(8px, .8vw, 10px); letter-spacing: .4em; margin-top: 6px; padding-left: .4em; }
+.plate.book .blabel b { display: block; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(15px, 9cqi, 24px); line-height: 1; }
+.plate.book .blabel i { display: block; font-style: normal; font-family: var(--serif); font-weight: 500; font-size: clamp(8px, 3.8cqi, 10px); letter-spacing: .4em; margin-top: 6px; padding-left: .4em; }
 .plate.book .marb { transition: transform 1.4s var(--ease); transform-origin: 60% 50%; }
 @media (hover: hover) and (pointer: fine) { .card.fable:hover .marb { transform: scale(1.08) rotate(-2deg); } }
 
@@ -194,8 +201,8 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .plate.flock { background: #0b0912; }
 .plate.flock svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .plate.flock .birds { transform-box: view-box; transform-origin: 50% 50%; }
-.plate.flock .note { position: absolute; left: 7%; top: 9%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(9px, .9vw, 12px); letter-spacing: .28em; color: rgba(246, 243, 236, .72); }
-.card.sonnet .seal { background: #8b6cff; color: #f6f3ec; font-size: clamp(7px, .8vw, 10px); box-shadow: 0 0 0 2px #0b0912, 0 0 0 3px rgba(139, 108, 255, .55); }
+.plate.flock .note { position: absolute; left: 7%; top: 9%; writing-mode: vertical-rl; font-family: var(--serif); font-weight: 600; font-size: clamp(9px, 4.3cqi, 12px); letter-spacing: .28em; color: rgba(246, 243, 236, .72); }
+.card.sonnet .seal { background: #8b6cff; color: #f6f3ec; font-size: clamp(7px, 3.8cqi, 10px); box-shadow: 0 0 0 2px #0b0912, 0 0 0 3px rgba(139, 108, 255, .55); }
 @keyframes sway { from { transform: rotate(-3deg) translateX(-4px); } to { transform: rotate(3deg) translateX(4px); } }
 @media (hover: hover) and (pointer: fine) { .card.sonnet:hover .birds { animation: sway 3.2s ease-in-out infinite alternate; } }
 
@@ -203,18 +210,42 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .js .plate.flock .b { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(.4); }
 .plate.flock.gather .b { opacity: 1; transform: none; transition: opacity .5s ease var(--d, 0s), transform 1.3s cubic-bezier(.2, .8, .2, 1) var(--d, 0s); }
 
+/* Astra: 성운 한가운데서 별이 점화된다 (Astra 페이지의 히어로를 카드 크기로) */
+.card.astra { --accent: var(--astra); --glow: rgba(200, 176, 255, .14); background: #0c0b14; border-color: #29253a; }
+.plate.nebula { background: #07070d; }
+.plate.nebula .neb { position: absolute; inset: -4%; background: url('assets/astra-card.jpg') 72% 50% / cover no-repeat; transform-origin: 70% 50%; transition: transform 1.6s var(--ease); }
+.plate.nebula .shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7, 7, 13, .72), transparent 62%), linear-gradient(0deg, rgba(7, 7, 13, .55), transparent 45%); }
+.plate.nebula .alabel { position: absolute; left: 7%; top: 8%; font-family: 'DM Mono', monospace; font-weight: 500; font-size: clamp(6px, 3cqi, 9px); letter-spacing: .14em; color: rgba(232, 222, 255, .82); white-space: nowrap; text-shadow: 0 0 6px #07070d, 0 0 2px #07070d; }
+.plate.nebula .aword { position: absolute; left: 6%; bottom: 7%; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: clamp(14px, 7cqi, 24px); line-height: 1; letter-spacing: -.05em; color: #f5edff; text-shadow: 0 0 24px rgba(204, 155, 250, .45); white-space: nowrap; }
+.plate.nebula .aword i { display: inline-block; font-style: normal; font-weight: 400; font-size: .42em; vertical-align: top; margin-left: .3em; color: #d3b9fa; transition: transform 1s var(--ease); }
+.card.astra .seal { background: #c8b0ff; color: #0b0711; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(7px, 3.8cqi, 10px); box-shadow: 0 0 0 2px #07070d, 0 0 0 3px rgba(200, 176, 255, .55); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
+.card.astra .seal i { font-style: normal; letter-spacing: .04em; }
+.card.astra .seal b { font-size: 2.1em; line-height: .85; }
+@media (hover: hover) and (pointer: fine) {
+  .card.astra:hover .plate.nebula .neb, .card.astra:hover .plate.nebula.lit .neb { transform: scale(1.1); }
+  .card.astra:hover .aword i { transform: rotate(180deg) scale(1.2); }
+}
+
+/* 처음 들어올 때: 어둠 속에서 별이 점화되고, 이름이 모여든다 */
+.js .plate.nebula .neb { opacity: 0; transform: scale(1.35); filter: brightness(.2) blur(6px); }
+.js .plate.nebula .aword { opacity: 0; letter-spacing: .5em; }
+.js .plate.nebula .alabel { opacity: 0; }
+.plate.nebula.lit .neb { opacity: 1; transform: none; filter: none; transition: opacity .8s ease, transform 1.8s var(--ease), filter 1.6s ease; }
+.plate.nebula.lit .aword { opacity: 1; letter-spacing: -.05em; transition: opacity .8s ease .7s, letter-spacing 1.2s var(--ease) .7s; }
+.plate.nebula.lit .alabel { opacity: 1; transition: opacity .8s ease 1s; }
+
 /* 먹색으로 번지며 넘어가기 */
 .veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
 .veil.on { opacity: 1; }
 
 @media (max-width: 760px) {
-  body { background: radial-gradient(80% 16% at 50% 4%, rgba(139, 108, 255, .13), transparent 70%), radial-gradient(80% 16% at 50% 36%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 16% at 50% 62%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 16% at 50% 90%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #07060b 0%, #07060b 16%, #12110f 32%, #12110f 44%, #09091a 56%, #09091a 68%, #0f1a17 84%, #0f1a17 100%); }
+  body { background: radial-gradient(80% 14% at 50% 4%, rgba(139, 108, 255, .13), transparent 70%), radial-gradient(80% 14% at 50% 30%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 14% at 50% 52%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 14% at 50% 72%, rgba(200, 176, 255, .12), transparent 70%), radial-gradient(80% 14% at 50% 92%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #07060b 0%, #07060b 12%, #12110f 24%, #12110f 34%, #09091a 44%, #09091a 56%, #07070d 64%, #07070d 76%, #0f1a17 86%, #0f1a17 100%); }
   .card { padding: var(--s3); }
 }
-@media (max-width: 640px) { .plate { width: 56%; } }
+@media (max-width: 640px) { .plate { width: 56%; } .plate.nebula .alabel { font-size: 7px; letter-spacing: .08em; } }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock * { transition: none !important; }
+  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock *, .plate.nebula * { transition: none !important; }
   .card.sonnet .birds { animation: none !important; }
   .solart .waves { animation: none; }
   .seal.on { animation: none; }
@@ -232,7 +263,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 
   <main class="cards">
     <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
-      <div class="meta"><b>01</b><span>Anthropic</span></div>
+      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
       <div class="art" aria-hidden="true">
         <div class="plate flock">
           <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
@@ -252,12 +283,12 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">Claude Sonnet 5.5</h2>
       <p class="tag">성적표로 쓴 자기소개</p>
-      <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다. 2026. 9. 28 공개</p>
+      <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다.</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
 
     <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
-      <div class="meta"><b>02</b><span>Anthropic</span></div>
+      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
       <div class="art" aria-hidden="true">
         <div class="plate hanji">
           <svg viewBox="0 -60 1024 1080"><g transform="translate(0, 900) scale(1, -1)" filter="url(#rough)"><g class="ghost"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z"/></g><g class="ink"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z" mask="url(#mk0)"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z" mask="url(#mk1)"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z" mask="url(#mk2)"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z" mask="url(#mk3)"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z" mask="url(#mk4)"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z" mask="url(#mk5)"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z" mask="url(#mk6)"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z" mask="url(#mk7)"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z" mask="url(#mk8)"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z" mask="url(#mk9)"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z" mask="url(#mk10)"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z" mask="url(#mk11)"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z" mask="url(#mk12)"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z" mask="url(#mk13)"/></g></g>
@@ -272,12 +303,12 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">Claude Opus 5.5</h2>
       <p class="tag">시 「획」으로 쓴 자기소개</p>
-      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.<br><span class="date">2026. 9. 22 공개</span></p>
+      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
 
     <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
-      <div class="meta"><b>03</b><span>OpenAI</span></div>
+      <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
       <div class="art" aria-hidden="true">
         <div class="plate solp">
           <svg class="solart" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
@@ -308,12 +339,29 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">GPT-6 Sol</h2>
       <p class="tag">아이디어가 결과가 되는 순간</p>
-      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다. 2026. 9. 22 공개</p>
+      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다.</p>
+      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+    </a>
+
+    <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
+      <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
+      <div class="art" aria-hidden="true">
+        <div class="plate nebula">
+          <span class="neb"></span>
+          <span class="shade"></span>
+          <span class="alabel">GPT-6 ASTRA · 2026.09.03</span>
+          <span class="aword">ASTRA<i>✦</i></span>
+          <span class="seal"><i>GPT</i><b>6</b><i>ASTRA</i></span>
+        </div>
+      </div>
+      <h2 class="name">GPT-6 Astra</h2>
+      <p class="tag">상상의 끝에서, 가능성의 시작으로</p>
+      <p class="desc">입자 궤적과 공식 벤치마크로 추론의 깊이를 보여 줍니다.</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
 
     <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
-      <div class="meta"><b>04</b><span>Anthropic</span></div>
+      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-01">2026. 9. 1 공개</time></div>
       <div class="art" aria-hidden="true">
         <div class="plate book">
           <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
@@ -332,7 +380,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
       </div>
       <h2 class="name">Claude Fable 5.1</h2>
       <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
-      <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.<br><span class="date">2026. 9. 1 공개</span></p>
+      <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.</p>
       <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
     </a>
   </main>
@@ -414,8 +462,13 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   if (!RM) sseal2.classList.add('off');
   function gather() { flock.classList.add('gather'); setTimeout(() => { sseal2.classList.remove('off'); sseal2.classList.add('on'); }, RM ? 0 : 1600); }
 
+  /* Astra: 어둠 속에서 성운이 밝아지고, 이름이 모인 뒤 도장이 찍힌다 */
+  const astra = document.getElementById('card-astra'), neb = astra.querySelector('.plate.nebula'), aseal = astra.querySelector('.seal');
+  if (!RM) aseal.classList.add('off');
+  function ignite() { neb.classList.add('lit'); setTimeout(() => { aseal.classList.remove('off'); aseal.classList.add('on'); }, RM ? 0 : 1700); }
+
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
-  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [fable, drop], [sonnet, gather]]);
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);
