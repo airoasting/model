@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
-<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://model.airoasting.com/">
 <meta property="og:title" content="모델의 자기소개">
-<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <meta property="og:image" content="https://model.airoasting.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -73,12 +73,29 @@ h1 q { quotes: '“' '”'; }
 @media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
-/* 카드 다섯 장: 같은 틀, 다른 재료. 넓으면 위에 두 장, 아래에 세 장(6칸 격자). 좁은 태블릿은 두 장씩, 휴대폰은 한 장씩 */
-.cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s3); margin-top: var(--s4); }
-.card { grid-column: span 2; }
-.card:nth-child(-n+2) { grid-column: span 3; }
-@media (max-width: 860px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .card, .card:nth-child(-n+2) { grid-column: auto; } }
-@media (max-width: 640px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+/* 타임라인: 공개일 순으로 한 줄. 왼쪽이 오래된 것, 오른쪽이 최근. 처음 열면 맨 오른쪽(최신)이 보이게 스크롤을 끝에 둔다 */
+.timeline { position: relative; margin-top: var(--s4); margin-inline: calc(max(20px, 5vw) * -1); }
+.cards { list-style: none; margin: 0; display: flex; gap: var(--s3); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: max(20px, 5vw); padding: var(--s5) max(20px, 5vw) var(--s3); scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.slot { position: relative; flex: 0 0 clamp(280px, 30vw, 360px); display: flex; scroll-snap-align: end; }
+.slot > .card { flex: 1; }
+/* 축: 카드 위로 지나가는 선과 날짜 점 */
+.slot::before { content: ''; position: absolute; left: calc(var(--s3) * -1); right: 0; top: calc(var(--s5) * -.5); height: 1px; background: var(--line); }
+.slot:first-child::before { left: 50%; }
+.slot.latest::before { right: 50%; }
+.slot::after { content: ''; position: absolute; left: 50%; top: calc(var(--s5) * -.5); width: 9px; height: 9px; translate: -50% -50%; border-radius: 50%; background: var(--bg); border: 1px solid var(--paper-3); }
+.slot.latest::after { background: var(--paper); border-color: var(--paper); box-shadow: 0 0 0 5px rgba(236, 230, 218, .12); }
+.timeline::before, .timeline::after { content: ''; position: absolute; top: 0; bottom: 0; width: max(20px, 5vw); z-index: 1; pointer-events: none; }
+.timeline::before { left: 0; background: linear-gradient(90deg, #0d0c0e, transparent); }
+.timeline::after { right: 0; background: linear-gradient(-90deg, #0d0c0e, transparent); }
+.pill.new { color: var(--paper); border-color: rgba(182, 161, 255, .5); background: rgba(182, 161, 255, .1); }
+.card.sol61 { --accent: #b6a1ff; --glow: rgba(182, 161, 255, .14); background: #111118; border-color: #2a2836; }
+.plate.chrome { background: #09090f; }
+.plate.chrome img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; scale: 1.08; transition: scale 1.2s var(--ease); }
+.card.sol61:hover .plate.chrome img { scale: 1.16; }
+.plate.chrome .clabel { position: absolute; left: 7%; top: 8%; font-size: 9px; letter-spacing: .22em; color: rgba(241, 240, 247, .78); }
+.plate.chrome .seal { color: #f1f0f7; flex-direction: column; font-family: var(--sans); font-size: 8px; letter-spacing: .1em; border: 1px solid rgba(241, 240, 247, .6); border-radius: 50%; }
+.plate.chrome .seal b { font-size: 15px; letter-spacing: 0; }
+.plate.chrome .seal i { font-style: normal; }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
   container-type: inline-size; /* 이름과 판 안의 글자 크기를 카드 폭(cqi)에 맞춘다 */
@@ -89,11 +106,13 @@ h1 q { quotes: '“' '”'; }
   transition: transform .6s var(--ease), border-color .35s, scale .08s;
   opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards;
 }
-.card:nth-child(1) { animation-delay: .36s; }
-.card:nth-child(2) { animation-delay: .48s; }
-.card:nth-child(3) { animation-delay: .6s; }
-.card:nth-child(4) { animation-delay: .72s; }
-.card:nth-child(5) { animation-delay: .84s; }
+/* 최신(오른쪽)부터 차례로 떠오른다 */
+.slot:nth-last-child(1) .card { animation-delay: .3s; }
+.slot:nth-last-child(2) .card { animation-delay: .4s; }
+.slot:nth-last-child(3) .card { animation-delay: .5s; }
+.slot:nth-last-child(4) .card { animation-delay: .6s; }
+.slot:nth-last-child(5) .card { animation-delay: .7s; }
+.slot:nth-last-child(6) .card { animation-delay: .8s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -261,128 +280,152 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
     </div>
   </header>
 
-  <main class="cards">
-    <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
-      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
-      <div class="art" aria-hidden="true">
-        <div class="plate flock">
-          <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <filter id="aur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
-            </defs>
-            <g filter="url(#aur)" opacity=".62">
-              <circle cx="60" cy="40" r="80" fill="#d97757"/>
-              <circle cx="250" cy="70" r="85" fill="#8b6cff"/>
-              <circle cx="160" cy="230" r="70" fill="#4fd6d0" opacity=".7"/>
-            </g>
-            <g class="birds"></g>
-          </svg>
-          <span class="note">찌르레기 군무</span>
-          <span class="seal">Sonnet<br>5.5</span>
+  <main class="timeline" aria-label="공개일 순 타임라인. 오른쪽이 최근">
+   <ol class="cards">
+    <li class="slot">
+      <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-01">2026. 9. 1 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate book">
+            <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+              <defs><filter id="comb" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".012 .05" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="46"/></filter></defs>
+              <g class="marb" filter="url(#comb)">
+                <rect x="-20" y="-20" width="340" height="280" fill="#1d3f6e"/>
+                <circle cx="90" cy="70" r="92" fill="#c8962e"/><circle cx="90" cy="70" r="70" fill="#8a2b3d"/><circle cx="90" cy="70" r="46" fill="#d9dccf"/><circle cx="90" cy="70" r="22" fill="#173229"/>
+                <circle cx="250" cy="190" r="100" fill="#d9dccf"/><circle cx="250" cy="190" r="76" fill="#1d3f6e"/><circle cx="250" cy="190" r="50" fill="#c8962e"/><circle cx="250" cy="190" r="24" fill="#8a2b3d"/>
+                <circle cx="200" cy="40" r="44" fill="#8a2b3d"/><circle cx="200" cy="40" r="24" fill="#d9dccf"/>
+                <circle cx="60" cy="210" r="56" fill="#c8962e"/><circle cx="60" cy="210" r="30" fill="#0f1a17"/>
+              </g>
+            </svg>
+            <span class="bspine"><span>FABLE 5.1</span></span>
+            <span class="blabel"><b>Fable 5.1</b><i>우화집</i></span>
+          </div>
         </div>
-      </div>
-      <h2 class="name">Claude Sonnet 5.5</h2>
-      <p class="tag">성적표로 쓴 자기소개</p>
-      <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다.</p>
-      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-    </a>
-
-    <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
-      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
-      <div class="art" aria-hidden="true">
-        <div class="plate hanji">
-          <svg viewBox="0 -60 1024 1080"><g transform="translate(0, 900) scale(1, -1)" filter="url(#rough)"><g class="ghost"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z"/></g><g class="ink"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z" mask="url(#mk0)"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z" mask="url(#mk1)"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z" mask="url(#mk2)"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z" mask="url(#mk3)"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z" mask="url(#mk4)"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z" mask="url(#mk5)"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z" mask="url(#mk6)"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z" mask="url(#mk7)"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z" mask="url(#mk8)"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z" mask="url(#mk9)"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z" mask="url(#mk10)"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z" mask="url(#mk11)"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z" mask="url(#mk12)"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z" mask="url(#mk13)"/></g></g>
-            <defs>
-              <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
-              <mask id="mk0" maskUnits="userSpaceOnUse"><path d="M259 713 L301 711 L366 722 L490 753 L518 746 L541 726 L507 611 L486 595" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk1" maskUnits="userSpaceOnUse"><path d="M126 603 L174 593 L554 663 L604 667 L628 662" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk2" maskUnits="userSpaceOnUse"><path d="M263 532 L302 532 L502 571 L543 564" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk3" maskUnits="userSpaceOnUse"><path d="M263 447 L297 442 L455 475 L505 472" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk4" maskUnits="userSpaceOnUse"><path d="M345 829 L389 790 L382 413 L367 392" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk5" maskUnits="userSpaceOnUse"><path d="M159 350 L195 341 L527 396 L579 389" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk6" maskUnits="userSpaceOnUse"><path d="M212 280 L237 259 L245 244 L280 106" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk7" maskUnits="userSpaceOnUse"><path d="M268 280 L284 273 L450 312 L509 308 L525 293 L528 275 L491 148 L494 134" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk8" maskUnits="userSpaceOnUse"><path d="M317 208 L422 233 L449 229" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk9" maskUnits="userSpaceOnUse"><path d="M394 279 L379 255 L380 179 L365 160" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk10" maskUnits="userSpaceOnUse"><path d="M298 120 L314 131 L441 155 L466 165" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk11" maskUnits="userSpaceOnUse"><path d="M148 39 L213 27 L519 80 L544 82 L585 74" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk12" maskUnits="userSpaceOnUse"><path d="M667 624 L692 597 L696 584 L698 414 L692 327 L697 291" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk13" maskUnits="userSpaceOnUse"><path d="M797 812 L846 772 L845 451 L855 78 L835 33 L714 90" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask>
-            </defs>
-          </svg>
-          <span class="note">劃 그을 획</span>
-          <span class="seal">Opus<br>5.5</span>
+        <h2 class="name">Claude Fable 5.1</h2>
+        <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
+        <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
+        <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate nebula">
+            <span class="neb"></span>
+            <span class="shade"></span>
+            <span class="alabel">GPT-6 ASTRA · 2026.09.03</span>
+            <span class="aword">ASTRA<i>✦</i></span>
+            <span class="seal"><i>GPT</i><b>6</b><i>ASTRA</i></span>
+          </div>
         </div>
-      </div>
-      <h2 class="name">Claude Opus 5.5</h2>
-      <p class="tag">시 「획」으로 쓴 자기소개</p>
-      <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.</p>
-      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-    </a>
-
-    <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
-      <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
-      <div class="art" aria-hidden="true">
-        <div class="plate solp">
-          <svg class="solart" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <radialGradient id="orb" cx="38%" cy="30%" r="78%" fx="34%" fy="26%">
-                <stop offset="0" stop-color="#fbe6b8"/><stop offset=".32" stop-color="#f3b681"/>
-                <stop offset=".62" stop-color="#e07d63"/><stop offset=".86" stop-color="#7c4a6c"/><stop offset="1" stop-color="#4e3462"/>
-              </radialGradient>
-              <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
-              <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
-            </defs>
-            <rect width="500" height="400" fill="#ebe3d6"/>
-            <rect x="9" y="9" width="482" height="382" fill="none" stroke="rgba(40,30,20,.16)"/>
-            <g class="waves" fill="none" stroke="rgba(90,80,70,.34)" stroke-width="1"><path d="M0 262.0 L10 263.3 L20 264.5 L30 265.7 L40 266.8 L50 267.9 L60 268.8 L70 269.7 L80 270.4 L90 271.0 L100 271.5 L110 271.8 L120 272.0 L130 272.0 L140 271.8 L150 271.5 L160 271.0 L170 270.4 L180 269.7 L190 268.8 L200 267.9 L210 266.8 L220 265.7 L230 264.5 L240 263.3 L250 262.0 L260 260.7 L270 259.5 L280 258.3 L290 257.2 L300 256.1 L310 255.2 L320 254.3 L330 253.6 L340 253.0 L350 252.5 L360 252.2 L370 252.0 L380 252.0 L390 252.2 L400 252.5 L410 253.0 L420 253.6 L430 254.3 L440 255.2 L450 256.1 L460 257.2 L470 258.3 L480 259.5 L490 260.7 L500 262.0 L510 263.3 L520 264.5 L530 265.7 L540 266.8 L550 267.9 L560 268.8 L570 269.7 L580 270.4 L590 271.0 L600 271.5 L610 271.8 L620 272.0 L630 272.0 L640 271.8 L650 271.5 L660 271.0 L670 270.4 L680 269.7 L690 268.8 L700 267.9 L710 266.8 L720 265.7 L730 264.5 L740 263.3 L750 262.0 L760 260.7 L770 259.5 L780 258.3 L790 257.2 L800 256.1 L810 255.2 L820 254.3 L830 253.6 L840 253.0 L850 252.5 L860 252.2 L870 252.0 L880 252.0 L890 252.2 L900 252.5 L910 253.0 L920 253.6 L930 254.3 L940 255.2 L950 256.1 L960 257.2 L970 258.3 L980 259.5 L990 260.7 L1000 262.0"/><path d="M0 294.5 L10 295.2 L20 295.7 L30 295.9 L40 296.0 L50 295.8 L60 295.4 L70 294.8 L80 294.0 L90 293.1 L100 291.9 L110 290.6 L120 289.1 L130 287.6 L140 285.9 L150 284.2 L160 282.4 L170 280.7 L180 278.9 L190 277.3 L200 275.6 L210 274.1 L220 272.7 L230 271.5 L240 270.4 L250 269.5 L260 268.8 L270 268.3 L280 268.1 L290 268.0 L300 268.2 L310 268.6 L320 269.2 L330 270.0 L340 270.9 L350 272.1 L360 273.4 L370 274.9 L380 276.4 L390 278.1 L400 279.8 L410 281.6 L420 283.3 L430 285.1 L440 286.7 L450 288.4 L460 289.9 L470 291.3 L480 292.5 L490 293.6 L500 294.5 L510 295.2 L520 295.7 L530 295.9 L540 296.0 L550 295.8 L560 295.4 L570 294.8 L580 294.0 L590 293.1 L600 291.9 L610 290.6 L620 289.1 L630 287.6 L640 285.9 L650 284.2 L660 282.4 L670 280.7 L680 278.9 L690 277.3 L700 275.6 L710 274.1 L720 272.7 L730 271.5 L740 270.4 L750 269.5 L760 268.8 L770 268.3 L780 268.1 L790 268.0 L800 268.2 L810 268.6 L820 269.2 L830 270.0 L840 270.9 L850 272.1 L860 273.4 L870 274.9 L880 276.4 L890 278.1 L900 279.8 L910 281.6 L920 283.3 L930 285.1 L940 286.7 L950 288.4 L960 289.9 L970 291.3 L980 292.5 L990 293.6 L1000 294.5"/><path d="M0 308.9 L10 308.0 L20 307.0 L30 305.9 L40 304.7 L50 303.4 L60 302.1 L70 300.7 L80 299.3 L90 297.9 L100 296.6 L110 295.3 L120 294.1 L130 293.0 L140 292.0 L150 291.1 L160 290.4 L170 289.8 L180 289.3 L190 289.1 L200 289.0 L210 289.1 L220 289.3 L230 289.8 L240 290.4 L250 291.1 L260 292.0 L270 293.0 L280 294.1 L290 295.3 L300 296.6 L310 297.9 L320 299.3 L330 300.7 L340 302.1 L350 303.4 L360 304.7 L370 305.9 L380 307.0 L390 308.0 L400 308.9 L410 309.6 L420 310.2 L430 310.7 L440 310.9 L450 311.0 L460 310.9 L470 310.7 L480 310.2 L490 309.6 L500 308.9 L510 308.0 L520 307.0 L530 305.9 L540 304.7 L550 303.4 L560 302.1 L570 300.7 L580 299.3 L590 297.9 L600 296.6 L610 295.3 L620 294.1 L630 293.0 L640 292.0 L650 291.1 L660 290.4 L670 289.8 L680 289.3 L690 289.1 L700 289.0 L710 289.1 L720 289.3 L730 289.8 L740 290.4 L750 291.1 L760 292.0 L770 293.0 L780 294.1 L790 295.3 L800 296.6 L810 297.9 L820 299.3 L830 300.7 L840 302.1 L850 303.4 L860 304.7 L870 305.9 L880 307.0 L890 308.0 L900 308.9 L910 309.6 L920 310.2 L930 310.7 L940 310.9 L950 311.0 L960 310.9 L970 310.7 L980 310.2 L990 309.6 L1000 308.9"/><path d="M0 327.0 L10 328.6 L20 330.0 L30 331.3 L40 332.3 L50 333.1 L60 333.6 L70 333.9 L80 334.0 L90 333.8 L100 333.4 L110 332.7 L120 331.7 L130 330.6 L140 329.3 L150 327.8 L160 326.1 L170 324.3 L180 322.4 L190 320.5 L200 318.5 L210 316.4 L220 314.5 L230 312.5 L240 310.7 L250 309.0 L260 307.4 L270 306.0 L280 304.7 L290 303.7 L300 302.9 L310 302.4 L320 302.1 L330 302.0 L340 302.2 L350 302.6 L360 303.3 L370 304.3 L380 305.4 L390 306.7 L400 308.2 L410 309.9 L420 311.7 L430 313.6 L440 315.5 L450 317.5 L460 319.6 L470 321.5 L480 323.5 L490 325.3 L500 327.0 L510 328.6 L520 330.0 L530 331.3 L540 332.3 L550 333.1 L560 333.6 L570 333.9 L580 334.0 L590 333.8 L600 333.4 L610 332.7 L620 331.7 L630 330.6 L640 329.3 L650 327.8 L660 326.1 L670 324.3 L680 322.4 L690 320.5 L700 318.5 L710 316.4 L720 314.5 L730 312.5 L740 310.7 L750 309.0 L760 307.4 L770 306.0 L780 304.7 L790 303.7 L800 302.9 L810 302.4 L820 302.1 L830 302.0 L840 302.2 L850 302.6 L860 303.3 L870 304.3 L880 305.4 L890 306.7 L900 308.2 L910 309.9 L920 311.7 L930 313.6 L940 315.5 L950 317.5 L960 319.6 L970 321.5 L980 323.5 L990 325.3 L1000 327.0"/><path d="M0 349.9 L10 349.6 L20 349.1 L30 348.5 L40 347.7 L50 346.7 L60 345.6 L70 344.4 L80 343.1 L90 341.7 L100 340.2 L110 338.7 L120 337.2 L130 335.7 L140 334.3 L150 332.9 L160 331.5 L170 330.3 L180 329.2 L190 328.3 L200 327.5 L210 326.8 L220 326.4 L230 326.1 L240 326.0 L250 326.1 L260 326.4 L270 326.9 L280 327.5 L290 328.3 L300 329.3 L310 330.4 L320 331.6 L330 332.9 L340 334.3 L350 335.8 L360 337.3 L370 338.8 L380 340.3 L390 341.7 L400 343.1 L410 344.5 L420 345.7 L430 346.8 L440 347.7 L450 348.5 L460 349.2 L470 349.6 L480 349.9 L490 350.0 L500 349.9 L510 349.6 L520 349.1 L530 348.5 L540 347.7 L550 346.7 L560 345.6 L570 344.4 L580 343.1 L590 341.7 L600 340.2 L610 338.7 L620 337.2 L630 335.7 L640 334.3 L650 332.9 L660 331.5 L670 330.3 L680 329.2 L690 328.3 L700 327.5 L710 326.8 L720 326.4 L730 326.1 L740 326.0 L750 326.1 L760 326.4 L770 326.9 L780 327.5 L790 328.3 L800 329.3 L810 330.4 L820 331.6 L830 332.9 L840 334.3 L850 335.8 L860 337.3 L870 338.8 L880 340.3 L890 341.7 L900 343.1 L910 344.5 L920 345.7 L930 346.8 L940 347.7 L950 348.5 L960 349.2 L970 349.6 L980 349.9 L990 350.0 L1000 349.9"/></g>
-            <circle class="glow" cx="240" cy="212" r="108" fill="#f0a57c" opacity=".35" filter="url(#soft)"/>
-            <g class="orb"><circle cx="240" cy="212" r="108" fill="url(#orb)"/><circle cx="240" cy="212" r="108" fill="#fff" filter="url(#grain)"/></g>
-            <g class="orbits" fill="none" stroke="rgba(80,70,62,.42)" stroke-width="1">
-              <ellipse cx="238" cy="212" rx="205" ry="84" transform="rotate(-18 238 212)" pathLength="1"/>
-              <ellipse cx="242" cy="208" rx="150" ry="120" transform="rotate(28 242 208)" pathLength="1"/>
-            </g>
-            <circle cx="92" cy="128" r="4" fill="#c79a90"/><circle cx="398" cy="262" r="3.5" fill="#c79a90"/>
-            <text class="solword" x="28" y="262" transform="rotate(-4 180 210)">SOL</text>
-            <text class="sollabel" x="30" y="34">GPT-6 SOL · 2026.09.22</text>
-          </svg>
-          <span class="vcol c1">컴퓨터 사용</span><span class="vcol c2">도구를 쓰는 에이전트</span><span class="vcol c3">코드 작성과 수정</span>
-          <span class="seal"><i>GPT</i><b>6</b><i>SOL</i></span>
+        <h2 class="name">GPT-6 Astra</h2>
+        <p class="tag">상상의 끝에서, 가능성의 시작으로</p>
+        <p class="desc">입자 궤적과 공식 벤치마크로 추론의 깊이를 보여 줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate hanji">
+            <svg viewBox="0 -60 1024 1080"><g transform="translate(0, 900) scale(1, -1)" filter="url(#rough)"><g class="ghost"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z"/></g><g class="ink"><path d="M 524 590 Q 531 621 539 641 L 558 682 Q 568 701 582 712 Q 597 728 584 744 Q 512 795 463 767 Q 441 760 418 751 L 360 737 Q 314 728 264 722 Q 249 721 251 712 Q 254 705 270 699 Q 292 689 324 700 Q 343 704 362 707 L 414 718 Q 486 737 497 727 Q 507 718 504 699 L 498 669 L 491 635 Q 484 611 479 589 C 472 560 517 561 524 590 Z" mask="url(#mk0)"/><path d="M 539 641 Q 578 648 621 651 Q 636 652 637 658 Q 638 670 622 679 Q 601 689 558 682 L 498 669 Q 449 660 410 652 L 364 644 Q 232 625 129 614 Q 119 614 115 607 Q 111 597 125 587 Q 158 560 197 571 Q 294 599 365 614 L 409 622 Q 446 629 491 635 L 539 641 Z" mask="url(#mk1)"/><path d="M 406 536 Q 464 546 541 555 Q 551 556 552 565 Q 553 572 524 590 C 512 598 508 596 479 589 Q 440 579 407 570 L 365 560 Q 311 550 265 542 Q 246 539 258 524 Q 273 509 316 519 Q 337 525 365 528 L 406 536 Z" mask="url(#mk2)"/><path d="M 402 445 Q 406 446 499 461 Q 506 460 514 471 Q 515 480 496 488 Q 472 506 403 482 L 363 472 Q 315 465 267 455 Q 243 451 262 438 Q 289 420 315 426 Q 334 432 362 436 L 402 445 Z" mask="url(#mk3)"/><path d="M 400 392 Q 401 419 402 445 L 403 482 Q 404 510 406 536 L 407 570 Q 407 597 409 622 L 410 652 Q 410 677 412 701 Q 412 710 414 718 L 418 751 Q 418 757 420 761 Q 426 783 429 798 Q 432 808 413 822 Q 379 838 357 843 Q 341 846 334 838 Q 327 831 335 816 Q 359 782 360 737 L 362 707 Q 363 676 364 644 L 365 614 Q 365 589 365 560 L 365 528 Q 364 501 363 472 L 362 436 Q 361 412 361 385 C 361 355 399 362 400 392 Z" mask="url(#mk4)"/><path d="M 361 385 Q 334 381 164 359 Q 137 356 158 339 Q 168 330 183 322 Q 195 315 216 321 Q 420 363 570 376 Q 580 375 589 387 Q 590 397 568 408 Q 540 429 460 406 Q 430 400 400 392 L 361 385 Z" mask="url(#mk5)"/><path d="M 254 280 Q 244 284 218 287 Q 208 290 204 285 Q 200 279 207 265 Q 232 219 251 143 Q 255 121 269 106 Q 285 87 290 101 Q 291 107 292 114 L 291 137 Q 278 206 268 255 C 264 277 264 277 254 280 Z" mask="url(#mk6)"/><path d="M 464 142 Q 477 124 489 118 Q 498 112 510 130 Q 520 145 541 229 Q 548 254 566 276 Q 576 286 567 298 Q 554 311 519 332 Q 507 338 436 321 Q 418 321 254 280 C 225 273 239 246 268 255 Q 305 267 360 278 L 399 286 Q 469 304 489 292 Q 498 286 496 273 Q 481 180 472 171 C 461 146 461 146 464 142 Z" mask="url(#mk7)"/><path d="M 399 211 Q 421 217 446 221 Q 464 225 457 234 Q 448 244 428 248 Q 415 249 399 244 L 360 232 Q 332 223 309 214 Q 296 210 312 199 L 360 203 L 399 211 Z" mask="url(#mk8)"/><path d="M 399 163 L 399 211 L 399 244 L 399 286 C 399 316 360 308 360 278 L 360 232 L 360 203 L 360 154 C 360 124 399 133 399 163 Z" mask="url(#mk9)"/><path d="M 292 114 Q 296 114 304 115 Q 392 131 464 142 C 494 147 501 163 472 171 Q 469 172 465 173 Q 437 177 399 163 L 360 154 Q 323 147 291 137 C 262 128 262 112 292 114 Z" mask="url(#mk10)"/><path d="M 156 53 Q 143 52 138 44 Q 134 34 150 20 Q 193 -13 236 0 Q 407 46 578 61 Q 596 62 597 71 Q 598 84 580 95 Q 552 110 526 105 Q 259 57 156 53 Z" mask="url(#mk11)"/><path d="M 655 613 Q 688 543 666 355 Q 657 321 688 285 Q 698 275 706 286 Q 721 310 723 383 Q 717 525 726 585 Q 732 607 712 618 Q 696 628 679 636 Q 667 640 658 634 Q 651 627 655 613 Z" mask="url(#mk12)"/><path d="M 813 734 Q 819 697 825 111 Q 825 86 812 77 Q 805 74 738 90 Q 704 103 707 92 Q 708 85 728 69 Q 792 14 808 -16 Q 827 -52 843 -54 Q 858 -55 873 -18 Q 892 30 890 106 Q 868 365 871 625 Q 872 716 885 764 Q 901 795 844 817 Q 808 836 789 828 Q 771 821 788 797 Q 810 770 813 734 Z" mask="url(#mk13)"/></g></g>
+              <defs>
+                <filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
+                <mask id="mk0" maskUnits="userSpaceOnUse"><path d="M259 713 L301 711 L366 722 L490 753 L518 746 L541 726 L507 611 L486 595" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk1" maskUnits="userSpaceOnUse"><path d="M126 603 L174 593 L554 663 L604 667 L628 662" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk2" maskUnits="userSpaceOnUse"><path d="M263 532 L302 532 L502 571 L543 564" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk3" maskUnits="userSpaceOnUse"><path d="M263 447 L297 442 L455 475 L505 472" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk4" maskUnits="userSpaceOnUse"><path d="M345 829 L389 790 L382 413 L367 392" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk5" maskUnits="userSpaceOnUse"><path d="M159 350 L195 341 L527 396 L579 389" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk6" maskUnits="userSpaceOnUse"><path d="M212 280 L237 259 L245 244 L280 106" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk7" maskUnits="userSpaceOnUse"><path d="M268 280 L284 273 L450 312 L509 308 L525 293 L528 275 L491 148 L494 134" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk8" maskUnits="userSpaceOnUse"><path d="M317 208 L422 233 L449 229" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk9" maskUnits="userSpaceOnUse"><path d="M394 279 L379 255 L380 179 L365 160" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk10" maskUnits="userSpaceOnUse"><path d="M298 120 L314 131 L441 155 L466 165" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk11" maskUnits="userSpaceOnUse"><path d="M148 39 L213 27 L519 80 L544 82 L585 74" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk12" maskUnits="userSpaceOnUse"><path d="M667 624 L692 597 L696 584 L698 414 L692 327 L697 291" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask><mask id="mk13" maskUnits="userSpaceOnUse"><path d="M797 812 L846 772 L845 451 L855 78 L835 33 L714 90" fill="none" stroke="#fff" stroke-width="150" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" style="stroke-dashoffset:0"/></mask>
+              </defs>
+            </svg>
+            <span class="note">劃 그을 획</span>
+            <span class="seal">Opus<br>5.5</span>
+          </div>
         </div>
-      </div>
-      <h2 class="name">GPT-6 Sol</h2>
-      <p class="tag">아이디어가 결과가 되는 순간</p>
-      <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다.</p>
-      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-    </a>
-
-    <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
-      <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
-      <div class="art" aria-hidden="true">
-        <div class="plate nebula">
-          <span class="neb"></span>
-          <span class="shade"></span>
-          <span class="alabel">GPT-6 ASTRA · 2026.09.03</span>
-          <span class="aword">ASTRA<i>✦</i></span>
-          <span class="seal"><i>GPT</i><b>6</b><i>ASTRA</i></span>
+        <h2 class="name">Claude Opus 5.5</h2>
+        <p class="tag">시 「획」으로 쓴 자기소개</p>
+        <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
+        <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate solp">
+            <svg class="solart" viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <radialGradient id="orb" cx="38%" cy="30%" r="78%" fx="34%" fy="26%">
+                  <stop offset="0" stop-color="#fbe6b8"/><stop offset=".32" stop-color="#f3b681"/>
+                  <stop offset=".62" stop-color="#e07d63"/><stop offset=".86" stop-color="#7c4a6c"/><stop offset="1" stop-color="#4e3462"/>
+                </radialGradient>
+                <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+                <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+              </defs>
+              <rect width="500" height="400" fill="#ebe3d6"/>
+              <rect x="9" y="9" width="482" height="382" fill="none" stroke="rgba(40,30,20,.16)"/>
+              <g class="waves" fill="none" stroke="rgba(90,80,70,.34)" stroke-width="1"><path d="M0 262.0 L10 263.3 L20 264.5 L30 265.7 L40 266.8 L50 267.9 L60 268.8 L70 269.7 L80 270.4 L90 271.0 L100 271.5 L110 271.8 L120 272.0 L130 272.0 L140 271.8 L150 271.5 L160 271.0 L170 270.4 L180 269.7 L190 268.8 L200 267.9 L210 266.8 L220 265.7 L230 264.5 L240 263.3 L250 262.0 L260 260.7 L270 259.5 L280 258.3 L290 257.2 L300 256.1 L310 255.2 L320 254.3 L330 253.6 L340 253.0 L350 252.5 L360 252.2 L370 252.0 L380 252.0 L390 252.2 L400 252.5 L410 253.0 L420 253.6 L430 254.3 L440 255.2 L450 256.1 L460 257.2 L470 258.3 L480 259.5 L490 260.7 L500 262.0 L510 263.3 L520 264.5 L530 265.7 L540 266.8 L550 267.9 L560 268.8 L570 269.7 L580 270.4 L590 271.0 L600 271.5 L610 271.8 L620 272.0 L630 272.0 L640 271.8 L650 271.5 L660 271.0 L670 270.4 L680 269.7 L690 268.8 L700 267.9 L710 266.8 L720 265.7 L730 264.5 L740 263.3 L750 262.0 L760 260.7 L770 259.5 L780 258.3 L790 257.2 L800 256.1 L810 255.2 L820 254.3 L830 253.6 L840 253.0 L850 252.5 L860 252.2 L870 252.0 L880 252.0 L890 252.2 L900 252.5 L910 253.0 L920 253.6 L930 254.3 L940 255.2 L950 256.1 L960 257.2 L970 258.3 L980 259.5 L990 260.7 L1000 262.0"/><path d="M0 294.5 L10 295.2 L20 295.7 L30 295.9 L40 296.0 L50 295.8 L60 295.4 L70 294.8 L80 294.0 L90 293.1 L100 291.9 L110 290.6 L120 289.1 L130 287.6 L140 285.9 L150 284.2 L160 282.4 L170 280.7 L180 278.9 L190 277.3 L200 275.6 L210 274.1 L220 272.7 L230 271.5 L240 270.4 L250 269.5 L260 268.8 L270 268.3 L280 268.1 L290 268.0 L300 268.2 L310 268.6 L320 269.2 L330 270.0 L340 270.9 L350 272.1 L360 273.4 L370 274.9 L380 276.4 L390 278.1 L400 279.8 L410 281.6 L420 283.3 L430 285.1 L440 286.7 L450 288.4 L460 289.9 L470 291.3 L480 292.5 L490 293.6 L500 294.5 L510 295.2 L520 295.7 L530 295.9 L540 296.0 L550 295.8 L560 295.4 L570 294.8 L580 294.0 L590 293.1 L600 291.9 L610 290.6 L620 289.1 L630 287.6 L640 285.9 L650 284.2 L660 282.4 L670 280.7 L680 278.9 L690 277.3 L700 275.6 L710 274.1 L720 272.7 L730 271.5 L740 270.4 L750 269.5 L760 268.8 L770 268.3 L780 268.1 L790 268.0 L800 268.2 L810 268.6 L820 269.2 L830 270.0 L840 270.9 L850 272.1 L860 273.4 L870 274.9 L880 276.4 L890 278.1 L900 279.8 L910 281.6 L920 283.3 L930 285.1 L940 286.7 L950 288.4 L960 289.9 L970 291.3 L980 292.5 L990 293.6 L1000 294.5"/><path d="M0 308.9 L10 308.0 L20 307.0 L30 305.9 L40 304.7 L50 303.4 L60 302.1 L70 300.7 L80 299.3 L90 297.9 L100 296.6 L110 295.3 L120 294.1 L130 293.0 L140 292.0 L150 291.1 L160 290.4 L170 289.8 L180 289.3 L190 289.1 L200 289.0 L210 289.1 L220 289.3 L230 289.8 L240 290.4 L250 291.1 L260 292.0 L270 293.0 L280 294.1 L290 295.3 L300 296.6 L310 297.9 L320 299.3 L330 300.7 L340 302.1 L350 303.4 L360 304.7 L370 305.9 L380 307.0 L390 308.0 L400 308.9 L410 309.6 L420 310.2 L430 310.7 L440 310.9 L450 311.0 L460 310.9 L470 310.7 L480 310.2 L490 309.6 L500 308.9 L510 308.0 L520 307.0 L530 305.9 L540 304.7 L550 303.4 L560 302.1 L570 300.7 L580 299.3 L590 297.9 L600 296.6 L610 295.3 L620 294.1 L630 293.0 L640 292.0 L650 291.1 L660 290.4 L670 289.8 L680 289.3 L690 289.1 L700 289.0 L710 289.1 L720 289.3 L730 289.8 L740 290.4 L750 291.1 L760 292.0 L770 293.0 L780 294.1 L790 295.3 L800 296.6 L810 297.9 L820 299.3 L830 300.7 L840 302.1 L850 303.4 L860 304.7 L870 305.9 L880 307.0 L890 308.0 L900 308.9 L910 309.6 L920 310.2 L930 310.7 L940 310.9 L950 311.0 L960 310.9 L970 310.7 L980 310.2 L990 309.6 L1000 308.9"/><path d="M0 327.0 L10 328.6 L20 330.0 L30 331.3 L40 332.3 L50 333.1 L60 333.6 L70 333.9 L80 334.0 L90 333.8 L100 333.4 L110 332.7 L120 331.7 L130 330.6 L140 329.3 L150 327.8 L160 326.1 L170 324.3 L180 322.4 L190 320.5 L200 318.5 L210 316.4 L220 314.5 L230 312.5 L240 310.7 L250 309.0 L260 307.4 L270 306.0 L280 304.7 L290 303.7 L300 302.9 L310 302.4 L320 302.1 L330 302.0 L340 302.2 L350 302.6 L360 303.3 L370 304.3 L380 305.4 L390 306.7 L400 308.2 L410 309.9 L420 311.7 L430 313.6 L440 315.5 L450 317.5 L460 319.6 L470 321.5 L480 323.5 L490 325.3 L500 327.0 L510 328.6 L520 330.0 L530 331.3 L540 332.3 L550 333.1 L560 333.6 L570 333.9 L580 334.0 L590 333.8 L600 333.4 L610 332.7 L620 331.7 L630 330.6 L640 329.3 L650 327.8 L660 326.1 L670 324.3 L680 322.4 L690 320.5 L700 318.5 L710 316.4 L720 314.5 L730 312.5 L740 310.7 L750 309.0 L760 307.4 L770 306.0 L780 304.7 L790 303.7 L800 302.9 L810 302.4 L820 302.1 L830 302.0 L840 302.2 L850 302.6 L860 303.3 L870 304.3 L880 305.4 L890 306.7 L900 308.2 L910 309.9 L920 311.7 L930 313.6 L940 315.5 L950 317.5 L960 319.6 L970 321.5 L980 323.5 L990 325.3 L1000 327.0"/><path d="M0 349.9 L10 349.6 L20 349.1 L30 348.5 L40 347.7 L50 346.7 L60 345.6 L70 344.4 L80 343.1 L90 341.7 L100 340.2 L110 338.7 L120 337.2 L130 335.7 L140 334.3 L150 332.9 L160 331.5 L170 330.3 L180 329.2 L190 328.3 L200 327.5 L210 326.8 L220 326.4 L230 326.1 L240 326.0 L250 326.1 L260 326.4 L270 326.9 L280 327.5 L290 328.3 L300 329.3 L310 330.4 L320 331.6 L330 332.9 L340 334.3 L350 335.8 L360 337.3 L370 338.8 L380 340.3 L390 341.7 L400 343.1 L410 344.5 L420 345.7 L430 346.8 L440 347.7 L450 348.5 L460 349.2 L470 349.6 L480 349.9 L490 350.0 L500 349.9 L510 349.6 L520 349.1 L530 348.5 L540 347.7 L550 346.7 L560 345.6 L570 344.4 L580 343.1 L590 341.7 L600 340.2 L610 338.7 L620 337.2 L630 335.7 L640 334.3 L650 332.9 L660 331.5 L670 330.3 L680 329.2 L690 328.3 L700 327.5 L710 326.8 L720 326.4 L730 326.1 L740 326.0 L750 326.1 L760 326.4 L770 326.9 L780 327.5 L790 328.3 L800 329.3 L810 330.4 L820 331.6 L830 332.9 L840 334.3 L850 335.8 L860 337.3 L870 338.8 L880 340.3 L890 341.7 L900 343.1 L910 344.5 L920 345.7 L930 346.8 L940 347.7 L950 348.5 L960 349.2 L970 349.6 L980 349.9 L990 350.0 L1000 349.9"/></g>
+              <circle class="glow" cx="240" cy="212" r="108" fill="#f0a57c" opacity=".35" filter="url(#soft)"/>
+              <g class="orb"><circle cx="240" cy="212" r="108" fill="url(#orb)"/><circle cx="240" cy="212" r="108" fill="#fff" filter="url(#grain)"/></g>
+              <g class="orbits" fill="none" stroke="rgba(80,70,62,.42)" stroke-width="1">
+                <ellipse cx="238" cy="212" rx="205" ry="84" transform="rotate(-18 238 212)" pathLength="1"/>
+                <ellipse cx="242" cy="208" rx="150" ry="120" transform="rotate(28 242 208)" pathLength="1"/>
+              </g>
+              <circle cx="92" cy="128" r="4" fill="#c79a90"/><circle cx="398" cy="262" r="3.5" fill="#c79a90"/>
+              <text class="solword" x="28" y="262" transform="rotate(-4 180 210)">SOL</text>
+              <text class="sollabel" x="30" y="34">GPT-6 SOL · 2026.09.22</text>
+            </svg>
+            <span class="vcol c1">컴퓨터 사용</span><span class="vcol c2">도구를 쓰는 에이전트</span><span class="vcol c3">코드 작성과 수정</span>
+            <span class="seal"><i>GPT</i><b>6</b><i>SOL</i></span>
+          </div>
         </div>
-      </div>
-      <h2 class="name">GPT-6 Astra</h2>
-      <p class="tag">상상의 끝에서, 가능성의 시작으로</p>
-      <p class="desc">입자 궤적과 공식 벤치마크로 추론의 깊이를 보여 줍니다.</p>
-      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-    </a>
-
-    <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
-      <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-01">2026. 9. 1 공개</time></div>
-      <div class="art" aria-hidden="true">
-        <div class="plate book">
-          <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
-            <defs><filter id="comb" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".012 .05" numOctaves="2" seed="11"/><feDisplacementMap in="SourceGraphic" scale="46"/></filter></defs>
-            <g class="marb" filter="url(#comb)">
-              <rect x="-20" y="-20" width="340" height="280" fill="#1d3f6e"/>
-              <circle cx="90" cy="70" r="92" fill="#c8962e"/><circle cx="90" cy="70" r="70" fill="#8a2b3d"/><circle cx="90" cy="70" r="46" fill="#d9dccf"/><circle cx="90" cy="70" r="22" fill="#173229"/>
-              <circle cx="250" cy="190" r="100" fill="#d9dccf"/><circle cx="250" cy="190" r="76" fill="#1d3f6e"/><circle cx="250" cy="190" r="50" fill="#c8962e"/><circle cx="250" cy="190" r="24" fill="#8a2b3d"/>
-              <circle cx="200" cy="40" r="44" fill="#8a2b3d"/><circle cx="200" cy="40" r="24" fill="#d9dccf"/>
-              <circle cx="60" cy="210" r="56" fill="#c8962e"/><circle cx="60" cy="210" r="30" fill="#0f1a17"/>
-            </g>
-          </svg>
-          <span class="bspine"><span>FABLE 5.1</span></span>
-          <span class="blabel"><b>Fable 5.1</b><i>우화집</i></span>
+        <h2 class="name">GPT-6 Sol</h2>
+        <p class="tag">아이디어가 결과가 되는 순간</p>
+        <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate flock">
+            <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <filter id="aur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+              </defs>
+              <g filter="url(#aur)" opacity=".62">
+                <circle cx="60" cy="40" r="80" fill="#d97757"/>
+                <circle cx="250" cy="70" r="85" fill="#8b6cff"/>
+                <circle cx="160" cy="230" r="70" fill="#4fd6d0" opacity=".7"/>
+              </g>
+              <g class="birds"></g>
+            </svg>
+            <span class="note">찌르레기 군무</span>
+            <span class="seal">Sonnet<br>5.5</span>
+          </div>
         </div>
-      </div>
-      <h2 class="name">Claude Fable 5.1</h2>
-      <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
-      <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.</p>
-      <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-    </a>
+        <h2 class="name">Claude Sonnet 5.5</h2>
+        <p class="tag">성적표로 쓴 자기소개</p>
+        <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot latest">
+      <a class="card sol61" href="gpt61sol/index.html" id="card-sol61" data-world="#09090f">
+        <div class="meta"><span class="pill">OpenAI</span><span class="pill date new">최신 추가</span></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate chrome">
+            <img src="gpt61sol/assets/sol-chrome.png" alt="" decoding="async">
+            <span class="clabel">GPT-6.1 SOL</span>
+            <span class="seal"><i>GPT</i><b>6.1</b><i>SOL</i></span>
+          </div>
+        </div>
+        <h2 class="name">GPT-6.1 Sol</h2>
+        <p class="tag">당신의 생각에, 실행이라는 빛을</p>
+        <p class="desc">아이디어의 첫 문장부터 마지막 코드 한 줄까지 함께 만듭니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+   </ol>
   </main>
 
   <footer><span>각 페이지의 모델 정보는 모델을 만든 회사의 공식 발표를 따릅니다.</span></footer>
@@ -466,6 +509,12 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   const astra = document.getElementById('card-astra'), neb = astra.querySelector('.plate.nebula'), aseal = astra.querySelector('.seal');
   if (!RM) aseal.classList.add('off');
   function ignite() { neb.classList.add('lit'); setTimeout(() => { aseal.classList.remove('off'); aseal.classList.add('on'); }, RM ? 0 : 1700); }
+
+  /* 타임라인은 최신(맨 오른쪽)에서 시작한다 */
+  const rail = document.querySelector('.cards');
+  const toLatest = () => { rail.scrollLeft = rail.scrollWidth; };
+  toLatest(); addEventListener('load', toLatest);
+  rail.addEventListener('wheel', e => { const max = rail.scrollWidth - rail.clientWidth; if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && ((e.deltaY < 0 && rail.scrollLeft > 0) || (e.deltaY > 0 && rail.scrollLeft < max - 1))) { e.preventDefault(); rail.scrollLeft += e.deltaY; } }, { passive: false });
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
   const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather]]);
