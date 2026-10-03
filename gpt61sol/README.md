@@ -47,3 +47,15 @@ Lighting/mood: luminous rim highlights, glossy reflections, dramatic sculptural 
 Color palette: electric cobalt blue, vivid ultraviolet, rose and magenta, a small touch of molten amber.
 Constraints: exactly one ring-like sculptural object; retain a clear dark center; black background, not transparent; no stars, text, typography, interface, logos, watermark.
 ```
+
+
+## 2026-10-03 인터랙션 업데이트
+
+`assets/sol-chrome.png` 한 장과 하나의 DOM 오브제가 첫 화면부터 마지막 장면까지 이어집니다. 스크롤에 맞춰 위치·크기·회전을 보간하고, 마우스 드래그·방향키·터치로 링을 회전합니다. 작업 예시와 비교 항목 선택은 링의 색에 반영됩니다. 기본 스크롤과 모션 끄기, 시스템의 모션 감소 설정을 지원합니다.
+
+벤치마크 탐색기는 공식 문서의 입력/출력 단가와 컨텍스트를 비교하며, 토큰 슬라이더로 Standard 비캐시 텍스트 요청 비용을 계산합니다. 비용 예시는 추론 토큰을 출력에 포함하고 도구·지역 할증·세금을 제외합니다. 입력은 250K 이하로 제한하므로 장문 할증 구간에 진입하지 않습니다. 성능 평가 점수는 확인한 공식 자료에서 찾지 못했으므로 숫자를 주장하지 않고 확인 대기로 표시합니다.
+
+검증 출처 (2026-10-03):
+- https://developers.openai.com/api/docs/models/gpt-6.1-sol
+- https://developers.openai.com/api/docs/models/gpt-6-astra
+- https://developers.openai.com/api/docs/guides/latest-model

@@ -1,0 +1,11 @@
+{
+  "name": "gpt61sol",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SOL — GPT-6.1 Sol interactive introduction",
+  "scripts": {
+    "start": "python3 -m http.server 4361 --bind 127.0.0.1",
+    "build": "node build.mjs",
+    "check": "node --check app.js"
+  }
+}

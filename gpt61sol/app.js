@@ -7,6 +7,8 @@
   const motionLabel = document.querySelector('.motion-label');
   const art = document.querySelector('.hero-art');
   const hero = document.querySelector('.hero');
+  const journey = document.querySelector('#sol-journey');
+  let dragTurn = 0;
   let heroVisible = true;
   let toastTimer;
   let scrollController = null;
@@ -18,6 +20,7 @@
     motionButton.setAttribute('aria-pressed', String(motion));
     motionButton.setAttribute('aria-label', motion ? '애니메이션 끄기' : '애니메이션 켜기');
     motionLabel.textContent = motion ? '모션 ON' : '모션 OFF';
+    art.tabIndex = motion ? 0 : -1;
     const image = art.querySelector('img');
     if (image) image.style.animationPlayState = motion && heroVisible ? 'running' : 'paused';
     if (!motion) {
@@ -92,6 +95,7 @@
   function selectScenario(name, scroll = false, fromScroll = false) {
     if (!scenarios[name]) return;
     currentScenario = name;
+    journey.style.setProperty('--journey-hue', `${({build:0,think:25,create:-25})[name]}deg`);
     const scenario = scenarios[name];
     tabs.forEach(tab => {
       const selected = tab.dataset.scenario === name;
@@ -154,6 +158,27 @@
   document.querySelector('#copy-prompt').addEventListener('click', () => copy(scenarios[currentScenario].prompt));
   document.querySelector('#copy-starter').addEventListener('click', () => copy('함께 새로운 아이디어를 만들어보자. 내가 만들고 싶은 것은 [아이디어]이고, [누가] 사용할 거야. 먼저 중요한 질문을 정리하고, 직접 확인할 수 있는 첫 결과물까지 만들어줘.'));
 
+  // Source-backed specification explorer; performance scores stay unclaimed.
+  const metrics={
+    input:{kicker:'STANDARD · USD / 1M TOKENS',title:'같은 토큰, 다른 비용.',highlight:'1/5',caption:'Astra 대비 토큰 단가',sol:'$2',astra:'$10',bar:20,note:'표준 처리의 비캐시 입력 단가입니다. 같은 토큰 수를 가정한 비교이며 작업 성능을 뜻하지 않습니다.'},
+    output:{kicker:'STANDARD · USD / 1M TOKENS',title:'결과물을 만드는 비용.',highlight:'1/5',caption:'Astra 대비 토큰 단가',sol:'$10',astra:'$50',bar:20,note:'표준 처리의 출력 단가입니다. 출력 토큰에는 추론 토큰이 포함되며 실제 사용량은 작업과 모델에 따라 달라집니다.'},
+    context:{kicker:'CONTEXT WINDOW · TOKENS',title:'긴 맥락을, 한 번에.',highlight:'1.05M',caption:'두 모델의 컨텍스트 한도',sol:'1,050,000',astra:'1,050,000',bar:100,note:'두 모델의 최대 컨텍스트 윈도는 같습니다. 저장 용량이나 장문 이해 정확도를 나타내는 점수는 아닙니다.'}
+  };
+  const metricButtons=[...document.querySelectorAll('[data-metric]')];
+  metricButtons.forEach(button=>button.addEventListener('click',()=>{
+    const key=button.dataset.metric,isEval=key==='evals';
+    metricButtons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    document.querySelector('#metric-view').hidden=isEval;
+    document.querySelector('#eval-view').hidden=!isEval;
+    document.querySelector('#cost-lab').hidden=key==='context'||isEval;
+    if(!isEval){const m=metrics[key];document.querySelector('#metric-kicker').textContent=m.kicker;document.querySelector('#metric-title').textContent=m.title;const high=document.querySelector('#metric-highlight');high.replaceChildren(document.createTextNode(m.highlight));const caption=document.createElement('span');caption.textContent=m.caption;high.append(caption);document.querySelector('#sol-value').textContent=m.sol;document.querySelector('#astra-value').textContent=m.astra;document.querySelector('#sol-bar').style.setProperty('--bar-width',`${m.bar}%`);document.querySelector('#metric-note').textContent=m.note;}
+    journey.style.setProperty('--journey-hue',`${({input:0,output:-20,context:35,evals:15})[key]}deg`);
+    queueMeasurements();
+  }));
+  const inputTokens=document.querySelector('#input-tokens'),outputTokens=document.querySelector('#output-tokens');
+  function updateCost(){const input=Number(inputTokens.value),output=Number(outputTokens.value);document.querySelector('#input-label').textContent=input.toLocaleString('en-US');document.querySelector('#output-label').textContent=output.toLocaleString('en-US');document.querySelector('#sol-cost').textContent=`$${((input*2+output*10)/1e6).toFixed(3)}`;document.querySelector('#astra-cost').textContent=`$${((input*10+output*50)/1e6).toFixed(3)}`;}
+  inputTokens.addEventListener('input',updateCost);outputTokens.addEventListener('input',updateCost);updateCost();
+
   // One scroll controller keeps the browser's native wheel, touch and keyboard scrolling.
   // Geometry is cached on layout changes; frames only update transforms and opacity.
   const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
@@ -208,8 +233,60 @@
       closingTop: layoutTop(closing),
       closingHeight: closing.offsetHeight
     };
+    measureJourney();
     queueScrollFrame();
   }
+  let journeyAnchors = [];
+  function measureJourney() {
+    const w = window.innerWidth, h = window.innerHeight, mobile = w <= 780;
+    const dock = document.querySelector('.hero-visual');
+    const heroSize = mobile ? Math.min(w * 1.03, 440) : Math.min(w * .53, 740);
+    const heroX = mobile ? w / 2 : w * .755;
+    const heroY = mobile ? layoutTop(dock) + dock.offsetHeight / 2 : Math.min(h * .54, 510);
+    const benchDock=document.querySelector('.benchmark-dock');
+    const benchRect=benchDock.getBoundingClientRect();
+    const endDock = document.querySelector('.closing-dock');
+    const closingY = layoutTop(endDock) + endDock.offsetHeight / 2;
+    const edge = mobile ? {x:w-22,y:105,size:64} : {x:w*.958,y:h*.48,size:125};
+    journeyAnchors = [
+      {at:0,x:heroX,y:heroY,size:heroSize,turn:0},
+      {at:mobile ? Math.max(0,heroY-h*.55) : geometry.heroTravel*.65,x:heroX,y:mobile?h*.55:heroY,size:heroSize*.86,turn:-45},
+      {at:layoutTop(document.querySelector('#about'))-h*.16,x:mobile?edge.x:w*.78,y:mobile?edge.y:h*.48,size:mobile?edge.size:320,turn:-110},
+      {at:layoutTop(document.querySelector('.principles'))-h*.45,...edge,turn:-160},
+      {at:layoutTop(document.querySelector('#possibilities'))-h*.25,...edge,turn:-215},
+      {at:layoutTop(document.querySelector('#benchmarks'))-h*.15,x:mobile?w/2:benchRect.left+benchRect.width/2,y:mobile?layoutTop(benchDock)+benchDock.offsetHeight/2-(layoutTop(document.querySelector('#benchmarks'))-h*.15):h*.81,size:mobile?245:280,turn:-270},
+      {at:layoutTop(document.querySelector('.benchmark-panel'))+document.querySelector('.benchmark-panel').offsetHeight-h*.65,...edge,turn:-310},
+      {at:layoutTop(document.querySelector('#studio'))-h*.2,...edge,turn:-340},
+      {at:layoutTop(closing)-h*.5,...edge,turn:-330},
+      {at:Math.max(layoutTop(closing)-h*.2,closingY-h*.34),x:w/2,y:h*.34,size:mobile?225:260,turn:-360},
+      {at:Math.max(geometry.maxScroll,closingY-h*.34+1),x:w/2,y:Math.max(mobile?155:230,closingY-geometry.maxScroll),size:mobile?225:260,turn:-400}
+    ].sort((a,b)=>a.at-b.at);
+  }
+  function renderJourney(y) {
+    if (!journeyAnchors.length) return;
+    let pose = journeyAnchors[0];
+    if (motion) {
+      let a=pose,b=pose;
+      for(let i=1;i<journeyAnchors.length;i++){b=journeyAnchors[i];if(y<=b.at)break;a=b;}
+      const t=clamp((y-a.at)/Math.max(1,b.at-a.at));
+      const ease=t*t*(3-2*t);
+      pose=Object.fromEntries(['x','y','size','turn'].map(k=>[k,a[k]+(b[k]-a[k])*ease]));
+    }
+    journey.style.setProperty('--journey-size',`${pose.size}px`);
+    journey.style.setProperty('--journey-x',`${pose.x-pose.size/2}px`);
+    journey.style.setProperty('--journey-y',`${pose.y-pose.size/2}px`);
+    journey.style.setProperty('--journey-turn',`${pose.turn+(motion?dragTurn:0)}deg`);
+    journey.style.setProperty('--caption-opacity',String(clamp((pose.size-360)/220)));
+  }
+  let dragStart = null;
+  art.addEventListener('pointerdown',event=>{
+    if (!motion || event.pointerType !== 'mouse') return;
+    dragStart={x:event.clientX,turn:dragTurn};art.setPointerCapture(event.pointerId);
+  });
+  art.addEventListener('pointermove',event=>{if(!dragStart)return;dragTurn=dragStart.turn+(event.clientX-dragStart.x)*.6;queueScrollFrame();});
+  art.addEventListener('pointerup',event=>{dragStart=null;if(motion&&event.pointerType!=='mouse'){dragTurn+=45;queueScrollFrame();}});
+  art.addEventListener('pointercancel',()=>{dragStart=null;});
+  art.addEventListener('keydown',event=>{if(!motion)return;if(['ArrowLeft','ArrowRight','Enter',' '].includes(event.key)){event.preventDefault();dragTurn+=event.key==='ArrowLeft'?-30:30;queueScrollFrame();}});
   function queueMeasurements() {
     if (!measureFrame) measureFrame = requestAnimationFrame(measureScenes);
   }
@@ -217,6 +294,11 @@
     const viewport = geometry.viewport || window.innerHeight;
     document.querySelector('.reading-progress').style.width = `${clamp(window.scrollY / (geometry.maxScroll || 1)) * 100}%`;
     header.classList.toggle('is-scrolled', window.scrollY > 32);
+    renderJourney(scrollY);
+    const chapterLinks=[...document.querySelectorAll('.journey-nav a')];
+    let active=chapterLinks[0];
+    for(const link of chapterLinks){const target=document.querySelector(link.hash);if(target && layoutTop(target)<=window.scrollY+viewport*.45)active=link;}
+    chapterLinks.forEach(link=>{link.classList.toggle('is-current',link===active);if(link===active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});
     if (!motion) return;
 
     const heroProgress = clamp((scrollY - geometry.heroTop) / (geometry.heroPinned ? geometry.heroTravel : geometry.heroHeight * .85));
@@ -273,7 +355,7 @@
   }
   scrollController = {
     capturePosition() {
-      const anchors = [studioShell, hero, document.querySelector('#about'), document.querySelector('#possibilities'), closing];
+      const anchors = [document.querySelector('.benchmark-panel'), document.querySelector('#benchmarks'), studioShell, hero, document.querySelector('#about'), document.querySelector('#possibilities'), closing];
       for (const element of anchors) {
         const rect = element.getBoundingClientRect();
         if (rect.top < window.innerHeight * .6 && rect.bottom > window.innerHeight * .3) return { element, top: rect.top };
@@ -325,6 +407,7 @@
   window.addEventListener('resize', resetSceneSize, { passive: true });
   pinnedViewport.addEventListener('change', resetSceneSize);
   new ResizeObserver(queueMeasurements).observe(studioShell);
+  new ResizeObserver(queueMeasurements).observe(document.querySelector('.benchmark-panel'));
   document.fonts.ready.then(queueMeasurements);
   measureScenes();
   renderScroll(window.scrollY);

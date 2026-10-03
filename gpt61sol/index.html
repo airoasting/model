@@ -29,12 +29,17 @@
 
   <header class="site-header">
     <a class="brand" href="#top" aria-label="SOL 첫 화면"><svg><use href="#sun"/></svg><span>SOL<span class="brand-period">.</span></span></a>
-    <nav aria-label="주요 메뉴"><a href="#about">소개</a><a href="#possibilities">가능성</a><a href="#studio">작업실</a></nav>
+    <nav aria-label="주요 메뉴"><a href="#about">소개</a><a href="#possibilities">가능성</a><a href="#benchmarks">벤치마크</a><a href="#studio">작업실</a></nav>
     <div class="header-actions"><button class="motion-toggle" type="button" aria-pressed="true" aria-label="애니메이션 끄기"><span class="motion-icon" aria-hidden="true">◌</span><span class="motion-label">모션 ON</span></button><a class="nav-cta" href="#studio">함께 시작하기</a></div>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="메뉴 열기"><span></span><span></span></button>
-    <nav id="mobile-menu" class="mobile-menu" aria-label="모바일 메뉴" hidden><a href="#about">소개</a><a href="#possibilities">가능성</a><a href="#studio">작업실</a></nav>
+    <nav id="mobile-menu" class="mobile-menu" aria-label="모바일 메뉴" hidden><a href="#about">소개</a><a href="#possibilities">가능성</a><a href="#benchmarks">벤치마크</a><a href="#studio">작업실</a></nav>
   </header>
 
+  <div class="sol-journey" id="sol-journey">
+    <div class="journey-halo" aria-hidden="true"></div>
+    <button class="hero-art journey-art" type="button" aria-label="Sol 링 회전하기. 드래그하거나 방향키로 돌려보세요."><img src="assets/sol-chrome.png" width="1024" height="1024" alt="보라와 푸른 빛의 크롬 링" fetchpriority="high" decoding="async" draggable="false"></button>
+    <span class="journey-caption mono" aria-hidden="true">DRAG TO ROTATE · SCROLL TO FOLLOW</span>
+  </div>
   <main id="main">
     <div class="hero-scroll-stage">
     <section class="hero" id="top" aria-labelledby="hero-title">
@@ -49,8 +54,8 @@
       </div>
       <div class="hero-visual" aria-hidden="true">
         <div class="visual-aura"></div>
-        <div class="hero-art"><img src="assets/sol-chrome.png" width="1024" height="1024" alt="" fetchpriority="high" decoding="async"></div>
-        <div class="visual-caption"><span>생각에서 시작되는 작은 우주</span></div>
+
+        <div class="visual-caption"><span>하나의 생각이 끝까지 이어지는 여정</span></div>
       </div>
       <div class="hero-bottom"><span class="mono">A CREATIVE MIND. A BUILDER AT HEART.</span><a href="#about" class="scroll-cue"><span class="scroll-track" aria-hidden="true"><i></i></span>SCROLL TO EXPLORE</a><span class="hero-version mono">GPT–6.1 / CODEX</span></div>
     </section>
@@ -78,8 +83,23 @@
       </div>
     </section>
 
+    <section class="benchmarks section-shell" id="benchmarks" aria-labelledby="benchmark-title">
+      <div class="section-label reveal"><span>03</span> THE NUMBERS, IN CONTEXT</div>
+      <div class="benchmark-layout">
+        <div class="benchmark-intro"><h2 id="benchmark-title">빛의 크기를,<br><span class="gradient-text">직접 비교하다.</span></h2><p>어떤 기준이 중요할까요?<br>가격, 컨텍스트, 성능 평가.<br>숫자와 그 근거를 함께 살펴보세요.</p><div class="benchmark-dock" aria-hidden="true"></div><span class="mono benchmark-orbit-label">ONE CORE. MORE POSSIBILITIES.</span></div>
+        <div class="benchmark-panel">
+          <div class="benchmark-topline"><span class="mono">BENCHMARK EXPLORER</span><span>2026.10.03 확인</span></div>
+          <div class="benchmark-controls" role="group" aria-label="비교 기준"><button type="button" data-metric="input" aria-pressed="true">입력 가격</button><button type="button" data-metric="output" aria-pressed="false">출력 가격</button><button type="button" data-metric="context" aria-pressed="false">컨텍스트</button><button type="button" data-metric="evals" aria-pressed="false">성능 평가</button></div>
+          <div class="metric-view" id="metric-view"><div class="metric-head"><div><span class="metric-kicker" id="metric-kicker">STANDARD · USD / 1M TOKENS</span><h3 id="metric-title">같은 토큰, 다른 비용.</h3></div><strong id="metric-highlight">1/5<span>Astra 대비 토큰 단가</span></strong></div><div class="comparison-chart" aria-label="모델 비교"><div class="comparison-row sol-row"><div><b>GPT-6.1 Sol</b><output id="sol-value">$2</output></div><div class="bar-track"><span id="sol-bar" style="--bar-width:20%"></span></div></div><div class="comparison-row"><div><b>GPT-6 Astra</b><output id="astra-value">$10</output></div><div class="bar-track"><span id="astra-bar" style="--bar-width:100%"></span></div></div></div><p id="metric-note" class="metric-note">표준 처리의 비캐시 입력 단가입니다. 같은 토큰 수를 가정한 비교이며 작업 성능을 뜻하지 않습니다.</p></div>
+          <div id="eval-view" class="eval-view" hidden><p class="metric-kicker">PERFORMANCE · SOURCE STATUS</p><h3>점수에도 근거가 필요하니까.</h3><p>확인한 공식 모델 문서에서 GPT-6.1 Sol의 아래 벤치마크 점수를 찾지 못했습니다.</p><div class="eval-row"><b>SWE-bench Verified</b><span>점수 확인 대기</span></div><div class="eval-row"><b>GPQA Diamond</b><span>점수 확인 대기</span></div><div class="eval-row"><b>OSWorld</b><span>점수 확인 대기</span></div><p class="metric-note">평가 설정과 원문 점수를 함께 확인할 수 있을 때 비교 차트에 반영합니다. 가격과 컨텍스트는 성능 점수와 별개입니다.</p></div>
+          <div class="cost-lab" id="cost-lab"><div class="lab-heading"><h3>내 사용량이라면?</h3><span class="mono">COST PLAYGROUND</span></div><label for="input-tokens">요청당 입력 토큰 <output id="input-label" for="input-tokens">20,000</output></label><input id="input-tokens" type="range" min="1000" max="250000" step="1000" value="20000"><label for="output-tokens">요청당 출력 토큰 <output id="output-label" for="output-tokens">5,000</output></label><input id="output-tokens" type="range" min="1000" max="20000" step="1000" value="5000"><div class="cost-results" aria-live="polite" aria-atomic="true"><div><span>Sol / 요청</span><output id="sol-cost">$0.090</output></div><div><span>Astra / 요청</span><output id="astra-cost">$0.450</output></div><div><span>단가 기준 절감</span><output id="saving-cost">80%</output></div></div><p class="metric-note">비캐시 · Standard · 텍스트 토큰만 계산한 예시입니다. 출력에는 추론 토큰을 포함하세요. 도구 사용료, 지역 할증, 세금은 제외됩니다.</p></div>
+          <details class="benchmark-sources"><summary>출처와 비교 조건</summary><p>2026년 10월 3일 공식 문서 기준. Sol 입력 $2 / 출력 $10, Astra 입력 $10 / 출력 $50 (각 100만 토큰). 두 모델의 컨텍스트는 1,050,000 토큰입니다. 실제 작업별 토큰 소비량은 다를 수 있습니다.</p><a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" target="_blank" rel="noopener noreferrer">GPT-6.1 Sol 모델 문서</a><a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener noreferrer">GPT-6 Astra 모델 문서</a><a href="https://developers.openai.com/api/docs/guides/latest-model" target="_blank" rel="noopener noreferrer">GPT-6 모델 가이드</a></details>
+        </div>
+      </div>
+    </section>
+
     <section class="studio section-shell" id="studio" aria-labelledby="studio-title">
-      <div class="section-label reveal"><span>03</span> A GLIMPSE INTO THE PROCESS</div>
+      <div class="section-label reveal"><span>04</span> A GLIMPSE INTO THE PROCESS</div>
       <div class="section-heading reveal"><h2 id="studio-title">말보다,<br><span class="muted">한 번의 경험.</span></h2><p>짧은 요청이 어떻게 구체적인 답으로 바뀔까요?<br>작업실에서 세 가지 예시를 살펴보세요.</p></div>
       <p class="studio-scroll-hint"><span class="hint-track" aria-hidden="true"><i></i></span>스크롤하며 세 가지 작업 예시를 만나보세요.</p>
       <div class="studio-scroll-track">
@@ -90,10 +110,11 @@
       </div>
     </section>
 
-    <section class="closing section-shell" aria-labelledby="closing-title"><div class="closing-orb" aria-hidden="true">✳</div><p class="eyebrow reveal">THE NEXT THING STARTS WITH YOU</p><h2 id="closing-title" class="reveal">아직 이름 없는<br><span class="gradient-text">당신의 다음 아이디어.</span></h2><p class="closing-description reveal">첫 문장만 건네주세요.<br>그다음은 함께 만들어갑니다.</p><div class="closing-actions reveal"><button id="copy-starter" class="button button-light" type="button"><svg><use href="#spark"/></svg><span>첫 요청 복사하기</span></button><a href="https://chatgpt.com/codex" target="_blank" rel="noopener noreferrer" class="text-link">Codex에서 시작하기 <span aria-hidden="true">+</span></a></div><span class="closing-watermark" aria-hidden="true">Let's make it.</span></section>
+    <section class="closing section-shell" aria-labelledby="closing-title"><div class="closing-dock" aria-hidden="true"></div><p class="eyebrow reveal">THE NEXT THING STARTS WITH YOU</p><h2 id="closing-title" class="reveal">아직 이름 없는<br><span class="gradient-text">당신의 다음 아이디어.</span></h2><p class="closing-description reveal">첫 문장만 건네주세요.<br>그다음은 함께 만들어갑니다.</p><div class="closing-actions reveal"><button id="copy-starter" class="button button-light" type="button"><svg><use href="#spark"/></svg><span>첫 요청 복사하기</span></button><a href="https://chatgpt.com/codex" target="_blank" rel="noopener noreferrer" class="text-link">Codex에서 시작하기 <span aria-hidden="true">+</span></a></div><span class="closing-watermark" aria-hidden="true">Let's make it.</span></section>
   </main>
 
   <footer class="site-footer section-shell"><a class="brand" href="#top" aria-label="SOL 첫 화면"><svg><use href="#sun"/></svg><span>SOL.</span></a><a href="https://developers.openai.com/api/docs/guides/code-generation" target="_blank" rel="noopener noreferrer">OpenAI Docs</a><span class="mono">MADE WITH CURIOSITY. © 2026</span></footer>
+  <nav class="journey-nav" aria-label="여정 바로가기"><a href="#top" aria-label="첫 화면" class="is-current"><span>HELLO</span><i></i></a><a href="#about" aria-label="소개"><span>CONTEXT</span><i></i></a><a href="#possibilities" aria-label="가능성"><span>CREATE</span><i></i></a><a href="#benchmarks" aria-label="벤치마크"><span>COMPARE</span><i></i></a><a href="#studio" aria-label="작업실"><span>MAKE</span><i></i></a><a href="#closing-title" aria-label="마지막 아이디어"><span>BEGIN</span><i></i></a></nav>
   <div class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
