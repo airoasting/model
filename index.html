@@ -101,13 +101,15 @@ h1 q { quotes: '“' '”'; }
 .card.haiku { --accent: #22c39a; --glow: rgba(34, 195, 154, .14); background: #15191a; border-color: #29363a; }
 /* Haiku: 발표 페이지의 그림에서 색만 가져온 포스터. 노란 해, 어두운 땅, 큰 이름 */
 .plate.verse { background: #efebe0; }
-.plate.verse .v-sun { position: absolute; right: 12%; top: 12%; width: 36%; aspect-ratio: 1; border-radius: 50%; background: #e9b93c; }
-.plate.verse .v-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: #141413; }
-.plate.verse .v-ground::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: #c2452d; }
+.plate.verse .v-lines { position: absolute; right: 8%; top: 30%; width: 34%; display: flex; flex-direction: column; gap: clamp(4px, 3cqi, 8px); }
+.plate.verse .v-lines i { display: block; margin-left: auto; height: clamp(5px, 3.6cqi, 9px); background: #e9b93c; }
+.plate.verse .v-lines i:nth-child(1), .plate.verse .v-lines i:nth-child(3) { width: 71%; }
+.plate.verse .v-lines i:nth-child(2) { width: 100%; }
+.plate.verse .v-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: #2d3f63; }
+.plate.verse .v-ground::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: #e9b93c; }
 .plate.verse .verse-text { position: absolute; left: 9%; top: 12%; margin: 0; font-family: 'Pretendard', sans-serif; font-weight: 900; font-size: clamp(16px, 11cqi, 34px); line-height: .98; letter-spacing: -.04em; color: #141413; }
 .plate.verse .verse-text span { display: block; }
-.plate.verse .verse-text span:nth-child(2) { color: #c2452d; }
-.card.haiku .seal { left: auto; top: auto; right: 7%; bottom: 7%; width: 19%; background: #c2452d; color: #f3eee3; font-family: 'Pretendard', sans-serif; font-weight: 900; font-size: clamp(7px, 3.8cqi, 10px); line-height: 1.1; box-shadow: 0 0 0 2px #efebe0, 0 0 0 3px rgba(194, 69, 45, .6); }
+.plate.verse .verse-text span:nth-child(2) { color: #2d3f63; }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
   container-type: inline-size; /* 이름과 판 안의 글자 크기를 카드 폭(cqi)에 맞춘다 */
@@ -441,10 +443,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate verse">
-            <span class="v-sun"></span>
+            <span class="v-lines"><i></i><i></i><i></i></span>
             <span class="v-ground"></span>
             <p class="verse-text"><span>Haiku</span><span>5.5</span></p>
-            <span class="seal">5·7<br>·5</span>
           </div>
         </div>
         <h2 class="name">Claude Haiku 5.5</h2>
