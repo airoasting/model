@@ -121,6 +121,11 @@ h1 .g2{background:linear-gradient(100deg,var(--clay),var(--gold) 40%,var(--rose)
 .draw.on{stroke-dashoffset:0}
 @media(max-width:760px){.plot{top:122px}}
 .axt{font-size:.88rem;color:var(--mute);margin-bottom:8px;line-height:1.55}
+.axt .axdef{color:var(--ink,#fff);font-weight:700}
+.axt{position:relative}
+.tip{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:help;text-decoration:underline dotted var(--gold);text-underline-offset:3px}
+.tipbox{position:absolute;left:0;top:100%;z-index:5;max-width:min(360px,100%);margin-top:6px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#15121f;color:var(--ink);font-size:.84rem;line-height:1.55;box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s,transform .2s,visibility .2s;pointer-events:none}
+.axt:has(.tip:hover) .tipbox,.axt:has(.tip:focus-visible) .tipbox,.tipbox.open{opacity:1;visibility:visible;transform:none}
 .plotcap{margin-top:16px;min-height:3.4em;font-family:'Noto Serif KR',serif;font-weight:700;font-size:clamp(1.1rem,2.6vw,1.6rem);line-height:1.4;transition:opacity .3s}
 .plotcap em{font-style:normal;color:var(--gold)}
 .plotdots{display:flex;gap:8px;margin-top:10px}
@@ -295,7 +300,7 @@ footer a{border-bottom:1px solid currentColor}
 
   <div class="plotwrap" id="plotwrap">
     <div class="plot" id="plot">
-      <div class="axt">GDPval-AA v2.1 (Elo) · 세로축은 1220부터 그렸고 아래는 생략했습니다. 가로 점선은 두 점의 높이, 곧 점수가 거의 같다는 것을 보여 줍니다.</div>
+      <div class="axt"><b class="axdef">GDPval-AA v2.1 (<button type="button" class="tip" aria-describedby="tip-elo">Elo</button>)</b><span class="tipbox" id="tip-elo" role="tooltip">Elo는 약자가 아니라 사람 이름입니다. 헝가리계 미국인 물리학자 아르파드 엘로(Arpad Elo)가 체스 선수의 실력을 매기려고 만든 방식이라 그의 성을 붙였습니다.</span>는 44개 직업의 실무 과제를 모델에 맡기고, 결과물을 둘씩 맞붙여 승패로 매긴 점수입니다. 체스 순위와 같은 방식이라 점수가 높을수록 더 자주 이깁니다.</div>
       <svg viewBox="0 0 720 470" role="img" aria-label="입력 가격 대비 GDPval-AA 점수. Sonnet 5는 $2에서 1449점, Sonnet 5.5는 $2에서 1844점, Opus 5.5는 $4에서 1846점.">
         <line class="gr" x1="90" x2="700" y1="90" y2="90"/><line class="gr" x1="90" x2="700" y1="190" y2="190"/><line class="gr" x1="90" x2="700" y1="290" y2="290"/>
         <line class="ax" x1="90" y1="30" x2="90" y2="380"/><line class="ax" x1="90" y1="380" x2="700" y2="380"/>
@@ -569,6 +574,12 @@ let ticking=false;addEventListener('scroll',()=>{if(!ticking){ticking=true;reque
 if(!RM&&matchMedia('(pointer:fine)').matches)$$('.btn').forEach(b=>{
  b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.12}px,${(e.clientY-r.top-r.height/2)*.25-2}px)`});
  b.addEventListener('pointerleave',()=>b.style.transform='')});
+</script>
+<script>
+(()=>{const b=document.querySelector('.tip'),t=document.getElementById('tip-elo');if(!b||!t)return;
+b.addEventListener('click',e=>{e.stopPropagation();t.classList.toggle('open')});
+document.addEventListener('click',()=>t.classList.remove('open'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')t.classList.remove('open')});})();
 </script>
 </body>
 </html>
