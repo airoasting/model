@@ -17,7 +17,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@500;700;900&family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=Noto+Sans+KR:wght@600&family=IM+Fell+English+SC&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=DM+Mono:wght@500&family=IM+Fell+English+SC&display=swap">
 <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js');</script>
 <style>
 :root {
@@ -36,8 +37,8 @@
   --sonnet: #a58cff;     /* Sonnet 오로라의 보라 */
   --astra: #c8b0ff;      /* Astra 성운의 라일락 */
   --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px;
-  --serif: 'Noto Serif KR', 'AppleMyungjo', serif;
-  --sans: 'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --serif: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --sans: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
 * { box-sizing: border-box; }
@@ -95,6 +96,18 @@ h1 q { quotes: '“' '”'; }
 .plate.chrome .seal { color: #f1f0f7; flex-direction: column; font-family: var(--sans); font-size: 8px; letter-spacing: .1em; border: 1px solid rgba(241, 240, 247, .6); border-radius: 50%; }
 .plate.chrome .seal b { font-size: 15px; letter-spacing: 0; }
 .plate.chrome .seal i { font-style: normal; }
+
+/* Haiku: 흰 종이 위에 하이쿠 세 줄과 여러 색 점 (Haiku 페이지의 시를 카드 크기로) */
+.card.haiku { --accent: #22c39a; --glow: rgba(34, 195, 154, .14); background: #15191a; border-color: #29363a; }
+/* Haiku: 발표 페이지의 그림에서 색만 가져온 포스터. 노란 해, 어두운 땅, 큰 이름 */
+.plate.verse { background: #efebe0; }
+.plate.verse .v-sun { position: absolute; right: 12%; top: 12%; width: 36%; aspect-ratio: 1; border-radius: 50%; background: #e9b93c; }
+.plate.verse .v-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: #141413; }
+.plate.verse .v-ground::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: #c2452d; }
+.plate.verse .verse-text { position: absolute; left: 9%; top: 12%; margin: 0; font-family: 'Pretendard', sans-serif; font-weight: 900; font-size: clamp(16px, 11cqi, 34px); line-height: .98; letter-spacing: -.04em; color: #141413; }
+.plate.verse .verse-text span { display: block; }
+.plate.verse .verse-text span:nth-child(2) { color: #c2452d; }
+.card.haiku .seal { left: auto; top: auto; right: 7%; bottom: 7%; width: 19%; background: #c2452d; color: #f3eee3; font-family: 'Pretendard', sans-serif; font-weight: 900; font-size: clamp(7px, 3.8cqi, 10px); line-height: 1.1; box-shadow: 0 0 0 2px #efebe0, 0 0 0 3px rgba(194, 69, 45, .6); }
 .card {
   --mx: 50%; --my: 50%; --rx: 0; --ry: 0;
   container-type: inline-size; /* 이름과 판 안의 글자 크기를 카드 폭(cqi)에 맞춘다 */
@@ -155,7 +168,7 @@ h1 q { quotes: '“' '”'; }
 .solart .waves { animation: drift 18s linear infinite; }
 @keyframes drift { to { transform: translateX(-500px); } }
 .solart .orb, .solart .glow { transform-box: fill-box; transform-origin: center; }
-.plate.solp .vcol { position: absolute; top: 9%; writing-mode: vertical-rl; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; font-size: clamp(7px, 3.4cqi, 9px); letter-spacing: .12em; color: #2c2722; padding-left: 5px; border-left: 1px solid rgba(40, 30, 20, .28); }
+.plate.solp .vcol { position: absolute; top: 9%; writing-mode: vertical-rl; font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: clamp(7px, 3.4cqi, 9px); letter-spacing: .12em; color: #2c2722; padding-left: 5px; border-left: 1px solid rgba(40, 30, 20, .28); }
 .plate.solp .c1 { right: 6%; } .plate.solp .c2 { right: 12%; } .plate.solp .c3 { right: 18%; }
 .card.sol .seal { right: 5%; bottom: 7%; width: 17%; background: #d45a3b; color: #f4ece0; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(7px, 3.8cqi, 10px); line-height: 1; box-shadow: 0 0 0 2px #ebe3d6, 0 0 0 3px rgba(212, 90, 59, .6); }
 .card.sol .seal { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
@@ -408,7 +421,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
-    <li class="slot latest">
+    <li class="slot">
       <a class="card sol61" href="gpt61sol/index.html" id="card-sol61" data-world="#09090f">
         <div class="meta"><span class="pill">OpenAI</span><time class="pill date new" datetime="2026-09-29">2026. 9. 29 공개</time></div>
         <div class="art" aria-hidden="true">
@@ -420,6 +433,23 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <h2 class="name">GPT-6.1 Sol</h2>
         <p class="tag">당신의 생각에, 실행이라는 빛을</p>
         <p class="desc">아이디어의 첫 문장부터 마지막 코드 한 줄까지 함께 만듭니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot latest">
+      <a class="card haiku" href="haiku55/index.html" id="card-haiku" data-world="#fbf3e4">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate verse">
+            <span class="v-sun"></span>
+            <span class="v-ground"></span>
+            <p class="verse-text"><span>Haiku</span><span>5.5</span></p>
+            <span class="seal">5·7<br>·5</span>
+          </div>
+        </div>
+        <h2 class="name">Claude Haiku 5.5</h2>
+        <p class="tag">가장 빠르고 저렴한 소형 모델</p>
+        <p class="desc">역할 정의, 벤치마크 비교, 가격 계산기.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
