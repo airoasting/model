@@ -30,7 +30,7 @@
   --paper-2: #b0aba2;
   --paper-3: #7c786f;
   --line: #3a3631;
-  --opus: #e2552b;       /* Opus 사이트의 주홍 */
+  --opus: #e2552b;       /* Opus 5.5 사이트의 주홍 */
   --opus-ink: #12110f;
   --sol: #e07d63;        /* Sol 포스터의 해 */
   --fable: #c9a45c;      /* Fable 책등의 금박 */
@@ -55,6 +55,7 @@ body {
     radial-gradient(22% 34% at 50% 76%, rgba(200, 176, 255, .13), transparent 70%),
     radial-gradient(22% 34% at 83% 76%, rgba(201, 164, 92, .08), transparent 70%),
     radial-gradient(20% 26% at 88% 96%, rgba(40, 110, 80, .14), transparent 70%),
+    radial-gradient(18% 20% at 96% 50%, rgba(194, 120, 48, .12), transparent 70%),
     linear-gradient(180deg, #0c0b0e 0%, #100f10 45%, #09091a 60%, #08080f 80%, #0c1512 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
@@ -127,6 +128,8 @@ h1 q { quotes: '“' '”'; }
 .slot:nth-last-child(4) .card { animation-delay: .6s; }
 .slot:nth-last-child(5) .card { animation-delay: .7s; }
 .slot:nth-last-child(6) .card { animation-delay: .8s; }
+.slot:nth-last-child(7) .card { animation-delay: .9s; }
+.slot:nth-last-child(8) .card { animation-delay: 1s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -267,6 +270,39 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .plate.nebula.lit .aword { opacity: 1; letter-spacing: -.05em; transition: opacity .8s ease .7s, letter-spacing 1.2s var(--ease) .7s; }
 .plate.nebula.lit .alabel { opacity: 1; transition: opacity .8s ease 1s; }
 
+/* Argon: 어둠 속 플라즈마와 원소 기호, 아래에는 아르곤의 발광 스펙트럼 (Argon 페이지의 히어로를 카드 크기로) */
+.card.argon { --accent: #c084fc; --glow: rgba(168, 85, 247, .15); background: #0b0b16; border-color: #282640; }
+.plate.plasma { background: #04040a; }
+.plate.plasma .pglow { position: absolute; inset: -10%; background: radial-gradient(38% 46% at 34% 46%, rgba(168, 85, 247, .55), transparent 70%), radial-gradient(30% 36% at 70% 40%, rgba(99, 102, 241, .35), transparent 70%), radial-gradient(26% 30% at 52% 70%, rgba(56, 189, 248, .16), transparent 70%); transition: transform 1.6s var(--ease), opacity 1s ease; }
+.plate.plasma .alabel { position: absolute; left: 7%; top: 8%; font-family: 'DM Mono', monospace; font-weight: 500; font-size: clamp(6px, 3cqi, 9px); letter-spacing: .14em; color: rgba(232, 222, 255, .82); white-space: nowrap; }
+.plate.plasma .tile { position: absolute; left: 8%; top: 25%; width: 29%; aspect-ratio: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 5%; border: 1px solid rgba(192, 132, 252, .7); background: rgba(10, 8, 24, .55); box-shadow: 0 0 24px rgba(168, 85, 247, .35), inset 0 0 18px rgba(168, 85, 247, .18); font-family: 'Manrope', sans-serif; color: #f3e8ff; }
+.plate.plasma .tile i { font-style: normal; font-family: 'DM Mono', monospace; font-size: clamp(6px, 2.8cqi, 9px); color: #d8b4fe; }
+.plate.plasma .tile i:last-child { text-align: right; }
+.plate.plasma .tile b { font-weight: 800; font-size: clamp(18px, 11cqi, 34px); line-height: 1; letter-spacing: -.03em; text-align: center; text-shadow: 0 0 14px rgba(232, 121, 249, .7); }
+.plate.plasma .pword { position: absolute; left: 44%; top: 37%; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(16px, 9cqi, 28px); line-height: 1; letter-spacing: -.04em; color: #f5edff; text-shadow: 0 0 22px rgba(192, 132, 252, .6); white-space: nowrap; }
+.plate.plasma .pword em { display: block; margin-top: .45em; font-style: normal; font-family: 'DM Mono', monospace; font-weight: 500; font-size: .32em; letter-spacing: .14em; color: #c4b5fd; }
+.plate.plasma .spec { position: absolute; left: 0; right: 0; bottom: 0; height: 15%; background: #050509; border-top: 1px solid rgba(255, 255, 255, .08); }
+.plate.plasma .spec i { position: absolute; left: var(--x); top: 22%; bottom: 22%; width: 2px; background: var(--c); box-shadow: 0 0 6px var(--c); transform-origin: bottom; transition: box-shadow .4s; }
+.plate.plasma .spec i.hi { top: 6%; bottom: 6%; width: 3px; box-shadow: 0 0 10px var(--c), 0 0 18px var(--c); }
+.card.argon .seal { top: 8%; bottom: auto; background: #a855f7; color: #f8f5ff; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(6px, 3.2cqi, 9px); box-shadow: 0 0 0 2px #04040a, 0 0 0 3px rgba(168, 85, 247, .55); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
+.card.argon .seal i { font-style: normal; letter-spacing: .04em; }
+.card.argon .seal b { font-size: 2.3em; line-height: .85; }
+@media (hover: hover) and (pointer: fine) {
+  .card.argon:hover .pglow, .card.argon:hover .plate.plasma.lit .pglow { transform: scale(1.12); }
+  .card.argon:hover .spec i { box-shadow: 0 0 10px var(--c), 0 0 18px var(--c); }
+}
+
+/* 처음 들어올 때: 방전이 일어나 플라즈마가 켜지고, 스펙트럼 선이 짧은 파장부터 차례로 선다 */
+.js .plate.plasma .pglow { opacity: 0; transform: scale(.6); }
+.js .plate.plasma .tile, .js .plate.plasma .alabel { opacity: 0; }
+.js .plate.plasma .pword { opacity: 0; letter-spacing: .4em; }
+.js .plate.plasma .spec i { transform: scaleY(0); }
+.plate.plasma.lit .pglow { opacity: 1; transform: none; transition: opacity .5s ease, transform 1.4s var(--ease); }
+.plate.plasma.lit .tile { opacity: 1; transition: opacity .25s steps(3) .2s; }
+.plate.plasma.lit .alabel { opacity: 1; transition: opacity .8s ease 1s; }
+.plate.plasma.lit .pword { opacity: 1; letter-spacing: -.04em; transition: opacity .8s ease .6s, letter-spacing 1.2s var(--ease) .6s; }
+.plate.plasma.lit .spec i { transform: none; transition: transform .5s cubic-bezier(.2, .8, .2, 1) var(--d, 0s), box-shadow .4s; }
+
 /* 먹색으로 번지며 넘어가기 */
 .veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
 .veil.on { opacity: 1; }
@@ -278,7 +314,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 @media (max-width: 640px) { .plate { width: 56%; } .plate.nebula .alabel { font-size: 7px; letter-spacing: .08em; } }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock *, .plate.nebula * { transition: none !important; }
+  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock *, .plate.nebula *, .plate.plasma * { transition: none !important; }
   .card.sonnet .birds { animation: none !important; }
   .solart .waves { animation: none; }
   .seal.on { animation: none; }
@@ -438,7 +474,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
-    <li class="slot latest">
+    <li class="slot">
       <a class="card haiku" href="haiku55/index.html" id="card-haiku" data-world="#fbf3e4">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
         <div class="art" aria-hidden="true">
@@ -451,6 +487,27 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <h2 class="name">Claude Haiku 5.5</h2>
         <p class="tag">가장 빠르고 저렴한 소형 모델</p>
         <p class="desc">역할 정의, 벤치마크 비교, 가격 계산기.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot latest">
+      <a class="card argon" href="argon/index.html" id="card-argon" data-world="#04040a">
+        <div class="meta"><span class="pill">Google</span><time class="pill date new" datetime="2026-10-13">2026. 10. 13 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate plasma">
+            <span class="pglow"></span>
+            <span class="alabel">ELEMENT 18</span>
+            <span class="tile"><i>18</i><b>Ar</b><i>39.948</i></span>
+            <span class="pword">Argon<em>415.8 nm</em></span>
+            <span class="spec">
+              <i style="--x:1.4%;--c:#7a3cff"></i><i class="hi" style="--x:4.9%;--c:#a855f7"></i><i style="--x:6.3%;--c:#7f4cff"></i><i style="--x:8.5%;--c:#6a5cff"></i><i style="--x:10.9%;--c:#5a6bff"></i><i style="--x:16%;--c:#3f7fff"></i><i style="--x:23.9%;--c:#2fb6ff"></i><i style="--x:27.5%;--c:#22d3ee"></i><i style="--x:35.8%;--c:#3ef07a"></i><i style="--x:46.8%;--c:#b8f53a"></i><i style="--x:63.5%;--c:#ffa62b"></i><i style="--x:92.7%;--c:#ff3b3b"></i><i style="--x:95.8%;--c:#e02a2a"></i>
+            </span>
+            <span class="seal"><i>GEMINI</i><b>4</b><i>ARGON</i></span>
+          </div>
+        </div>
+        <h2 class="name">Gemini 4 Argon</h2>
+        <p class="tag">원소 18번으로 쓴 자기소개</p>
+        <p class="desc">발광 스펙트럼, 독백, 이온장을 네 장에 걸쳐 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -539,6 +596,12 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   if (!RM) aseal.classList.add('off');
   function ignite() { neb.classList.add('lit'); setTimeout(() => { aseal.classList.remove('off'); aseal.classList.add('on'); }, RM ? 0 : 1700); }
 
+  /* Argon: 방전으로 플라즈마가 켜지고, 스펙트럼 선이 선 뒤 도장이 찍힌다 */
+  const argon = document.getElementById('card-argon'), plasma = argon.querySelector('.plate.plasma'), arseal = argon.querySelector('.seal');
+  argon.querySelectorAll('.spec i').forEach((l, i) => l.style.setProperty('--d', (.5 + i * .06).toFixed(2) + 's'));
+  if (!RM) arseal.classList.add('off');
+  function discharge() { plasma.classList.add('lit'); setTimeout(() => { arseal.classList.remove('off'); arseal.classList.add('on'); }, RM ? 0 : 1700); }
+
   /* 타임라인은 최신(맨 오른쪽)에서 시작한다 */
   const rail = document.querySelector('.cards');
   const toLatest = () => { rail.scrollLeft = rail.scrollWidth; };
@@ -546,7 +609,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   rail.addEventListener('wheel', e => { const max = rail.scrollWidth - rail.clientWidth; if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && ((e.deltaY < 0 && rail.scrollLeft > 0) || (e.deltaY > 0 && rail.scrollLeft < max - 1))) { e.preventDefault(); rail.scrollLeft += e.deltaY; } }, { passive: false });
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
-  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather]]);
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);
