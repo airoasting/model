@@ -1,0 +1,7 @@
+{
+  "name": "gpt6astra",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}
