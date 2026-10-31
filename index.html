@@ -76,15 +76,21 @@ h1 q { quotes: '“' '”'; }
 @media (max-width: 760px) { h1 { white-space: normal; font-size: 1.75rem; text-wrap: balance; } }
 @media (max-width: 760px) { header { grid-template-columns: minmax(0, 1fr); column-gap: 0; } .head-l { grid-column: 1 / -1; } }
 
-/* 타임라인: 공개일 순으로 한 줄. 왼쪽이 오래된 것, 오른쪽이 최근. 처음 열면 맨 오른쪽(최신)이 보이게 스크롤을 끝에 둔다 */
-.timeline { position: relative; margin-top: var(--s4); margin-inline: calc(max(20px, 5vw) * -1); }
+/* 회사별로 한 줄씩. 줄 안에서는 공개일 순(왼쪽이 오래된 것, 오른쪽이 최근). 처음 열면 줄마다 맨 오른쪽(최신)이 보이게 스크롤을 끝에 둔다 */
+.lanes { margin-top: var(--s4); }
+.lane { min-width: 0; }
+.lane + .lane { margin-top: var(--s4); }
+.lane-h { display: flex; align-items: baseline; gap: 10px; margin: 0; font-family: var(--sans); font-weight: 600; font-size: .82rem; letter-spacing: .2em; text-transform: uppercase; color: var(--paper-2); }
+.lane-h::before { content: ''; flex: none; width: 14px; height: 1px; align-self: center; background: var(--paper-2); }
+.lane-h span { font-family: var(--mono, 'DM Mono', monospace); letter-spacing: .05em; color: var(--paper-3); }
+.timeline { position: relative; margin-inline: calc(max(20px, 5vw) * -1); }
 .cards { list-style: none; margin: 0; display: flex; gap: var(--s3); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: max(20px, 5vw); padding: var(--s5) max(20px, 5vw) var(--s3); scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
-.slot { position: relative; flex: 0 0 clamp(280px, 30vw, 360px); display: flex; scroll-snap-align: end; }
+.slot { position: relative; flex: 0 0 clamp(270px, 24vw, 300px); display: flex; scroll-snap-align: end; }
 .slot > .card { flex: 1; }
 /* 축: 카드 위로 지나가는 선과 날짜 점 */
 .slot::before { content: ''; position: absolute; left: calc(var(--s3) * -1); right: 0; top: calc(var(--s5) * -.5); height: 1px; background: var(--line); }
 .slot:first-child::before { left: 50%; }
-.slot.latest::before { right: 50%; }
+.slot:last-child::before { right: 50%; }
 .slot::after { content: ''; position: absolute; left: 50%; top: calc(var(--s5) * -.5); width: 9px; height: 9px; translate: -50% -50%; border-radius: 50%; background: var(--bg); border: 1px solid var(--paper-3); }
 .slot.latest::after { background: var(--paper); border-color: var(--paper); box-shadow: 0 0 0 5px rgba(236, 230, 218, .12); }
 .timeline::before, .timeline::after { content: ''; position: absolute; top: 0; bottom: 0; width: max(20px, 5vw); z-index: 1; pointer-events: none; }
@@ -220,7 +226,9 @@ h1 q { quotes: '“' '”'; }
 }
 .card:focus-visible .go svg { transform: translateX(6px); }
 
-footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .84s forwards; }
+footer { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line); font-size: .78rem; color: var(--paper-3); opacity: 0; animation: rise .6s var(--ease) .84s forwards; }
+footer .by { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: .75rem; font-weight: 700; letter-spacing: .12em; color: var(--paper-2); white-space: nowrap; }
+footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
 
 /* Fable: 마블링 판지에 책 천 책등을 댄 반가죽 제본 */
 .card.fable { --accent: var(--fable); --glow: rgba(201, 164, 92, .12); background: #111c19; border-color: #26382f; }
@@ -377,8 +385,11 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
     </div>
   </header>
 
-  <main class="timeline" aria-label="공개일 순 타임라인. 오른쪽이 최근">
-   <ol class="cards">
+  <main class="lanes" aria-label="회사별 모델. 줄마다 공개일 순, 오른쪽이 최근">
+   <section class="lane" aria-labelledby="lane-anthropic">
+    <h2 class="lane-h" id="lane-anthropic">Anthropic<span>4</span></h2>
+    <div class="timeline">
+    <ol class="cards">
     <li class="slot">
       <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-01">2026. 9. 1 공개</time></div>
@@ -398,27 +409,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
             <span class="blabel"><b>Fable 5.1</b><i>우화집</i></span>
           </div>
         </div>
-        <h2 class="name">Claude Fable 5.1</h2>
+        <h3 class="name">Claude Fable 5.1</h3>
         <p class="tag">우화 여섯 편으로 쓴 자기소개</p>
         <p class="desc">여섯 주인공이 차례로 이야기를 들려줍니다.</p>
-        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-      </a>
-    </li>
-    <li class="slot">
-      <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
-        <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
-        <div class="art" aria-hidden="true">
-          <div class="plate nebula">
-            <span class="neb"></span>
-            <span class="shade"></span>
-            <span class="alabel">GPT-6 ASTRA · 2026.09.03</span>
-            <span class="aword">ASTRA<i>✦</i></span>
-            <span class="seal"><i>GPT</i><b>6</b><i>ASTRA</i></span>
-          </div>
-        </div>
-        <h2 class="name">GPT-6 Astra</h2>
-        <p class="tag">상상의 끝에서, 가능성의 시작으로</p>
-        <p class="desc">입자 궤적과 공식 벤치마크로 추론의 깊이를 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -437,9 +430,84 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
             <span class="seal">Opus<br>5.5</span>
           </div>
         </div>
-        <h2 class="name">Claude Opus 5.5</h2>
+        <h3 class="name">Claude Opus 5.5</h3>
         <p class="tag">시 「획」으로 쓴 자기소개</p>
         <p class="desc">일곱 장에 걸쳐 시 한 편을 씁니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate flock">
+            <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <filter id="aur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+              </defs>
+              <g filter="url(#aur)" opacity=".62">
+                <circle cx="60" cy="40" r="80" fill="#d97757"/>
+                <circle cx="250" cy="70" r="85" fill="#8b6cff"/>
+                <circle cx="160" cy="230" r="70" fill="#4fd6d0" opacity=".7"/>
+              </g>
+              <g class="birds"></g>
+            </svg>
+            <span class="note">찌르레기 군무</span>
+            <span class="seal">Sonnet<br>5.5</span>
+          </div>
+        </div>
+        <h3 class="name">Claude Sonnet 5.5</h3>
+        <p class="tag">성적표로 쓴 자기소개</p>
+        <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot">
+      <a class="card haiku" href="haiku55/index.html" id="card-haiku" data-world="#fbf3e4">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate verse">
+            <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
+              <defs><filter id="grainH"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .08  0 0 0 0 .06  0 0 0 0 .04  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
+              <rect width="500" height="400" fill="#e9b93c"/>
+              <circle class="sun" cx="352" cy="150" r="96" fill="#f6d46b"/>
+              <path d="M0 270 Q117 226 242 266 T500 250 V400 H0Z" fill="#cf9a22"/>
+              <path d="M0 322 Q158 290 300 326 T500 312 V400 H0Z" fill="#141413" opacity=".88"/>
+              <g class="toks"></g>
+              <rect width="500" height="400" filter="url(#grainH)"/>
+            </svg>
+            <p class="verse-text"><span>Haiku</span><span>5.5</span></p>
+            <span class="vdate">OCTOBER 7, 2026</span>
+          </div>
+        </div>
+        <h3 class="name">Claude Haiku 5.5</h3>
+        <p class="tag">가장 빠르고 저렴한 소형 모델</p>
+        <p class="desc">역할 정의, 벤치마크 비교, 가격 계산기.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    </ol>
+    </div>
+   </section>
+   <section class="lane" aria-labelledby="lane-openai">
+    <h2 class="lane-h" id="lane-openai">OpenAI<span>4</span></h2>
+    <div class="timeline">
+    <ol class="cards">
+    <li class="slot">
+      <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
+        <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate nebula">
+            <span class="neb"></span>
+            <span class="shade"></span>
+            <span class="alabel">GPT-6 ASTRA · 2026.09.03</span>
+            <span class="aword">ASTRA<i>✦</i></span>
+            <span class="seal"><i>GPT</i><b>6</b><i>ASTRA</i></span>
+          </div>
+        </div>
+        <h3 class="name">GPT-6 Astra</h3>
+        <p class="tag">상상의 끝에서, 가능성의 시작으로</p>
+        <p class="desc">입자 궤적과 공식 벤치마크로 추론의 깊이를 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -477,35 +545,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
             <span class="seal"><i>GPT</i><b>6</b><i>SOL</i></span>
           </div>
         </div>
-        <h2 class="name">GPT-6 Sol</h2>
+        <h3 class="name">GPT-6 Sol</h3>
         <p class="tag">아이디어가 결과가 되는 순간</p>
         <p class="desc">복잡한 코딩과 여러 단계의 작업을 돕는 모델입니다.</p>
-        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-      </a>
-    </li>
-    <li class="slot">
-      <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
-        <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
-        <div class="art" aria-hidden="true">
-          <div class="plate flock">
-            <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
-              <defs>
-                <filter id="aur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
-              </defs>
-              <g filter="url(#aur)" opacity=".62">
-                <circle cx="60" cy="40" r="80" fill="#d97757"/>
-                <circle cx="250" cy="70" r="85" fill="#8b6cff"/>
-                <circle cx="160" cy="230" r="70" fill="#4fd6d0" opacity=".7"/>
-              </g>
-              <g class="birds"></g>
-            </svg>
-            <span class="note">찌르레기 군무</span>
-            <span class="seal">Sonnet<br>5.5</span>
-          </div>
-        </div>
-        <h2 class="name">Claude Sonnet 5.5</h2>
-        <p class="tag">성적표로 쓴 자기소개</p>
-        <p class="desc">점수와 가격을 Opus 5.5와 나란히 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -518,54 +560,9 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
             <span class="seal"><i>GPT</i><b>6.1</b><i>SOL</i></span>
           </div>
         </div>
-        <h2 class="name">GPT-6.1 Sol</h2>
+        <h3 class="name">GPT-6.1 Sol</h3>
         <p class="tag">당신의 생각에, 실행이라는 빛을</p>
         <p class="desc">아이디어의 첫 문장부터 마지막 코드 한 줄까지 함께 만듭니다.</p>
-        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-      </a>
-    </li>
-    <li class="slot">
-      <a class="card haiku" href="haiku55/index.html" id="card-haiku" data-world="#fbf3e4">
-        <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
-        <div class="art" aria-hidden="true">
-          <div class="plate verse">
-            <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid slice">
-              <defs><filter id="grainH"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .08  0 0 0 0 .06  0 0 0 0 .04  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>
-              <rect width="500" height="400" fill="#e9b93c"/>
-              <circle class="sun" cx="352" cy="150" r="96" fill="#f6d46b"/>
-              <path d="M0 270 Q117 226 242 266 T500 250 V400 H0Z" fill="#cf9a22"/>
-              <path d="M0 322 Q158 290 300 326 T500 312 V400 H0Z" fill="#141413" opacity=".88"/>
-              <g class="toks"></g>
-              <rect width="500" height="400" filter="url(#grainH)"/>
-            </svg>
-            <p class="verse-text"><span>Haiku</span><span>5.5</span></p>
-            <span class="vdate">OCTOBER 7, 2026</span>
-          </div>
-        </div>
-        <h2 class="name">Claude Haiku 5.5</h2>
-        <p class="tag">가장 빠르고 저렴한 소형 모델</p>
-        <p class="desc">역할 정의, 벤치마크 비교, 가격 계산기.</p>
-        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
-      </a>
-    </li>
-    <li class="slot">
-      <a class="card argon" href="argon/index.html" id="card-argon" data-world="#04040a">
-        <div class="meta"><span class="pill">Google</span><time class="pill date new" datetime="2026-10-13">2026. 10. 13 공개</time></div>
-        <div class="art" aria-hidden="true">
-          <div class="plate plasma">
-            <span class="pglow"></span>
-            <span class="alabel">ELEMENT 18</span>
-            <span class="tile"><i>18</i><b>Ar</b><i>39.948</i></span>
-            <span class="pword">Argon<em>415.8 nm</em></span>
-            <span class="spec">
-              <i style="--x:1.4%;--c:#7a3cff"></i><i class="hi" style="--x:4.9%;--c:#a855f7"></i><i style="--x:6.3%;--c:#7f4cff"></i><i style="--x:8.5%;--c:#6a5cff"></i><i style="--x:10.9%;--c:#5a6bff"></i><i style="--x:16%;--c:#3f7fff"></i><i style="--x:23.9%;--c:#2fb6ff"></i><i style="--x:27.5%;--c:#22d3ee"></i><i style="--x:35.8%;--c:#3ef07a"></i><i style="--x:46.8%;--c:#b8f53a"></i><i style="--x:63.5%;--c:#ffa62b"></i><i style="--x:92.7%;--c:#ff3b3b"></i><i style="--x:95.8%;--c:#e02a2a"></i>
-            </span>
-            <span class="seal"><i>GEMINI</i><b>4</b><i>ARGON</i></span>
-          </div>
-        </div>
-        <h2 class="name">Gemini 4 Argon</h2>
-        <p class="tag">원소 18번으로 쓴 자기소개</p>
-        <p class="desc">발광 스펙트럼, 독백, 이온장을 네 장에 걸쳐 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -584,16 +581,49 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
             <span class="seal"><i>GPT</i><b>6.1</b><i>TERRA</i></span>
           </div>
         </div>
-        <h2 class="name">GPT-6.1 Terra</h2>
+        <h3 class="name">GPT-6.1 Terra</h3>
         <p class="tag">세상을 읽고, 일을 움직이다</p>
         <p class="desc">이미지와 화면을 읽고 실제 작업으로 옮기는 과정을 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
-   </ol>
+    </ol>
+    </div>
+   </section>
+   <section class="lane" aria-labelledby="lane-google">
+    <h2 class="lane-h" id="lane-google">Google<span>1</span></h2>
+    <div class="timeline">
+    <ol class="cards">
+    <li class="slot">
+      <a class="card argon" href="argon/index.html" id="card-argon" data-world="#04040a">
+        <div class="meta"><span class="pill">Google</span><time class="pill date new" datetime="2026-10-13">2026. 10. 13 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate plasma">
+            <span class="pglow"></span>
+            <span class="alabel">ELEMENT 18</span>
+            <span class="tile"><i>18</i><b>Ar</b><i>39.948</i></span>
+            <span class="pword">Argon<em>415.8 nm</em></span>
+            <span class="spec">
+              <i style="--x:1.4%;--c:#7a3cff"></i><i class="hi" style="--x:4.9%;--c:#a855f7"></i><i style="--x:6.3%;--c:#7f4cff"></i><i style="--x:8.5%;--c:#6a5cff"></i><i style="--x:10.9%;--c:#5a6bff"></i><i style="--x:16%;--c:#3f7fff"></i><i style="--x:23.9%;--c:#2fb6ff"></i><i style="--x:27.5%;--c:#22d3ee"></i><i style="--x:35.8%;--c:#3ef07a"></i><i style="--x:46.8%;--c:#b8f53a"></i><i style="--x:63.5%;--c:#ffa62b"></i><i style="--x:92.7%;--c:#ff3b3b"></i><i style="--x:95.8%;--c:#e02a2a"></i>
+            </span>
+            <span class="seal"><i>GEMINI</i><b>4</b><i>ARGON</i></span>
+          </div>
+        </div>
+        <h3 class="name">Gemini 4 Argon</h3>
+        <p class="tag">원소 18번으로 쓴 자기소개</p>
+        <p class="desc">발광 스펙트럼, 독백, 이온장을 네 장에 걸쳐 보여 줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    </ol>
+    </div>
+   </section>
   </main>
 
-  <footer><span>각 페이지의 모델 정보는 모델을 만든 회사의 공식 발표를 따릅니다.</span></footer>
+  <footer>
+    <span>각 페이지의 모델 정보는 모델을 만든 회사의 공식 발표를 따릅니다.</span>
+    <span class="by"><img src="assets/ai-roasting-logo.png" alt="" width="28" height="28"><span>AI ROASTING</span></span>
+  </footer>
 </div>
 <div class="veil" aria-hidden="true"></div>
 
@@ -701,11 +731,10 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   }
   function flow() { field.classList.add('flow'); }
 
-  /* 타임라인은 최신(맨 오른쪽)에서 시작한다 */
-  const rail = document.querySelector('.cards');
-  const toLatest = () => { rail.scrollLeft = rail.scrollWidth; };
+  /* 줄마다 최신(맨 오른쪽)에서 시작한다 */
+  const rails = [...document.querySelectorAll('.cards')];
+  const toLatest = () => rails.forEach(r => { r.scrollLeft = r.scrollWidth; });
   toLatest(); addEventListener('load', toLatest);
-  rail.addEventListener('wheel', e => { const max = rail.scrollWidth - rail.clientWidth; if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && ((e.deltaY < 0 && rail.scrollLeft > 0) || (e.deltaY > 0 && rail.scrollLeft < max - 1))) { e.preventDefault(); rail.scrollLeft += e.deltaY; } }, { passive: false });
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
   const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge], [haiku, flow], [terra, sight]]);
