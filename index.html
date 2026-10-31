@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
-<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://model.airoasting.com/">
 <meta property="og:title" content="모델의 자기소개">
-<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <meta property="og:image" content="https://model.airoasting.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -56,6 +56,7 @@ body {
     radial-gradient(22% 34% at 83% 76%, rgba(201, 164, 92, .08), transparent 70%),
     radial-gradient(20% 26% at 88% 96%, rgba(40, 110, 80, .14), transparent 70%),
     radial-gradient(18% 20% at 96% 50%, rgba(194, 120, 48, .12), transparent 70%),
+    radial-gradient(18% 22% at 99% 72%, rgba(163, 212, 87, .08), transparent 70%),
     linear-gradient(180deg, #0c0b0e 0%, #100f10 45%, #09091a 60%, #08080f 80%, #0c1512 100%);
   color: var(--paper); font-family: var(--sans); word-break: keep-all;
   padding: calc(env(safe-area-inset-top, 0px) + var(--s4)) max(20px, 5vw) calc(env(safe-area-inset-bottom, 0px) + var(--s3));
@@ -137,6 +138,7 @@ h1 q { quotes: '“' '”'; }
 .slot:nth-last-child(6) .card { animation-delay: .8s; }
 .slot:nth-last-child(7) .card { animation-delay: .9s; }
 .slot:nth-last-child(8) .card { animation-delay: 1s; }
+.slot:nth-last-child(9) .card { animation-delay: 1.1s; }
 .head-l { opacity: 0; translate: 0 12px; animation: rise .6s var(--ease) forwards; }
 .head-l { animation-delay: .12s; }
 @keyframes rise { to { opacity: 1; translate: 0 0; } }
@@ -310,6 +312,42 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
 .plate.plasma.lit .pword { opacity: 1; letter-spacing: -.04em; transition: opacity .8s ease .6s, letter-spacing 1.2s var(--ease) .6s; }
 .plate.plasma.lit .spec i { transform: none; transition: transform .5s cubic-bezier(.2, .8, .2, 1) var(--d, 0s), box-shadow .4s; }
 
+/* Terra: 격자 위의 초록 광학 코어와 초점 표시, 라임색 포인트 (Terra 페이지의 히어로를 카드 크기로) */
+.card.terra { --accent: #dcff83; --glow: rgba(220, 255, 131, .1); background: #0e110d; border-color: #263021; }
+.plate.lens { background: radial-gradient(60% 75% at 72% 50%, rgba(39, 51, 24, .65), transparent 70%), #090b0a; }
+.plate.lens .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(200, 222, 153, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 222, 153, .07) 1px, transparent 1px); background-size: 20px 20px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%); mask-image: linear-gradient(90deg, transparent, #000 60%); }
+.plate.lens .core { position: absolute; right: -4%; top: 50%; width: 66%; translate: 0 -50%; transition: transform 1.2s var(--ease); }
+.plate.lens .core img { display: block; width: 100%; height: auto; filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .55)); }
+.plate.lens .frame { --c: rgba(220, 255, 131, .75); position: absolute; left: 51%; top: 50%; width: 40%; aspect-ratio: 1; translate: 0 -50%; transition: transform .8s var(--ease);
+  background: linear-gradient(var(--c) 0 0) top left / 9px 1px, linear-gradient(var(--c) 0 0) top left / 1px 9px, linear-gradient(var(--c) 0 0) top right / 9px 1px, linear-gradient(var(--c) 0 0) top right / 1px 9px, linear-gradient(var(--c) 0 0) bottom left / 9px 1px, linear-gradient(var(--c) 0 0) bottom left / 1px 9px, linear-gradient(var(--c) 0 0) bottom right / 9px 1px, linear-gradient(var(--c) 0 0) bottom right / 1px 9px; background-repeat: no-repeat; }
+.plate.lens .tlabel { position: absolute; left: 8%; top: 8%; font-family: 'DM Mono', monospace; font-weight: 500; font-size: clamp(6px, 2.8cqi, 9px); letter-spacing: .14em; color: #96a67e; white-space: nowrap; }
+.plate.lens .tword { position: absolute; left: 8%; top: 36%; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(16px, 9cqi, 28px); line-height: 1; letter-spacing: -.06em; color: #f3f1eb; white-space: nowrap; }
+.plate.lens .tword b { color: #dcff83; }
+.plate.lens .tword em { display: block; margin-top: .45em; font-style: normal; font-family: 'DM Mono', monospace; font-weight: 500; font-size: .32em; letter-spacing: .14em; color: #dcff83; }
+.plate.lens .callout { position: absolute; left: 8%; bottom: 8%; display: flex; align-items: center; gap: 5px; padding: 4px 6px; border: 1px solid rgba(197, 223, 146, .2); background: rgba(19, 26, 15, .8); font-family: 'DM Mono', monospace; font-weight: 500; font-size: clamp(5px, 2.2cqi, 7px); letter-spacing: .06em; color: #e5f9c0; white-space: nowrap; }
+.plate.lens .callout i { width: 4px; height: 4px; border-radius: 50%; background: #dcff83; box-shadow: 0 0 6px #dcff83; }
+.plate.lens .scan { position: absolute; left: 0; right: 0; top: 4%; height: 1px; background: #dcff83; box-shadow: 0 0 8px #dcff83, 0 0 18px rgba(220, 255, 131, .5); opacity: 0; pointer-events: none; }
+.card.terra .seal { top: 8%; bottom: auto; background: #dcff83; color: #10150b; font-family: 'Manrope', sans-serif; font-weight: 800; font-size: clamp(6px, 3.2cqi, 9px); box-shadow: 0 0 0 2px #090b0a, 0 0 0 3px rgba(220, 255, 131, .45); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .12em; line-height: .9; }
+.card.terra .seal i { font-style: normal; letter-spacing: .04em; }
+.card.terra .seal b { font-size: 2em; line-height: .85; letter-spacing: -.04em; }
+@media (hover: hover) and (pointer: fine) {
+  .card.terra:hover .plate.lens .core { transform: scale(1.06); }
+  .card.terra:hover .plate.lens .frame { transform: scale(.9); }
+}
+
+/* 처음 들어올 때: 스캔선이 위에서 아래로 훑고, 흐릿하던 코어의 초점이 맞으며 초점 표시가 조여든다 */
+.js .plate.lens .core img { opacity: 0; filter: blur(8px); transform: scale(1.12); }
+.js .plate.lens .frame { opacity: 0; transform: scale(1.35); }
+.js .plate.lens .tlabel, .js .plate.lens .callout { opacity: 0; }
+.js .plate.lens .tword { opacity: 0; translate: 0 8px; }
+.plate.lens.lit .core img { opacity: 1; filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .55)); transform: none; transition: opacity .6s ease .2s, filter 1.1s var(--ease) .5s, transform 1.4s var(--ease) .2s; }
+.plate.lens.lit .frame { opacity: 1; transform: none; transition: opacity .3s ease .9s, transform .7s cubic-bezier(.3, 1.3, .5, 1) .9s; }
+.plate.lens.lit .scan { animation: scan 1.2s cubic-bezier(.5, 0, .4, 1) .1s both; }
+@keyframes scan { 0% { top: 4%; opacity: 0; } 12% { opacity: 1; } 85% { opacity: 1; } 100% { top: 96%; opacity: 0; } }
+.plate.lens.lit .tword { opacity: 1; translate: 0 0; transition: opacity .6s ease .6s, translate .8s var(--ease) .6s; }
+.plate.lens.lit .tlabel { opacity: 1; transition: opacity .8s ease 1s; }
+.plate.lens.lit .callout { opacity: 1; transition: opacity .3s steps(3) 1.3s; }
+
 /* 먹색으로 번지며 넘어가기 */
 .veil { position: fixed; inset: 0; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .28s ease; }
 .veil.on { opacity: 1; }
@@ -318,10 +356,11 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   body { background: radial-gradient(80% 14% at 50% 4%, rgba(139, 108, 255, .13), transparent 70%), radial-gradient(80% 14% at 50% 30%, rgba(226, 85, 43, .08), transparent 70%), radial-gradient(80% 14% at 50% 52%, rgba(140, 80, 190, .16), transparent 70%), radial-gradient(80% 14% at 50% 72%, rgba(200, 176, 255, .12), transparent 70%), radial-gradient(80% 14% at 50% 92%, rgba(201, 164, 92, .08), transparent 70%), linear-gradient(180deg, #07060b 0%, #07060b 12%, #12110f 24%, #12110f 34%, #09091a 44%, #09091a 56%, #07070d 64%, #07070d 76%, #0f1a17 86%, #0f1a17 100%); }
   .card { padding: var(--s3); }
 }
-@media (max-width: 640px) { .plate { width: 56%; } .plate.nebula .alabel { font-size: 7px; letter-spacing: .08em; } }
+@media (max-width: 640px) { .plate { width: 56%; } .plate.nebula .alabel { font-size: 7px; letter-spacing: .08em; } .plate.lens .tword { font-size: clamp(13px, 6.4cqi, 22px); } .plate.lens .tlabel { font-size: 6px; letter-spacing: .1em; } .plate.lens .callout { font-size: 5px; padding: 3px 4px; gap: 3px; letter-spacing: .02em; } }
 @media (prefers-reduced-motion: reduce) {
   .card, .head-l, footer { animation: none; opacity: 1; translate: none; }
-  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock *, .plate.nebula *, .plate.plasma * { transition: none !important; }
+  .card, .plate, .go svg, .solart *, .plate.book *, .plate.flock *, .plate.nebula *, .plate.plasma *, .plate.lens * { transition: none !important; }
+  .plate.lens .scan { animation: none !important; }
   .card.sonnet .birds { animation: none !important; }
   .plate.verse * { transition: none !important; }
   .solart .waves { animation: none; }
@@ -509,7 +548,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
-    <li class="slot latest">
+    <li class="slot">
       <a class="card argon" href="argon/index.html" id="card-argon" data-world="#04040a">
         <div class="meta"><span class="pill">Google</span><time class="pill date new" datetime="2026-10-13">2026. 10. 13 공개</time></div>
         <div class="art" aria-hidden="true">
@@ -527,6 +566,27 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
         <h2 class="name">Gemini 4 Argon</h2>
         <p class="tag">원소 18번으로 쓴 자기소개</p>
         <p class="desc">발광 스펙트럼, 독백, 이온장을 네 장에 걸쳐 보여 줍니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
+    <li class="slot latest">
+      <a class="card terra" href="terra61/index.html" id="card-terra" data-world="#090b0a">
+        <div class="meta"><span class="pill">OpenAI</span><time class="pill date new" datetime="2026-10-26">2026. 10. 26 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate lens">
+            <span class="grid"></span>
+            <span class="core"><img src="terra61/assets/terra-core.svg" alt="" decoding="async"></span>
+            <span class="frame"></span>
+            <span class="scan"></span>
+            <span class="tlabel">PERCEPTION CORE</span>
+            <span class="tword">Terra<b>.</b><em>GPT—6.1</em></span>
+            <span class="callout"><i></i>SEE. UNDERSTAND. ACT.</span>
+            <span class="seal"><i>GPT</i><b>6.1</b><i>TERRA</i></span>
+          </div>
+        </div>
+        <h2 class="name">GPT-6.1 Terra</h2>
+        <p class="tag">세상을 읽고, 일을 움직이다</p>
+        <p class="desc">이미지와 화면을 읽고 실제 작업으로 옮기는 과정을 보여 줍니다.</p>
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
@@ -621,6 +681,11 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   if (!RM) arseal.classList.add('off');
   function discharge() { plasma.classList.add('lit'); setTimeout(() => { arseal.classList.remove('off'); arseal.classList.add('on'); }, RM ? 0 : 1700); }
 
+  /* Terra: 스캔선이 판을 훑고, 코어의 초점이 맞은 뒤 도장이 찍힌다 */
+  const terra = document.getElementById('card-terra'), scope = terra.querySelector('.plate.lens'), tseal = terra.querySelector('.seal');
+  if (!RM) tseal.classList.add('off');
+  function sight() { scope.classList.add('lit'); setTimeout(() => { tseal.classList.remove('off'); tseal.classList.add('on'); }, RM ? 0 : 1700); }
+
   /* Haiku: 토큰 점이 곡선을 따라 흐르며 오른쪽으로 갈수록 커진다 (Haiku 페이지 그림과 같은 식) */
   const haiku = document.getElementById('card-haiku'), field = haiku.querySelector('.plate.verse'), toks = field.querySelector('.toks');
   for (let i = 0; i < 44; i++) {
@@ -643,7 +708,7 @@ footer { display: flex; justify-content: space-between; gap: var(--s2); flex-wra
   rail.addEventListener('wheel', e => { const max = rail.scrollWidth - rail.clientWidth; if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && ((e.deltaY < 0 && rail.scrollLeft > 0) || (e.deltaY > 0 && rail.scrollLeft < max - 1))) { e.preventDefault(); rail.scrollLeft += e.deltaY; } }, { passive: false });
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
-  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge], [haiku, flow]]);
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge], [haiku, flow], [terra, sight]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);
