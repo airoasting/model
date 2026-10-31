@@ -93,9 +93,8 @@ h1 q { quotes: '“' '”'; }
 .slot:last-child::before { right: 50%; }
 .slot::after { content: ''; position: absolute; left: 50%; top: calc(var(--s5) * -.5); width: 9px; height: 9px; translate: -50% -50%; border-radius: 50%; background: var(--bg); border: 1px solid var(--paper-3); }
 .slot.latest::after { background: var(--paper); border-color: var(--paper); box-shadow: 0 0 0 5px rgba(236, 230, 218, .12); }
-.timeline::before, .timeline::after { content: ''; position: absolute; top: 0; bottom: 0; width: max(20px, 5vw); z-index: 1; pointer-events: none; }
-.timeline::before { left: 0; background: linear-gradient(90deg, #0d0c0e, transparent); }
-.timeline::after { right: 0; background: linear-gradient(-90deg, #0d0c0e, transparent); }
+/* 좌우 끝에서 카드가 사라지게. 단색 띠를 덮으면 뒤 배경의 빛과 색이 어긋나 사각형으로 보이므로, 칠하지 않고 투명하게 지운다 */
+.cards { --fade: max(20px, 5vw); -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); }
 .pill.new { color: var(--paper); border-color: rgba(182, 161, 255, .5); background: rgba(182, 161, 255, .1); }
 .card.sol61 { --accent: #b6a1ff; --glow: rgba(182, 161, 255, .14); background: #111118; border-color: #2a2836; }
 .plate.chrome { background: #09090f; }
