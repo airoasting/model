@@ -201,7 +201,7 @@ function updateHeroScroll() {
   if (!scrollGeometry || motionQuery.matches) return;
   const amount = clamp((scrollY - scrollGeometry.start) / scrollGeometry.distance);
   const travel = smoothRange(0, 1, amount);
-  const phaseReveal = smoothRange(0.18, 0.42, amount);
+  const phaseReveal = smoothRange(0.24, 0.42, amount);
   heroCopy.inert = amount >= 0.44;
   const values = {
     '--core-x': scrollGeometry.x * travel + 'px',
@@ -210,7 +210,7 @@ function updateHeroScroll() {
     '--core-rotate-x': travel * 18 + 'deg',
     '--core-rotate-y': travel * -26 + 'deg',
     '--core-scale': 1 - travel * scrollGeometry.shrink,
-    '--core-detail-opacity': 1 - smoothRange(0.03, 0.32, amount),
+    '--core-detail-opacity': 1 - smoothRange(0.02, 0.22, amount),
     '--core-halo-opacity': 1 + travel * 0.5,
     '--core-halo-scale': 1 + travel * 0.25,
     '--hero-copy-y': travel * -70 + 'px',
