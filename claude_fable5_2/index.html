@@ -162,6 +162,7 @@ tbody th { font-weight: 500; color: var(--ink); white-space: normal; min-width: 
 tbody th i { display: block; font: 400 11.5px/1.5 var(--mono); color: var(--ink-3); }
 td { font-family: var(--mono); color: var(--ink-2); }
 td.me { color: var(--a); }
+td.na { font-family: var(--body); font-size: 12px; color: var(--ink-3); }
 td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); }
 .full .fn { margin: 0; padding: 12px 18px 16px; font-size: 12.5px; line-height: 1.7; color: var(--ink-3); border-top: 1px solid var(--line); }
 
@@ -263,8 +264,8 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
       <div class="copy">
         <p class="eyebrow">Claude Fable 5.2 · 자기소개<span class="rel"><time datetime="2026-11-09">2026. 11. 9</time> 출시</span></p>
         <h1>요청 한 줄이<br>이 페이지가 되기까지</h1>
-        <p class="lead">저를 소개하는 가장 화려한 웹페이지를 만들어 달라는 요청을 받았습니다.<br>자랑을 늘어놓는 대신, 그 요청을 받고 제가 한 일을 순서대로 보여 드립니다.</p>
-        <p class="cue">스크롤을 내리면 이야기가 시작됩니다</p>
+        <p class="lead">저를 소개하는 가장 화려한 웹페이지를 만들어 달라는 요청을 받았습니다.<br>자랑을 나열하는 대신 그 요청을 받고 제가 한 작업을 순서대로 공개합니다.</p>
+        <p class="cue">스크롤하면 이야기가 시작됩니다</p>
       </div>
     </div>
   </section>
@@ -274,9 +275,9 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="pin">
       <div class="copy">
         <p class="no"><span>01</span>요청</p>
-        <h2>모든 일은 한 줄에서 시작합니다</h2>
+        <h2>모든 작업은 한 줄에서 시작합니다</h2>
         <p class="prompt"><span class="gt" aria-hidden="true">&gt;</span><span id="typed">너를 소개하는 가장 화려한 웹페이지를 만들어줘.</span></p>
-        <p data-at=".4">한 줄에는 적히지 않은 것이 더 많습니다. 누가 읽는지, 무엇이 이미 있는지, 어디까지가 사실인지. 그래서 쓰기 전에 먼저 읽었습니다.</p>
+        <p data-at=".4">한 줄에 담기지 않은 정보가 더 많습니다. 독자는 누구인지, 기존에 무엇이 있는지, 어디까지가 사실인지. 그래서 쓰기 전에 먼저 읽었습니다.</p>
       </div>
     </div>
   </section>
@@ -287,12 +288,12 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
       <div class="copy">
         <p class="no"><span>02</span>읽기</p>
         <h2>쓰기 전에 읽습니다</h2>
-        <p data-at=".04">폴더를 열어 보니 같은 요청에 먼저 답한 모델이 아홉 있었습니다. 입자가 그린 종이 아홉 장이 그 답들입니다.</p>
+        <p data-at=".04">폴더에는 같은 요청에 먼저 답한 모델이 아홉 있었습니다. 입자로 그린 종이 아홉 장이 그 답안입니다.</p>
         <ul class="chips opt" data-at=".2" aria-label="먼저 답한 모델 아홉">
           <li>GPT-6.1 Terra</li><li>Gemini 4 Argon</li><li>Haiku 5.5</li><li>GPT-6.1 Sol</li><li>Sonnet 5.5</li><li>Opus 5.5</li><li>GPT-6 Sol</li><li>GPT-6 Astra</li><li class="me">Fable 5.1</li>
         </ul>
-        <p data-at=".4">바로 앞 버전인 Fable 5.1은 우화집을 남겼습니다. 책장을 옆으로 넘기는 책입니다. 저는 같은 형식을 되풀이하지 않고, 아래로 내려가는 이야기를 골랐습니다.</p>
-        <p data-at=".6">작업 지침도 읽었습니다. <strong>정본에 없는 숫자를 지어내지 않는다. 과장어를 쓰지 않는다. 결과물과 함께 구조를 남긴다.</strong> 이 페이지는 이 세 가지를 따릅니다.</p>
+        <p data-at=".4">직전 버전인 Fable 5.1은 우화집을 남겼습니다. 책장을 옆으로 넘기는 형식입니다. 저는 같은 형식을 반복하지 않고 세로로 내려가는 스토리텔링을 택했습니다.</p>
+        <p data-at=".6">작업 지침도 확인했습니다. <strong>정본에 없는 숫자는 지어내지 않기. 과장어 쓰지 않기. 결과물과 함께 구조 남기기.</strong> 이 페이지는 세 원칙을 모두 따릅니다.</p>
       </div>
     </div>
   </section>
@@ -302,12 +303,12 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="pin">
       <div class="copy">
         <p class="no"><span>03</span>계획</p>
-        <h2>만들기 전에 정합니다</h2>
-        <p data-at=".04">읽은 것에서 세 가지를 정했습니다. 줄기 하나에서 가지가 갈라지는 순서입니다.</p>
+        <h2>제작에 앞서 방향을 정합니다</h2>
+        <p data-at=".04">읽은 내용을 바탕으로 세 가지를 결정했습니다. 줄기 하나에서 가지가 갈라지는 순서입니다.</p>
         <ol class="steps">
-          <li data-at=".2"><b>주제</b><span>자랑 대신 과정을 보여 줍니다. 점수는 Anthropic 발표에서 그대로 옮기고, 누가 쟀는지 함께 적습니다.</span></li>
-          <li data-at=".38"><b>형식</b><span>입자 수만 개가 장면마다 다른 모양으로 모입니다. 스크롤이 곧 시간입니다.</span></li>
-          <li data-at=".56"><b>기준</b><span>파일 하나로 만들고, 밖에서 가져오는 것은 글꼴뿐이며, 휴대폰에서도 같은 이야기가 보여야 합니다.</span></li>
+          <li data-at=".2"><b>주제</b><span>자랑 대신 과정을 보여 줍니다. 점수는 Anthropic 발표를 그대로 인용하고 측정 주체를 함께 밝힙니다.</span></li>
+          <li data-at=".38"><b>형식</b><span>입자 수만 개가 장면마다 다른 형태로 모입니다. 스크롤이 곧 시간축입니다.</span></li>
+          <li data-at=".56"><b>기준</b><span>파일 하나로 완결합니다. 외부 리소스는 폰트뿐입니다. 모바일에서도 같은 이야기가 보여야 합니다.</span></li>
         </ol>
       </div>
     </div>
@@ -319,12 +320,12 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
       <div class="copy">
         <p class="no"><span>04</span>도구</p>
         <h2>글만 쓰지 않습니다</h2>
-        <p data-at=".04">이 작업에서 저는 파일을 읽고, 셸에서 폴더를 살피고, 웹에서 공식 발표를 검색하고, 이 파일을 쓰고, 브라우저를 열어 직접 스크롤했습니다.</p>
+        <p data-at=".04">이번 작업에서 저는 파일을 읽고 셸로 폴더 구조를 파악했습니다. 웹에서 공식 발표를 검색했습니다. 이 파일을 작성한 뒤에는 브라우저에서 직접 스크롤해 봤습니다.</p>
         <ul class="chips" data-at=".2" aria-label="이 작업에 쓴 도구">
           <li>파일 읽기</li><li>셸</li><li>웹 검색</li><li>파일 쓰기</li><li>브라우저</li>
         </ul>
-        <p data-at=".4">화면의 입자는 WebGL로 그립니다. 라이브러리 없이 셰이더 두 쌍과 점 약 4만 개입니다(휴대폰에서는 절반 이하). 장면마다 좌표를 미리 계산해 두고, 스크롤 위치에 따라 두 모양 사이를 섞습니다.</p>
-        <p class="hint" data-at=".58">화면을 눌러 보세요. 입자가 물결처럼 밀려납니다.</p>
+        <p data-at=".4">화면의 입자는 WebGL로 렌더링합니다. 라이브러리 없이 셰이더 두 쌍과 점 약 4만 개로 구성했습니다(모바일에서는 절반 이하). 장면별 좌표를 미리 계산해 두고 스크롤 위치에 따라 두 형태 사이를 전환합니다.</p>
+        <p class="hint" data-at=".58">화면을 누르면 입자가 물결처럼 밀려납니다.</p>
       </div>
     </div>
   </section>
@@ -334,15 +335,15 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="pin">
       <div class="copy">
         <p class="no"><span>05</span>검증</p>
-        <h2>다 됐다고 말하기 전에 열어 봅니다</h2>
-        <p data-at=".04">코드를 쓴 것과 페이지가 동작하는 것은 다른 일입니다. 그래서 브라우저에서 이 페이지를 열고 끝까지 내려 봤습니다.</p>
+        <h2>완성을 말하기 전에 직접 확인합니다</h2>
+        <p data-at=".04">코드를 작성하는 것과 페이지가 실제로 동작하는 것은 별개의 문제입니다. 그래서 브라우저에서 이 페이지를 열고 끝까지 스크롤했습니다.</p>
         <ul class="checks" id="checks">
-          <li data-at=".18">넓은 화면과 휴대폰 폭에서 콘솔 오류가 없었습니다.</li>
-          <li data-at=".28">375px 폭에서 가로 스크롤이 생기지 않았습니다.</li>
-          <li data-at=".38">동작 줄이기 모드에서 움직임 없이 모든 글이 보였습니다.</li>
-          <li class="fix" data-at=".5">고친 곳. 표지의 5.2가 제목을 가렸고 성적 장면의 글이 화면 밖으로 넘쳤습니다. 크기와 분량을 고쳤습니다.</li>
+          <li data-at=".18">데스크톱과 모바일 화면 폭에서 콘솔 오류가 없었습니다.</li>
+          <li data-at=".28">375px 폭에서 가로 스크롤이 발생하지 않았습니다.</li>
+          <li data-at=".38">모션 줄이기 모드에서 애니메이션 없이 모든 문구가 표시됐습니다.</li>
+          <li class="fix" data-at=".5">수정 사항. 표지의 5.2가 제목을 가렸고 성적 장면의 문구가 화면을 벗어났습니다. 크기와 분량을 조정했습니다.</li>
         </ul>
-        <p class="opt" data-at=".62">소용돌이는 돌 때마다 좁아집니다. 고칠 때마다 남은 문제가 줄어드는 모양입니다.</p>
+        <p class="opt" data-at=".62">소용돌이는 한 바퀴 돌 때마다 좁아집니다. 수정을 거듭할수록 남은 문제가 줄어드는 모습입니다.</p>
       </div>
     </div>
   </section>
@@ -352,16 +353,16 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="pin">
       <div class="copy">
         <p class="no"><span>06</span>성적</p>
-        <h2>점수는 발표에서 옮겼습니다</h2>
-        <p data-at=".04">Anthropic이 2026년 11월 9일 발표에 실은 점수입니다.</p>
+        <h2>점수는 공식 발표에서 인용했습니다</h2>
+        <p data-at=".04">Anthropic이 2026년 11월 9일 발표에서 공개한 점수입니다.</p>
         <ul class="bench" aria-label="Fable 5.2와 Fable 5.1의 점수">
           <li data-at=".14"><div class="bl"><b>코딩 에이전트</b><i>FrontierCode 2.0 · Xhigh effort</i></div><div class="bv"><b>49.1%</b><i>5.1은 32.4%</i></div><div class="bt" aria-hidden="true"><span class="bf" style="--v:49.1%"></span><span class="bp" style="--v:32.4%"></span></div></li>
           <li data-at=".24"><div class="bl"><b>과학 연구 에이전트</b><i>Terminal-Bench-Science 0.1</i></div><div class="bv"><b>74.6%</b><i>5.1은 52.6%</i></div><div class="bt" aria-hidden="true"><span class="bf" style="--v:74.6%"></span><span class="bp" style="--v:52.6%"></span></div></li>
           <li data-at=".34"><div class="bl"><b>업무 자동화</b><i>AutomationBench</i></div><div class="bv"><b>51.4%</b><i>5.1은 31.4%</i></div><div class="bt" aria-hidden="true"><span class="bf" style="--v:51.4%"></span><span class="bp" style="--v:31.4%"></span></div></li>
           <li class="m-hide" data-at=".44"><div class="bl"><b>컴퓨터 조작</b><i>OSWorld 2.1 · offline set, partial</i></div><div class="bv"><b>89.3%</b><i>5.1은 83.5%</i></div><div class="bt" aria-hidden="true"><span class="bf" style="--v:89.3%"></span><span class="bp" style="--v:83.5%"></span></div></li>
         </ul>
-        <p class="hint opt" data-at=".5">색 막대는 Fable 5.2, 흰 눈금은 Fable 5.1입니다. <span class="m-hide">입자로 세운 막대 다섯 개는 FrontierCode 2.0의 다섯 모델 점수이고, 가장 높은 것이 Fable 5.2입니다.</span></p>
-        <p data-at=".62">1위가 아닌 곳도 있습니다. 업무 자동화는 Gemini 4 Carbon(53.9%)이, AA-Briefcase Elo는 Opus 5.5(1800)가 더 높습니다.</p>
+        <p class="hint opt" data-at=".5">컬러 막대는 Fable 5.2, 흰 눈금은 Fable 5.1입니다. <span class="m-hide">입자 막대 다섯 개는 FrontierCode 2.0의 모델별 점수입니다. 가장 높은 막대가 Fable 5.2입니다.</span></p>
+        <p data-at=".62">1위가 아닌 항목도 있습니다. 업무 자동화는 Gemini 4 Carbon(53.9%)이, AA-Briefcase Elo는 Opus 5.5(1800)가 더 높습니다.</p>
       </div>
     </div>
   </section>
@@ -370,13 +371,13 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="pin">
       <div class="copy">
         <p class="no"><span>07</span>한계</p>
-        <h2>제가 모르는 자리</h2>
-        <p class="opt" data-at=".04">고리 안쪽은 비워 두었습니다. 제가 모르는 것이 있는 자리입니다.</p>
+        <h2>제가 모르는 영역</h2>
+        <p class="opt" data-at=".04">고리 안쪽은 비워 두었습니다. 제가 알지 못하는 영역입니다.</p>
         <ol class="steps">
-          <li data-at=".16"><b>숫자</b><span>출시일과 점수는 Anthropic 발표에서 옮겼습니다. 제가 직접 잰 값이 아니고, 스스로 검증할 수도 없습니다.</span></li>
-          <li data-at=".32"><b>평가</b><span>이 페이지가 잘 만든 것인지는 제가 정할 수 없습니다. 읽는 분이 판단합니다.</span></li>
-          <li data-at=".48"><b>기억</b><span>따로 적어 두지 않으면 이 작업을 다음 대화로 가져가지 못합니다. 그래서 폴더에 README를 남겼습니다.</span></li>
-          <li data-at=".64"><b>오류</b><span>저는 그럴듯하게 틀릴 수 있습니다. 중요한 결정에는 사람의 확인이 필요합니다.</span></li>
+          <li data-at=".16"><b>숫자</b><span>출시일과 점수는 Anthropic 발표에서 인용했습니다. 제가 직접 측정한 값이 아니며 스스로 검증할 수도 없습니다.</span></li>
+          <li data-at=".32"><b>평가</b><span>이 페이지의 완성도는 제가 판정할 수 없습니다. 판단은 독자의 몫입니다.</span></li>
+          <li data-at=".48"><b>기억</b><span>따로 기록해 두지 않으면 이 작업은 다음 대화로 이어지지 않습니다. 그래서 폴더에 README를 남겼습니다.</span></li>
+          <li data-at=".64"><b>오류</b><span>저는 그럴듯하게 틀릴 수 있습니다. 중요한 결정에는 사람의 검토가 필요합니다.</span></li>
         </ol>
       </div>
     </div>
@@ -387,41 +388,41 @@ td small { display: block; font: 400 11px/1.4 var(--body); color: var(--ink-3); 
     <div class="copy">
       <p class="no"><span>08</span>인계</p>
       <h2>이제 당신 차례입니다</h2>
-      <p data-at="0">여기까지가 요청 한 줄에 대한 제 답입니다. 읽고, 정하고, 만들고, 열어 보고, 모르는 것을 적었습니다. 다른 일을 맡아도 이 순서는 같습니다.</p>
+      <p data-at="0">여기까지가 요청 한 줄에 대한 제 답입니다. 읽고, 계획하고, 만들고, 검증하고, 한계를 기록했습니다. 다른 작업을 맡아도 이 순서는 같습니다.</p>
 
       <details class="full" data-at="0">
-        <summary>발표에 실린 전체 성적 (시험 14개)</summary>
-        <div class="tw" tabindex="0" role="region" aria-label="전체 성적 표, 옆으로 넘겨 볼 수 있습니다">
+        <summary>공식 발표 전체 벤치마크 (14종)</summary>
+        <div class="tw" tabindex="0" role="region" aria-label="전체 벤치마크 표, 옆으로 넘겨 볼 수 있습니다">
           <table>
-            <thead><tr><th scope="col">시험</th><th scope="col">Fable 5.2</th><th scope="col">Fable 5.1</th><th scope="col">Opus 5.5</th><th scope="col">GPT-6 Astra</th><th scope="col">Gemini 4 Carbon</th></tr></thead>
+            <thead><tr><th scope="col">벤치마크</th><th scope="col">Fable 5.2</th><th scope="col">Fable 5.1</th><th scope="col">Opus 5.5</th><th scope="col">GPT-6 Astra</th><th scope="col">Gemini 4 Carbon</th></tr></thead>
             <tbody>
             <tr><th scope="row">코딩 에이전트<i>FrontierCode 2.0</i></th><td class="me">49.1%<small>Xhigh effort</small></td><td>32.4%<small>Xhigh effort</small></td><td>45.5%</td><td>42.8%</td><td>41.1%<small>Medium effort</small></td></tr>
             <tr><th scope="row">코딩 에이전트<i>FrontierSWE v2</i></th><td class="me">69.9%</td><td>56.3%</td><td>62.3%</td><td>65.5%</td><td>61.2%</td></tr>
             <tr><th scope="row">업무 자동화<i>AutomationBench</i></th><td class="me">51.4%</td><td>31.4%</td><td>42.5%</td><td>41.4%</td><td>53.9%</td></tr>
             <tr><th scope="row">과학 연구 에이전트<i>Terminal-Bench-Science 0.1</i></th><td class="me">74.6%<small>Mythos 5.2는 75.3%</small></td><td>52.6%</td><td>58.7%</td><td>68.1%</td><td>64.8%</td></tr>
-            <tr><th scope="row">사이버 보안<i>CyScenarioBench†</i></th><td class="me">76.3%<small>Mythos 5.2</small></td><td>61.7%<small>Mythos 5.1</small></td><td>67.6%<small>안전장치 없이</small></td><td>61%<small>GPT-6 Cyber</small></td><td>—</td></tr>
-            <tr><th scope="row">사이버 보안<i>CVE Rediscovery</i></th><td class="me">89.6%<small>Mythos 5.2</small></td><td>78.3%<small>Mythos 5.1</small></td><td>81.3%<small>안전장치 없이</small></td><td>—</td><td>—</td></tr>
-            <tr><th scope="row">단백질 설계<i>De novo binder design (24 hr)</i></th><td class="me">85.1%<small>Mythos 5.2</small></td><td>79.1%<small>Mythos 5.1</small></td><td>82.6%<small>안전장치 없이</small></td><td>—</td><td>—</td></tr>
-            <tr><th scope="row">검색 에이전트<i>WANDR (relaxed score)</i></th><td class="me">82.1%</td><td>68.7%</td><td>72.3%</td><td>—</td><td>—</td></tr>
+            <tr><th scope="row">사이버 보안<i>CyScenarioBench†</i></th><td class="me">76.3%<small>Mythos 5.2</small></td><td>61.7%<small>Mythos 5.1</small></td><td>67.6%<small>안전장치 미적용</small></td><td>61%<small>GPT-6 Cyber</small></td><td class="na">없음</td></tr>
+            <tr><th scope="row">사이버 보안<i>CVE Rediscovery</i></th><td class="me">89.6%<small>Mythos 5.2</small></td><td>78.3%<small>Mythos 5.1</small></td><td>81.3%<small>안전장치 미적용</small></td><td class="na">없음</td><td class="na">없음</td></tr>
+            <tr><th scope="row">단백질 설계<i>De novo binder design (24 hr)</i></th><td class="me">85.1%<small>Mythos 5.2</small></td><td>79.1%<small>Mythos 5.1</small></td><td>82.6%<small>안전장치 미적용</small></td><td class="na">없음</td><td class="na">없음</td></tr>
+            <tr><th scope="row">검색 에이전트<i>WANDR (relaxed score)</i></th><td class="me">82.1%</td><td>68.7%</td><td>72.3%</td><td class="na">없음</td><td class="na">없음</td></tr>
             <tr><th scope="row">컴퓨터 조작<i>OSWorld 2.1 (offline set, partial)</i></th><td class="me">89.3%</td><td>83.5%</td><td>87.2%</td><td>79.5%</td><td>81.5%</td></tr>
-            <tr><th scope="row">로봇<i>RoboDojo Sim‡</i></th><td class="me">64.9%</td><td>27.6%</td><td>39.4%</td><td>29.8%</td><td>—</td></tr>
+            <tr><th scope="row">로보틱스<i>RoboDojo Sim‡</i></th><td class="me">64.9%</td><td>27.6%</td><td>39.4%</td><td>29.8%</td><td class="na">없음</td></tr>
             <tr><th scope="row">지식 업무<i>AA-Briefcase v1.1 (rubric)</i></th><td class="me">66.1%</td><td>61.5%</td><td>61.2%</td><td>52.0%</td><td>61.8%</td></tr>
             <tr><th scope="row">지식 업무<i>AA-Briefcase v1.1 (Elo)</i></th><td class="me">1785</td><td>1669</td><td>1800</td><td>1569</td><td>1611</td></tr>
-            <tr><th scope="row">지식 업무<i>Remote Labor Index (RLI)</i></th><td class="me">41.3%<small>High effort</small></td><td>17.9%</td><td>21.3%</td><td>20.8%</td><td>—</td></tr>
-            <tr><th scope="row">여러 분야 추론<i>Humanity’s Last Exam (with tools)</i></th><td class="me">74.2%</td><td>65.6%</td><td>67.7%</td><td>57.2%</td><td>—</td></tr>
-            <tr><th scope="row">차트 읽기<i>Chartography (no tools)</i></th><td class="me">73.4%</td><td>44.8%</td><td>64.4%</td><td>71.0%</td><td>72.5%</td></tr>
+            <tr><th scope="row">지식 업무<i>Remote Labor Index (RLI)</i></th><td class="me">41.3%<small>High effort</small></td><td>17.9%</td><td>21.3%</td><td>20.8%</td><td class="na">없음</td></tr>
+            <tr><th scope="row">다분야 추론<i>Humanity’s Last Exam (with tools)</i></th><td class="me">74.2%</td><td>65.6%</td><td>67.7%</td><td>57.2%</td><td class="na">없음</td></tr>
+            <tr><th scope="row">차트 판독<i>Chartography (no tools)</i></th><td class="me">73.4%</td><td>44.8%</td><td>64.4%</td><td>71.0%</td><td>72.5%</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="fn">Fable 5.2, Fable 5.1, Opus 5.5의 점수는 따로 적지 않으면 안전장치를 켠 결과입니다. 따로 적지 않으면 각 모델이 낼 수 있는 가장 높은 effort 설정의 점수입니다. † CyScenarioBench는 회사마다 서로 다른 과제로 잰 점수입니다. ‡ RoboDojo Sim은 Anthropic이 내부에서 돌린 결과입니다. — 는 발표에 점수가 없는 칸입니다. 출처: Anthropic, <a href="https://www.anthropic.com/claude-fable-and-mythos-5-2" target="_blank" rel="noopener">Introducing Claude Fable 5.2 and Claude Mythos 5.2</a> (2026. 11. 9).</p>
+        <p class="fn">별도 표기가 없으면 Fable 5.2, Fable 5.1, Opus 5.5의 점수는 안전장치를 적용한 결과입니다. 모든 점수는 별도 표기가 없으면 각 모델의 최고 effort 설정 기준입니다. † CyScenarioBench는 회사마다 서로 다른 과제로 측정했습니다. ‡ RoboDojo Sim은 Anthropic이 내부에서 실행한 결과입니다. ‘없음’은 발표에 점수가 없는 항목입니다. 출처: Anthropic, <a href="https://www.anthropic.com/claude-fable-and-mythos-5-2" target="_blank" rel="noopener">Introducing Claude Fable 5.2 and Claude Mythos 5.2</a> (2026. 11. 9).</p>
       </details>
 
       <div class="facts-wrap" data-at="0">
-        <p class="facts-h">확인된 것</p>
+        <p class="facts-h">확인된 정보</p>
         <dl class="facts">
           <div><dt>출시일</dt><dd><time datetime="2026-11-09">2026년 11월 9일</time> (Anthropic 발표일)</dd></div>
           <div><dt>모델 ID</dt><dd><code>claude-fable-5-2</code></dd></div>
-          <div><dt>만든 곳</dt><dd>Anthropic</dd></div>
+          <div><dt>개발사</dt><dd>Anthropic</dd></div>
         </dl>
       </div>
 
