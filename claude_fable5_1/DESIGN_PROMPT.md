@@ -47,7 +47,7 @@ Fable은 우화다. 사이트 전체를 한 권의 우화집으로 만든다. �
 
 ## 4. 정본 사실
 
-출처: Anthropic, "Introducing Claude Fable 5.1 and Claude Mythos 5.1"(2026-09-01), anthropic.com/claude/fable, System Card(2026-09-01). 자기 인식 정보(지식 기준 2026년 6월). 사용자 정본 `Opus5_5/COPY.md`(Opus 5.5 출시 2026-09-22).
+출처: Anthropic, "Introducing Claude Fable 5.1 and Claude Mythos 5.1"(2026-09-01), anthropic.com/claude/fable, System Card(2026-09-01). 자기 인식 정보(지식 기준 2026년 6월). 사용자 정본 `claude_opus5_5/COPY.md`(Opus 5.5 출시 2026-09-22).
 
 - 같은 기반 모델, 안전장치 수준과 쓸 수 있는 곳이 다름. Mythos 5.1은 사이버 보안, 생명과학 검증 프로그램을 거친 미국 조직만.
 - 가격(100만 토큰당): 입력 $10, 출력 $50(Fable 5와 같음). 캐시 읽기 $0.25(Fable 5보다 75% 낮음). 일반 사용량 약 25%, 에이전트 작업 최대 약 45% 절감.

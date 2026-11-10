@@ -5,7 +5,7 @@ A cinematic, Korean-language interactive showcase for GPT-6 Astra.
 ## Run locally
 
 ```sh
-cd gpt6astra
+cd gpt_astra6
 python3 -m http.server 4316 --bind 127.0.0.1
 ```
 

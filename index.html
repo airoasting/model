@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>모델의 자기소개</title>
-<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta name="description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Fable 5.2, GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <!-- 소셜 공유 카드. 이미지는 og/make-og.py로 다시 만든다. og:image는 전체 주소여야 카카오톡 등에서 뜬다 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://model.airoasting.com/">
 <meta property="og:title" content="모델의 자기소개">
-<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
+<meta property="og:description" content="너를 소개하는 가장 화려한 웹사이트를 만들어 줘. Fable 5.2, GPT-6.1 Terra, Gemini 4 Argon, Haiku 5.5, GPT-6.1 Sol, Sonnet 5.5, Opus 5.5, GPT-6 Sol, GPT-6 Astra, Fable 5.1의 답">
 <meta property="og:image" content="https://model.airoasting.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -105,6 +105,16 @@ h1 q { quotes: '“' '”'; }
 .plate.chrome .seal i { font-style: normal; }
 
 /* Haiku: 노란 들판 위의 해와 두 겹 능선, 그 위로 커지며 흘러가는 토큰 점 (Haiku 페이지의 그림 「낮은 지평선」과 「토큰이 흐르는 자리」를 카드 크기로) */
+/* Fable 5.2: 입자로 쓴 5.2. 흩어져 있다가 글자로 모인다 */
+.card.fable52 { --accent: #ffb35c; --glow: rgba(255, 150, 80, .13); background: #0d0c12; border-color: #2c2630; }
+.plate.grain { background: #06070b; }
+.plate.grain svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.plate.grain .num { transform-box: fill-box; transform-origin: center; transition: opacity 1.2s ease, filter 1.4s var(--ease), transform 1.4s var(--ease); }
+.plate.grain .dust circle { transition: opacity .6s ease var(--d, 0s), transform 1.2s var(--ease) var(--d, 0s); }
+.js .plate.grain:not(.in) .num { opacity: 0; filter: blur(7px); transform: scale(1.35); }
+.js .plate.grain:not(.in) .dust circle { opacity: 0; transform: translateY(14px); }
+@media (hover: hover) and (pointer: fine) { .card.fable52:hover .plate.grain.in .num { transform: scale(1.05); } }
+@media (prefers-reduced-motion: reduce) { .plate.grain .num, .plate.grain .dust circle { transition: none; } }
 .card.haiku { --accent: #e9b93c; --glow: rgba(233, 185, 60, .13); background: #13161f; border-color: #2a3146; }
 .plate.verse { background: #e9b93c; }
 .plate.verse svg { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -386,11 +396,11 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
 
   <main class="lanes" aria-label="회사별 모델. 줄마다 공개일 순, 오른쪽이 최근">
    <section class="lane" aria-labelledby="lane-anthropic">
-    <h2 class="lane-h" id="lane-anthropic">Anthropic<span>4</span></h2>
+    <h2 class="lane-h" id="lane-anthropic">Anthropic<span>5</span></h2>
     <div class="timeline">
     <ol class="cards">
     <li class="slot">
-      <a class="card fable" href="Fable5_1/index.html" id="card-fable" data-world="#0f1a17">
+      <a class="card fable" href="claude_fable5_1/index.html" id="card-fable" data-world="#0f1a17">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-01">2026. 9. 1 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate book">
@@ -415,7 +425,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
       </a>
     </li>
     <li class="slot">
-      <a class="card opus" href="Opus5_5/index.html" id="card-opus" data-world="#12110f">
+      <a class="card opus" href="claude_opus5_5/index.html" id="card-opus" data-world="#12110f">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate hanji">
@@ -436,7 +446,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
       </a>
     </li>
     <li class="slot">
-      <a class="card sonnet" href="sonet5_5/index.html" id="card-sonnet" data-world="#07060b">
+      <a class="card sonnet" href="claude_sonnet5_5/index.html" id="card-sonnet" data-world="#07060b">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date" datetime="2026-09-28">2026. 9. 28 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate flock">
@@ -462,7 +472,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
       </a>
     </li>
     <li class="slot">
-      <a class="card haiku" href="haiku55/index.html" id="card-haiku" data-world="#fbf3e4">
+      <a class="card haiku" href="claude_haiku5_5/index.html" id="card-haiku" data-world="#fbf3e4">
         <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-10-07">2026. 10. 7 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate verse">
@@ -485,6 +495,32 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
+    <li class="slot latest">
+      <a class="card fable52" href="claude_fable5_2/index.html" id="card-fable52" data-world="#06070b">
+        <div class="meta"><span class="pill">Anthropic</span><time class="pill date new" datetime="2026-11-09">2026. 11. 9 공개</time></div>
+        <div class="art" aria-hidden="true">
+          <div class="plate grain">
+            <svg viewBox="0 0 300 240" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <pattern id="f52dots" width="4.6" height="4.6" patternUnits="userSpaceOnUse" patternTransform="rotate(18)"><circle cx="2.3" cy="2.3" r="1.55" fill="#fff"/></pattern>
+                <linearGradient id="f52ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2a0"/><stop offset="1" stop-color="#ff6b3d"/></linearGradient>
+                <radialGradient id="f52glow"><stop offset="0" stop-color="#8a3a16" stop-opacity=".55"/><stop offset="1" stop-color="#8a3a16" stop-opacity="0"/></radialGradient>
+                <mask id="f52mask"><rect width="300" height="240" fill="#000"/><text x="150" y="163" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="900" font-size="132" fill="url(#f52dots)">5.2</text></mask>
+              </defs>
+              <ellipse cx="150" cy="120" rx="170" ry="110" fill="url(#f52glow)"/>
+              <g class="dust" fill="#ffd9a0">
+                <circle cx="24" cy="38" r="1.2"/><circle cx="58" cy="206" r="1"/><circle cx="92" cy="22" r=".9"/><circle cx="131" cy="214" r="1.3"/><circle cx="176" cy="26" r="1"/><circle cx="212" cy="210" r=".9"/><circle cx="252" cy="34" r="1.4"/><circle cx="278" cy="188" r="1"/><circle cx="16" cy="150" r=".9"/><circle cx="286" cy="104" r="1.1"/><circle cx="40" cy="96" r=".8"/><circle cx="236" cy="62" r=".8"/>
+              </g>
+              <rect class="num" width="300" height="240" fill="url(#f52ink)" mask="url(#f52mask)"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="name">Claude Fable 5.2</h3>
+        <p class="tag">과정으로 쓴 자기소개</p>
+        <p class="desc">스크롤하면 입자가 아홉 장면을 그립니다.</p>
+        <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
+      </a>
+    </li>
     </ol>
     </div>
    </section>
@@ -493,7 +529,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
     <div class="timeline">
     <ol class="cards">
     <li class="slot">
-      <a class="card astra" href="gpt6astra/index.html" id="card-astra" data-world="#07070d">
+      <a class="card astra" href="gpt_astra6/index.html" id="card-astra" data-world="#07070d">
         <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-03">2026. 9. 3 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate nebula">
@@ -511,7 +547,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
       </a>
     </li>
     <li class="slot">
-      <a class="card sol" href="6Sol/index.html" id="card-sol" data-world="#070713">
+      <a class="card sol" href="gpt_sol6/index.html" id="card-sol" data-world="#070713">
         <div class="meta"><span class="pill">OpenAI</span><time class="pill date" datetime="2026-09-22">2026. 9. 22 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate solp">
@@ -551,11 +587,11 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
       </a>
     </li>
     <li class="slot">
-      <a class="card sol61" href="gpt61sol/index.html" id="card-sol61" data-world="#09090f">
+      <a class="card sol61" href="gpt_sol6_1/index.html" id="card-sol61" data-world="#09090f">
         <div class="meta"><span class="pill">OpenAI</span><time class="pill date new" datetime="2026-09-29">2026. 9. 29 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate chrome">
-            <img src="gpt61sol/assets/sol-chrome.png" alt="" decoding="async">
+            <img src="gpt_sol6_1/assets/sol-chrome.png" alt="" decoding="async">
             <span class="seal"><i>GPT</i><b>6.1</b><i>SOL</i></span>
           </div>
         </div>
@@ -565,13 +601,13 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
         <span class="go">들어가기 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 7h11M8 3l4 4-4 4"/></svg></span>
       </a>
     </li>
-    <li class="slot latest">
-      <a class="card terra" href="terra61/index.html" id="card-terra" data-world="#090b0a">
+    <li class="slot">
+      <a class="card terra" href="gpt_terra6_1/index.html" id="card-terra" data-world="#090b0a">
         <div class="meta"><span class="pill">OpenAI</span><time class="pill date new" datetime="2026-10-26">2026. 10. 26 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate lens">
             <span class="grid"></span>
-            <span class="core"><img src="terra61/assets/terra-core.svg" alt="" decoding="async"></span>
+            <span class="core"><img src="gpt_terra6_1/assets/terra-core.svg" alt="" decoding="async"></span>
             <span class="frame"></span>
             <span class="scan"></span>
             <span class="tlabel">PERCEPTION CORE</span>
@@ -594,7 +630,7 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
     <div class="timeline">
     <ol class="cards">
     <li class="slot">
-      <a class="card argon" href="argon/index.html" id="card-argon" data-world="#04040a">
+      <a class="card argon" href="gemini_argon/index.html" id="card-argon" data-world="#04040a">
         <div class="meta"><span class="pill">Google</span><time class="pill date new" datetime="2026-10-13">2026. 10. 13 공개</time></div>
         <div class="art" aria-hidden="true">
           <div class="plate plasma">
@@ -730,13 +766,18 @@ footer .by img { width: 28px; height: 28px; object-fit: contain; flex: none; }
   }
   function flow() { field.classList.add('flow'); }
 
+  /* Fable 5.2: 흩어진 입자가 5.2로 모인다 */
+  const fable52 = document.getElementById('card-fable52'), grain = fable52.querySelector('.plate.grain');
+  grain.querySelectorAll('.dust circle').forEach((c, i) => c.style.setProperty('--d', (i * .06).toFixed(2) + 's'));
+  function settle() { grain.classList.add('in'); }
+
   /* 줄마다 최신(맨 오른쪽)에서 시작한다 */
   const rails = [...document.querySelectorAll('.cards')];
   const toLatest = () => rails.forEach(r => { r.scrollLeft = r.scrollWidth; });
   toLatest(); addEventListener('load', toLatest);
 
   /* 처음 한 번은 카드가 화면에 들어올 때 저절로 (휴대폰에서도 보이게) */
-  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge], [haiku, flow], [terra, sight]]);
+  const intro = new Map([[opus, write], [document.getElementById('card-sol'), sunrise], [astra, ignite], [fable, drop], [sonnet, gather], [argon, discharge], [haiku, flow], [terra, sight], [fable52, settle]]);
   const once = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     once.unobserve(e.target);

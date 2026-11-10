@@ -43,7 +43,7 @@
   - CursorBench 3.2.0: 73.4 / 70.5 / 70.0 / 67.2
 - 모델 ID `claude-fable-5-1`. 사용처: Claude.ai Pro/Max/Team/Enterprise, Claude API, AWS, Google Cloud, Microsoft Foundry.
 - 자기 인식(시스템 정보): 지식 기준 2026년 6월. Claude 5 가족, Opus보다 위 등급(Mythos급).
-- 사용자 정본(`Opus5_5/COPY.md`): Opus 5.5는 2026-09-22 출시.
+- 사용자 정본(`claude_opus5_5/COPY.md`): Opus 5.5는 2026-09-22 출시.
 
 ## 톤
 - 본문은 "저"의 합니다체. 버튼과 안내는 해요체.
