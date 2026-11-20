@@ -1208,3 +1208,96 @@ html[data-motion="off"] *:after {
     margin-top: 12px;
   }
 }
+
+/* The photographic cover gives way to a depth-sorted drawing of the gimbals. */
+.orbit-drawing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 96%;
+  width: auto;
+  max-width: 96%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition: transform .25s ease-out;
+  opacity: 0;
+  pointer-events: none;
+}
+.object-float {
+  opacity: var(--portrait-opacity, 1);
+  rotate: var(--portrait-turn, 0deg);
+  scale: var(--portrait-scale, 1);
+}
+.art-note {
+  z-index: 1;
+}
+.orbit-control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 5px 8px;
+  color: var(--faded);
+}
+.orbit-control label {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.orbit-control input {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  height: 24px;
+  appearance: none;
+  background: transparent;
+  cursor: ew-resize;
+}
+.orbit-control input::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--traveled, 0%),
+    var(--rule) var(--traveled, 0%)
+  );
+}
+.orbit-control input::-moz-range-track {
+  height: 2px;
+  background: var(--rule);
+}
+.orbit-control input::-moz-range-progress {
+  height: 2px;
+  background: var(--accent);
+}
+.orbit-control input::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--paper);
+  outline: 1px solid var(--accent);
+  margin-top: -5px;
+}
+.orbit-control input::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--paper);
+  outline: 1px solid var(--accent);
+}
+.orbit-control output {
+  font: 0.78rem var(--mono);
+  width: 4ch;
+  text-align: right;
+}
+.orbit-control + figcaption {
+  margin-top: 3px;
+}
+.stage.inspecting .object-float {
+  opacity: 1;
+  rotate: none;
+  scale: none;
+}
+.stage.inspecting .orbit-drawing {
+  visibility: hidden;
+}

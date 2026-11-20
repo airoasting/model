@@ -22,6 +22,7 @@
     />
     <link rel="stylesheet" href="style.css" />
     <script src="app.js" defer></script>
+    <script src="orbit.js" defer></script>
   </head>
   <body>
     <a class="skip" href="#identity">본문으로 건너뛰기</a>
@@ -104,9 +105,29 @@
                 alt=""
               />
             </div>
-            <div class="art-note" aria-hidden="true"><i></i> OPTICAL CORE</div>
+            <canvas
+              class="orbit-drawing"
+              width="600"
+              height="600"
+              aria-hidden="true"
+            ></canvas>
+            <div class="art-note" aria-hidden="true">
+              <i></i><span id="orbit-view">OPTICAL CORE</span>
+            </div>
             <div class="loupe" aria-hidden="true"></div>
             <span class="stage-scale" aria-hidden="true"></span>
+          </div>
+          <div class="orbit-control">
+            <label for="orbit-angle">스크롤로 궤도 회전</label>
+            <input
+              id="orbit-angle"
+              type="range"
+              min="0"
+              max="180"
+              value="0"
+              aria-label="궤도 회전 각도"
+            />
+            <output for="orbit-angle" id="orbit-degrees">000°</output>
           </div>
           <figcaption>
             <div>

@@ -8,6 +8,7 @@ const tones = {
   green: { name: "Viridian", hue: "133deg", ink: "#14775e", paper: "#e6f0e7" },
 };
 
+const stage = select("#specimen-stage");
 const media = matchMedia("(prefers-reduced-motion: reduce)");
 let moving = !media.matches;
 function applyMotion(enabled) {
@@ -19,21 +20,19 @@ function applyMotion(enabled) {
 }
 function resetPerspective() {
   for (const property of ["--rx", "--ry", "--rz"])
-    select(".object").style.removeProperty(property);
+    stage.style.removeProperty(property);
 }
 applyMotion(moving);
 select("#motion").addEventListener("click", () => applyMotion(!moving));
 media.addEventListener("change", (event) => applyMotion(!event.matches));
-const stage = select("#specimen-stage");
 stage.addEventListener("pointermove", (event) => {
   if (!moving || event.pointerType === "touch") return;
   const bounds = stage.getBoundingClientRect();
   const x = (event.clientX - bounds.left) / bounds.width - 0.5;
   const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-  const image = select(".object");
-  image.style.setProperty("--rx", -y * 14 + "deg");
-  image.style.setProperty("--ry", x * 16 + "deg");
-  image.style.setProperty("--rz", x * 5 + "deg");
+  stage.style.setProperty("--rx", -y * 14 + "deg");
+  stage.style.setProperty("--ry", x * 16 + "deg");
+  stage.style.setProperty("--rz", x * 5 + "deg");
 });
 stage.addEventListener("pointerleave", resetPerspective);
 function markSelection(buttons, selected) {
