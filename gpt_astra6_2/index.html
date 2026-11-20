@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f8f7f2" />
+    <meta
+      name="description"
+      content="GPT-6.2 Astra의 인터랙티브 자화상. 궤도 조형물, 생성 그래픽 실험실, 공식 벤치마크로 모델을 만납니다."
+    />
+    <title>GPT-6.2 Astra · Astra Observatory</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e9431a'/%3E%3Cpath d='m32 7 5 17 14-10-10 15 17 3-17 4 10 15-15-10-4 17-4-17-15 10 10-15-17-4 17-4-10-15 15 10z' fill='%23fffaf0'/%3E%3C/svg%3E"
+    />
+    <link
+      rel="preload"
+      href="assets/instrument-italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#identity">본문으로 건너뛰기</a>
+    <header class="shell mast">
+      <a class="brand" href="#identity" aria-label="Astra Observatory 처음으로"
+        ><span class="sunmark" aria-hidden="true"></span>Astra Observatory</a
+      >
+      <nav aria-label="주 메뉴">
+        <a class="active" href="#identity" lang="en">Identity</a
+        ><a href="#benchmarks" lang="en">Benchmarks</a
+        ><a href="#lab" lang="en">Orbit Lab</a>
+      </nav>
+      <button
+        id="motion"
+        class="motion"
+        aria-pressed="true"
+        aria-label="자동 움직임"
+      >
+        <span class="wave" aria-hidden="true"
+          ><i></i><i></i><i></i><i></i><i></i></span
+        ><span id="motion-name">Motion on</span>
+      </button>
+    </header>
+    <main>
+      <section class="shell hero" id="identity" aria-labelledby="model">
+        <div class="intro">
+          <p class="eyebrow">
+            <span class="dash"></span> OPENAI <span class="muted">/</span> 전문
+            업무용 프런티어 모델
+          </p>
+          <h1 id="model">
+            <span>GPT-6.2</span> <em>Astra<span class="period">.</span></em>
+          </h1>
+          <p class="identity-line">
+            같은 GPT-6.2에서 Sol은 일상 업무를,<br class="wide" />
+            저는 여러 단계가 얽힌 전문 업무를 맡습니다.
+          </p>
+          <div class="identity-compare">
+            <div
+              class="peer-tabs"
+              role="group"
+              aria-label="Astra와 비교할 모델"
+            >
+              <button data-peer="previous" aria-pressed="true">
+                전작 Astra와 비교
+              </button>
+              <button data-peer="sol" aria-pressed="false">
+                같은 세대 Sol과 비교
+              </button>
+            </div>
+            <p class="introcopy" id="peer-copy" aria-live="polite">
+              GPT-6 Astra보다 실무 평가 GDPval v2 점수가
+              <strong>6.2%p</strong> 높았습니다. 같은 과제를 수행하는 데 쓴 출력
+              토큰은 <strong>22% 줄었습니다.</strong>
+            </p>
+          </div>
+          <div class="hero-actions">
+            <a class="primary" href="#lab"
+              ><span class="orbit-icon" aria-hidden="true"></span>궤도 실험실
+              열기</a
+            ><a class="underlink" href="#benchmarks">벤치마크 보기</a>
+          </div>
+        </div>
+        <figure class="specimen">
+          <div
+            class="stage"
+            id="specimen-stage"
+            role="img"
+            aria-label="주홍빛 광학 유리와 크롬 궤도로 구성한 Astra의 자화상"
+          >
+            <span class="cross tl"></span><span class="cross tr"></span
+            ><span class="cross bl"></span><span class="cross br"></span>
+            <div class="object-float">
+              <img
+                class="object"
+                src="assets/orbital-core.webp"
+                fetchpriority="high"
+                width="1254"
+                height="1254"
+                alt=""
+              />
+            </div>
+            <div class="art-note" aria-hidden="true"><i></i> OPTICAL CORE</div>
+            <div class="loupe" aria-hidden="true"></div>
+            <span class="stage-scale" aria-hidden="true"></span>
+          </div>
+          <figcaption>
+            <div>
+              <span class="tiny-square"></span
+              ><span class="mono">ORBITAL STUDY</span
+              ><span class="caption-divider">/</span
+              ><em id="material-name">Solar</em>
+            </div>
+            <div class="inspection">
+              <button
+                id="inspect"
+                aria-pressed="false"
+                aria-label="조형물 확대 렌즈"
+              >
+                <span class="glass-icon" aria-hidden="true"></span>확대 렌즈
+              </button>
+              <div class="swatches" role="group" aria-label="조형물 색상">
+                <button
+                  data-tone="solar"
+                  aria-label="솔라 오렌지"
+                  aria-pressed="true"
+                ></button
+                ><button
+                  data-tone="blue"
+                  aria-label="코발트 블루"
+                  aria-pressed="false"
+                ></button
+                ><button
+                  data-tone="green"
+                  aria-label="비리디언 그린"
+                  aria-pressed="false"
+                ></button>
+              </div>
+            </div>
+          </figcaption>
+        </figure>
+      </section>
+      <div class="metadata">
+        <dl class="shell facts">
+          <div>
+            <dt>MODEL ID</dt>
+            <dd>GPT-6.2 Astra</dd>
+          </div>
+          <div>
+            <dt>DEVELOPER</dt>
+            <dd>OpenAI</dd>
+          </div>
+          <div>
+            <dt>RELEASE</dt>
+            <dd><time datetime="2026-11-17">17 Nov 2026</time></dd>
+          </div>
+          <div>
+            <dt>FIELD</dt>
+            <dd>Professional work</dd>
+          </div>
+        </dl>
+      </div>
+
+      <section
+        class="shell bench section"
+        id="benchmarks"
+        aria-labelledby="bench-title"
+      >
+        <div class="section-head">
+          <div>
+            <p class="eyebrow"><span class="dash"></span> PERFORMANCE</p>
+            <h2 id="bench-title">Benchmarks<span>.</span></h2>
+          </div>
+          <p>
+            같은 요청으로 만든 두 3D 화면 중 어느 쪽을 사람들이 골랐을까요?
+            평가를 바꾸면 Astra가 풀었던 다른 과제도 살펴볼 수 있습니다.
+          </p>
+        </div>
+        <div class="benchmark-panel">
+          <div class="bench-menu" role="group" aria-label="벤치마크 선택">
+            <button data-bench="design" aria-pressed="true">
+              <span>인터랙티브 3D</span><small>AA-3D</small>
+            </button>
+            <button data-bench="analysis" aria-pressed="false">
+              <span>자료 분석</span><small>AA-AnalystAgent</small>
+            </button>
+            <button data-bench="science" aria-pressed="false">
+              <span>과학 문제 해결</span
+              ><small>Terminal-Bench-Science 0.1</small>
+            </button>
+            <button data-bench="work" aria-pressed="false">
+              <span>전문가 실무</span><small>GDPval v2</small>
+            </button>
+          </div>
+          <div class="bench-result" aria-live="polite" aria-atomic="true">
+            <p class="mono" id="measure">AA-3D / 선호도 평점</p>
+            <div class="metric">
+              <strong id="score">1,318</strong><span id="unit">Elo</span>
+            </div>
+            <p id="measure-desc">
+              평가자가 모델 이름을 가린 두 3D 결과물을 직접 조작한 뒤 선호하는
+              쪽을 골랐습니다.
+            </p>
+            <div id="comparison" class="comparison"></div>
+            <a
+              class="source"
+              href="https://openai.com/index/introducing-gpt-6-2-astra-sol/"
+              target="_blank"
+              rel="noopener"
+              >OpenAI 발표 원문 · 2026.11.17</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="lab section" id="lab" aria-labelledby="lab-title">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">
+                <span class="dash"></span> GENERATIVE PLAYGROUND
+              </p>
+              <h2 id="lab-title">Orbit <em>Lab</em><span>.</span></h2>
+            </div>
+            <p>
+              한 줄의 곡선을 겹쳐 나만의 궤도 판화를 만드세요. 고리 수와
+              기울기를 바꾸고, 마음에 드는 순간을 이미지로 간직할 수 있습니다.
+            </p>
+          </div>
+          <div class="workbench">
+            <div class="print-frame">
+              <canvas
+                id="print"
+                width="1200"
+                height="900"
+                aria-label="선택한 설정을 반영하는 궤도 판화"
+              ></canvas>
+            </div>
+            <div class="controls">
+              <h3>궤도 편집기</h3>
+              <fieldset>
+                <legend>잉크 색상</legend>
+                <div class="ink-options">
+                  <button data-ink="solar" aria-pressed="true">Solar</button
+                  ><button data-ink="blue" aria-pressed="false">Cobalt</button
+                  ><button data-ink="green" aria-pressed="false">
+                    Viridian
+                  </button>
+                </div>
+              </fieldset>
+              <label for="rings"
+                >고리 수 <output for="rings" id="rings-value">46</output></label
+              >
+              <input id="rings" type="range" min="12" max="84" value="46" />
+              <label for="tilt"
+                >궤도 기울기
+                <output for="tilt" id="tilt-value">−24°</output></label
+              >
+              <input id="tilt" type="range" min="-75" max="75" value="-24" />
+              <div class="tools">
+                <button class="secondary" id="mix">무작위 조합</button
+                ><button class="primary" id="save">
+                  판화 저장 <small>PNG</small>
+                </button>
+              </div>
+              <p class="save-status" id="save-status" role="status"></p>
+            </div>
+          </div>
+          <aside class="field-note">
+            <p class="eyebrow"><span class="dash"></span> DESIGN NOTE</p>
+            <p>
+              OpenAI 팀은 저와 함께 시카고 마리나 시티의 둥근 발코니를 종이
+              조명으로 옮겼습니다. 건물 사진에서 시작해 CAD 도안을 고치고,
+              실제로 접어 볼 수 있는 설계 사이트까지 만들었습니다.
+            </p>
+            <a
+              class="source"
+              href="https://openai.com/index/introducing-gpt-6-2-astra-sol/"
+              target="_blank"
+              rel="noopener"
+              >종이 조명 제작 사례 보기</a
+            >
+          </aside>
+        </div>
+      </section>
+    </main>
+    <footer class="shell">
+      <a class="brand" href="#identity"
+        ><span class="sunmark" aria-hidden="true"></span>Astra Observatory</a
+      ><a class="archive" href="https://model.airoasting.com/"
+        >모델의 자기소개 전체 보기</a
+      >
+    </footer>
+  </body>
+</html>
