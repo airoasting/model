@@ -25,20 +25,54 @@ function drawCover() {
 function redrawCover() {
   if (!heroFrame) heroFrame = requestAnimationFrame(drawCover);
 }
+// The frame stays pinned for the height of its track. Leave the final
+// 12% of travel to see the completed drawing before the frame moves away.
+const opening = $(".opening");
+const folding = $(".folding");
+const animationShare = 0.88;
+function sceneBounds(scene) {
+  const box = scene.getBoundingClientRect();
+  const frame = scene.firstElementChild;
+  const inset = parseFloat(getComputedStyle(frame).top) || 0;
+  return {
+    start: scrollY + box.top - inset,
+    travel: (box.height - frame.offsetHeight) * animationShare,
+  };
+}
+function percentAt(scene) {
+  const { start, travel } = sceneBounds(scene);
+  return Math.round(100 * clamp((scrollY - start) / Math.max(1, travel), 0, 1));
+}
+function seek(scene, percent, behavior = "instant") {
+  const { start, travel } = sceneBounds(scene);
+  window.scrollTo({ top: start + (travel * percent) / 100, behavior });
+}
 function followPage() {
   if (!moving) return;
-  const bounds = art.getBoundingClientRect();
-  const start = Math.max(0, scrollY + bounds.top - innerHeight * 0.68);
-  const progress = clamp(
-    (scrollY - start) / Math.max(150, bounds.height * 0.72),
-    0,
-    1,
-  );
-  const next = Math.round(progress * 100);
+  const next = percentAt(opening);
   if (reveal !== next) {
     reveal = next;
     redrawCover();
   }
+  const nextFold = 100 - percentAt(folding);
+  if (Number(fold.value) !== nextFold) {
+    fold.value = nextFold;
+    drawModel();
+  }
+}
+function measureScenes() {
+  // On shorter screens the reader can scroll the intro text into view
+  // before the illustration pins. Keep the workshop drawing in view.
+  opening.style.setProperty(
+    "--pin-top",
+    Math.min(0, innerHeight - opening.firstElementChild.offsetHeight) + "px",
+  );
+  folding.style.setProperty(
+    "--pin-top",
+    Math.max(0, (innerHeight - folding.firstElementChild.offsetHeight) * 0.45) +
+      "px",
+  );
+  followPage();
 }
 function applyMotion(on) {
   moving = on;
@@ -48,10 +82,13 @@ function applyMotion(on) {
   $(".cover-figure label").textContent = on
     ? "스크롤로 도면 펼치기"
     : "도면 펼치기";
+  $("#fold-help").textContent = on
+    ? "아래로 스크롤하면 종이가 펼쳐집니다."
+    : "‘펼쳐 보기’를 누르면 종이가 펼쳐집니다.";
   pointer = 0;
   art.style.removeProperty("--px");
   art.style.removeProperty("--py");
-  if (on) followPage();
+  if (on) measureScenes();
   else {
     reveal = 0;
     redrawCover();
@@ -59,6 +96,7 @@ function applyMotion(on) {
 }
 slider.addEventListener("input", () => {
   reveal = Number(slider.value);
+  if (moving) seek(opening, reveal);
   redrawCover();
 });
 art.addEventListener("pointermove", (event) => {
@@ -81,25 +119,24 @@ art.addEventListener("pointerleave", () => {
 addEventListener("scroll", followPage, { passive: true });
 $("#motion").addEventListener("click", () => applyMotion(!moving));
 motionPreference.addEventListener("change", (e) => applyMotion(!e.matches));
-applyMotion(moving);
 
 const steps = [
   [
     "Reference",
-    "건물에서 곡선 하나를 꺼냅니다.",
-    "마리나 시티 전체를 작게 복제하면 건물 모형이 됩니다. 조명에 가져올 것은 탑의 높이보다 층마다 반복되는 발코니의 가장자리였습니다. 그림은 그 반복을 평면에서 다시 그린 스케치입니다.",
-    "평면 스케치 · 형태 재해석",
+    "발코니의 윤곽을 따서 그렸습니다.",
+    "위에서 내려다보면 발코니의 가장자리가 꽃잎처럼 둥글게 이어집니다. 그 윤곽을 층마다 겹쳐 그린 스케치입니다.",
+    "발코니 윤곽 스케치",
   ],
   [
     "Revision",
-    "곡선은 살리고, 종이가 꺾일 곳을 정합니다.",
-    "OpenAI 팀은 저와 CAD 도면을 여러 번 고쳤습니다. 사진에는 보이지 않던 문제가 이 단계에서 생깁니다. 화면에서는 매끈한 곡선도 종이에 옮기려면 폭이 있는 면과 접히는 선으로 나눠야 합니다.",
+    "종이를 어디서 접을지 정했습니다.",
+    "화면에서는 곡선을 매끈하게 그릴 수 있습니다. 같은 곡선을 종이로 만들려면 한 면의 폭과 접는 위치부터 정해야 합니다. OpenAI 팀과 저는 CAD 도면을 여러 번 고쳤습니다.",
     "형상 스케치 · 주름과 단면",
   ],
   [
     "Handoff",
-    "도안을 고칠 도구까지 건넵니다.",
-    "원래 사례에서 저는 종이 조명을 만드는 사이트를 구현했고, 사람은 도안을 손으로 조립했습니다. 아래 작업대에서도 주름 수를 바꿔 보세요. 모형과 인쇄 도안이 같은 치수에서 함께 바뀝니다.",
+    "도안을 직접 고칠 수 있게 했습니다.",
+    "저는 조명 도안을 만드는 사이트를 구현했습니다. OpenAI 팀은 그 도안을 따라 종이를 접고 조명을 조립했습니다. 아래 작업대에서 주름 수를 바꾸면 인쇄 도안의 접는 선도 모형에 맞춰 바뀝니다.",
     "조립 스케치 · 펼침과 접힘",
   ],
 ];
@@ -125,17 +162,18 @@ const tests = {
     name: "Agents’ Last Exam",
     value: "+5.2",
     unit: "점",
-    title: "전작보다 점수가 높았고, 과제당 비용은 3분의 1 미만이었습니다.",
-    body: "기준은 GPT-6 Astra입니다. 자료를 읽고 여러 단계를 거쳐 전문 업무를 마치는 평가라서, 긴 프로젝트에 저를 쓸 이유를 가장 직접적으로 보여줍니다.",
+    title:
+      "전작보다 5.2점 높았고, 과제당 비용은 전작의 3분의 1에도 못 미쳤습니다.",
+    body: "여기서 전작은 GPT-6 Astra입니다. 이 시험에서는 자료 검토부터 최종 결과물 작성까지 여러 단계를 한 모델에 맡깁니다.",
     detail:
-      "Claude Fable 5.2와 비교하면 5.5점 앞섰고 비용은 5%였습니다. Fable의 순위표 결과는 대체 모델을 쓴 아홉 과제를 제외합니다.",
+      "제 점수는 Claude Fable 5.2보다 5.5점 높았고, 비용은 Fable의 5%였습니다. Fable의 순위를 집계할 때는 대체 모델이 수행한 아홉 과제를 뺐습니다.",
   },
   design: {
     name: "AA-3D",
     value: "1,318",
     unit: "Elo",
     title: "평가자는 두 화면을 직접 써 보고 하나를 골랐습니다.",
-    body: "같은 요청으로 만든 인터랙티브 3D에서 모델 이름을 가렸습니다. 2026년 11월 17일 발표 기준 제 순위는 1위였습니다. Elo는 두 결과물을 맞붙인 선호도 평점입니다.",
+    body: "평가자는 어떤 모델이 만들었는지 모르는 상태에서 두 3D 화면을 조작했습니다. 두 작품 중 하나를 고른 결과를 모아 Elo 점수를 매깁니다. 2026년 11월 17일 발표에서 저는 1위였습니다.",
     detail:
       "GPT-6.2 Astra 1,318  ·  Claude Fable 5.2 1,271  ·  GPT-6.2 Sol 1,259",
   },
@@ -144,7 +182,7 @@ const tests = {
     value: "약 ⅕",
     unit: "과제 비용",
     title: "코드 수정 비용이 중요하면 저는 Sol부터 권합니다.",
-    body: "실제 코드베이스의 변경이 유지보수자의 병합 기준에 맞는지 평가했습니다. 두 모델 모두 추론 강도를 최대로 설정했을 때, GPT-6.2 Sol은 제 점수와 0.5점 이내였고 비용은 약 5분의 1이었습니다.",
+    body: "이 시험은 수정한 코드가 실제 프로젝트의 병합 기준에 맞는지 평가합니다. 두 모델의 추론 강도를 최대로 높였을 때 GPT-6.2 Sol과 제 점수 차이는 0.5점 이내였습니다. Sol이 쓴 비용은 제 비용의 약 5분의 1이었습니다.",
     detail:
       "이 비용 비율은 FrontierCode 2.0 과제에서 측정했습니다. 다른 작업의 견적에는 그 작업의 입력량과 출력량이 필요합니다.",
   },
@@ -153,9 +191,9 @@ const tests = {
     value: "+6.2",
     unit: "%p",
     title: "전문 실무 점수는 올랐고, 출력 토큰은 22% 줄었습니다.",
-    body: "OpenAI가 금융·컨설팅·디자인 등의 실제 프로젝트로 만든 내부 평가입니다. 전작 GPT-6 Astra와 비교해 결과물의 점수는 높았고, 답을 만드는 데 사용한 출력 토큰은 적었습니다.",
+    body: "OpenAI가 금융, 컨설팅, 디자인 분야의 실제 프로젝트로 만든 내부 평가입니다. 제 점수는 GPT-6 Astra보다 6.2%포인트 높았습니다. 결과물을 작성할 때 쓴 출력 토큰은 전작보다 22% 적었습니다.",
     detail:
-      "토큰은 모델이 글이나 코드를 나누어 처리하는 단위입니다. 22%는 출력량 차이이며 작업 시간의 차이와는 구분됩니다.",
+      "토큰은 모델이 글이나 코드를 처리할 때 쓰는 단위입니다. 이 시험에서 22% 줄어든 것은 출력량입니다.",
   },
 };
 const taskButtons = all("[data-task]");
@@ -191,13 +229,12 @@ function drawModel() {
   $("#print-spec").textContent =
     `주름 ${n}개 · 높이 ${h}mm · 한 면의 폭 ${shape.width.toFixed(2)}mm · 가로 230mm + 풀칠 8mm`;
 }
-let animation = 0;
 for (const input of [ribs, height, fold])
   input.addEventListener("input", () => {
-    cancelAnimationFrame(animation);
+    if (input === fold && moving) seek(folding, 100 - Number(fold.value));
     if (input === ribs || input === height) {
       const ending = document.createElement("em");
-      ending.textContent = "이제 당신의 판본입니다.";
+      ending.textContent = "직접 고친 도안입니다.";
       $("#closing").replaceChildren(
         "주름 " + ribs.value + "개, 높이 " + height.value + "mm.",
         document.createElement("br"),
@@ -208,17 +245,12 @@ for (const input of [ribs, height, fold])
     drawModel();
   });
 $("#fold-toggle").addEventListener("click", () => {
-  cancelAnimationFrame(animation);
-  const from = Number(fold.value),
-    to = from >= 50 ? 0 : 100,
-    start = performance.now();
-  const tick = (now) => {
-    const t = moving ? clamp((now - start) / 850, 0, 1) : 1;
-    fold.value = Math.round(from + (to - from) * t * t * (3 - 2 * t));
+  const to = Number(fold.value) >= 50 ? 0 : 100;
+  if (moving) seek(folding, 100 - to, "smooth");
+  else {
+    fold.value = to;
     drawModel();
-    if (t < 1) animation = requestAnimationFrame(tick);
-  };
-  animation = requestAnimationFrame(tick);
+  }
 });
 function prepareSheet() {
   Paper.net($("#net"), Number(ribs.value), Number(height.value));
@@ -230,13 +262,18 @@ $("#print").addEventListener("click", () => {
 });
 new ResizeObserver(() => {
   dirty = true;
-  followPage();
   redrawCover();
 }).observe(art);
 new ResizeObserver(() => Paper.sketch($("#case-art"), step)).observe(
   $(".study-plate"),
 );
 new ResizeObserver(drawModel).observe($(".bench figure"));
+const layoutObserver = new ResizeObserver(measureScenes);
+layoutObserver.observe(opening.firstElementChild);
+layoutObserver.observe(folding.firstElementChild);
+addEventListener("resize", measureScenes);
+addEventListener("pageshow", measureScenes);
+applyMotion(moving);
 Paper.sketch($("#case-art"), step);
 drawModel();
 redrawCover();
@@ -258,22 +295,22 @@ $("#audit").addEventListener("click", () => {
     (input) => input.checked === (input.dataset.counts === "yes"),
   );
   $("#audit-note").textContent = correct
-    ? "맞습니다. 두 지급 내역 $480와 $260을 합친 $740입니다. 예산 잔액은 아직 지출한 돈이 아닙니다."
-    : "원자료의 지급 합계는 $740입니다. ‘지급 완료’ 두 줄을 합산하고 ‘예산 잔액’은 제외하세요.";
+    ? "맞습니다. 480달러와 260달러를 더하면 지급액은 740달러입니다. 예산 잔액 120달러는 아직 쓰지 않은 돈입니다."
+    : "장부에 기록된 지급액은 모두 740달러입니다. ‘지급 완료’ 두 줄만 더해 보세요.";
 });
 
 const briefPairs = {
   merch: [
-    "네 팀, 팀마다 시안 하나.",
-    "네 팀의 동물 굿즈를 기획하는 과제였습니다. 전작이 만든 목업에서는 팀마다 한 가지 디자인의 모습을 볼 수 있었습니다.",
-    "여덟 디자인을 제작 파일까지.",
-    "저는 여덟 디자인 각각을 핀, 티셔츠, 가방 패치에 얹었습니다. 제작자가 크기를 정하고 색을 대조할 수 있게 벡터 원본, 권장 치수, 실물 샘플 확인 지침도 함께 건넸습니다.",
+    "팀마다 시안 한 가지",
+    "의뢰는 네 팀의 동물 굿즈를 기획해 달라는 것이었습니다. 전작은 팀마다 한 가지 디자인을 골라 제품 시안으로 보여줬습니다.",
+    "여덟 가지 디자인과 제작 파일",
+    "저는 여덟 가지 디자인을 각각 핀, 티셔츠, 가방 패치에 적용했습니다. 제작자가 시제품의 크기와 색을 확인할 수 있도록 벡터 원본과 권장 치수, 샘플 확인 지침도 건넸습니다.",
   ],
   book: [
-    "매출 구성은 별도 탭에.",
-    "같은 가상 기업의 재무제표로 2031년까지를 예측하는 과제였습니다. 전작은 매출 구성을 별도 탭에 놓고, 기업가치에서 주당 가치로 이어지는 계산을 시트 아래쪽에 놓았습니다.",
-    "주당 가치의 근거를 한눈에.",
-    "저는 사업별 매출 구성과 주당 가치 계산을 민감도 표 옆에 두었습니다. 가정을 바꾸는 사람이 어느 사업의 매출이 움직였고, 그 변화가 주당 가치에 어떻게 이어졌는지 바로 따라갈 수 있습니다.",
+    "별도 탭에 정리한 매출",
+    "두 모델은 같은 가상 기업의 재무제표를 받아 2031년까지의 매출을 추정했습니다. 전작은 사업별 매출을 별도 탭에 정리하고, 기업가치로 주당 가치를 계산하는 과정은 시트 아래쪽에 담았습니다.",
+    "한곳에 모은 주당 가치의 근거",
+    "저는 민감도 표 옆에 사업별 매출과 주당 가치 계산식을 놓았습니다. 가정을 바꾼 사람이 그 자리에서 어느 사업의 매출이 달라졌는지, 주당 가치는 얼마나 변했는지 확인할 수 있습니다.",
   ],
 };
 const briefButtons = all("[data-brief]");

@@ -966,3 +966,30 @@ html[data-motion="off"] * {
 #signature {
   font-size: 0.84rem;
 }
+
+@media screen {
+  html[data-motion="on"] .scroll-scene::after {
+    content: "";
+    height: clamp(420px, 95svh, 960px);
+    display: block;
+  }
+  html[data-motion="on"] .scene-frame {
+    position: sticky;
+    top: var(--pin-top, 0px);
+  }
+  html[data-motion="on"] .opening-frame {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding-bottom: min(2svh, 20px);
+    background: var(--paper);
+  }
+}
+
+/* Keep both spoken phrases intact even in the narrow column of the cover. */
+.hero-copy {
+  container-type: inline-size;
+}
+.hero-copy h1 {
+  font-size: clamp(1.65rem, 10.4cqi, 5.3rem);
+}

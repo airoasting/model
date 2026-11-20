@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#f7f5ed" />
     <meta
       name="description"
-      content="GPT-6.2 Astra의 작업실. 건물 사진이 종이 조명이 되기까지, 전작과 Sol의 차이, 직접 접고 인쇄하는 도안을 만납니다."
+      content="GPT-6.2 Astra가 만든 종이 조명 도안을 직접 고쳐 보세요. 전작 및 Sol과의 차이도 실제 작업과 평가 결과로 살펴봅니다."
     />
-    <title>GPT-6.2 Astra — 접을 수 있는 답</title>
+    <title>GPT-6.2 Astra · 고쳐 쓸 수 있는 답</title>
     <link
       rel="preload"
       as="font"
@@ -25,83 +25,90 @@
     <script defer src="app.js"></script>
   </head>
   <body>
-    <a class="skip" href="#cover">본문으로</a>
-    <header class="mast wrap">
-      <a class="brand" href="#cover"
-        ><i class="foldmark" aria-hidden="true"></i>Astra <em>Paperworks</em></a
-      >
-      <nav aria-label="본문 탐색">
-        <a href="#record">작업 기록</a><a href="#compare">모델 비교</a
-        ><a href="#workshop">도안 작업대</a>
-      </nav>
-      <button id="motion" class="quiet" aria-pressed="true">모션 켜짐</button>
-    </header>
-    <main>
-      <section id="cover" class="cover">
-        <div class="hero-copy">
-          <p class="eyebrow">
-            <span class="rule"></span> OPENAI <b>/</b> GPT-6.2 ASTRA
-          </p>
-          <h1>제 서명은<br /><em>접는 선</em>입니다.</h1>
-          <p class="lede">
-            저는 GPT-6.2 Astra입니다. 종이는 접으면 모양이 생기고, 다시 펴면 그
-            모양에 이른 자국이 남습니다. 저는 제 답에도 그런 자국을 남기고
-            싶습니다.
-          </p>
-          <p class="identity">
-            제가 일을 잘했는지는 제가 자리를 뜬 뒤에 드러납니다. 당신이 제
-            계산표에서 가정 하나를 바꿀 수 있는지, 제 도안에서 주름 하나를 덜어
-            내고도 종이를 다시 접을 수 있는지. 거기까지가 제 일입니다.
-          </p>
-          <div class="actions">
-            <a class="button" href="#workshop">내 손으로 도안 고치기</a
-            ><a class="ink-link" href="#compare">다른 모델과 비교</a>
-          </div>
-        </div>
-        <figure class="cover-figure">
-          <div class="cover-art" id="cover-art">
-            <canvas
-              id="hero-cad"
-              aria-label="접힌 종이 조명의 능선을 선으로 표현한 회전 모형"
-            ></canvas>
-            <div class="photo-mask">
-              <img
-                class="lamp-photo"
-                fetchpriority="high"
-                src="assets/paper-lamp.webp"
-                width="1448"
-                height="1086"
-                alt="코발트색 작업대에서 주름 사이로 빛이 비치는 종이 조명 콘셉트"
-              />
+    <a class="skip" href="#cover-title">본문으로</a>
+    <div class="scroll-scene opening" id="cover">
+      <div class="scene-frame opening-frame">
+        <header class="mast wrap">
+          <a class="brand" href="#cover"
+            ><i class="foldmark" aria-hidden="true"></i>Astra
+            <em>Paperworks</em></a
+          >
+          <nav aria-label="본문 탐색">
+            <a href="#record">작업 기록</a><a href="#compare">모델 비교</a
+            ><a href="#workshop">도안 작업대</a>
+          </nav>
+          <button id="motion" class="quiet" aria-pressed="true">
+            모션 켜짐
+          </button>
+        </header>
+        <section class="cover" aria-labelledby="cover-title">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="rule"></span> OPENAI <b>/</b> GPT-6.2 ASTRA
+            </p>
+            <h1 id="cover-title">
+              저는 <em>고쳐 쓸 수 있는</em><br />답을 만듭니다.
+            </h1>
+            <p class="lede">
+              저는 GPT-6.2 Astra입니다. 제가 일을 마친 뒤에도 그 일을 이어 갈
+              사람이 있습니다. 그래서 결과물과 함께 수정할 수 있는 원본을
+              건넵니다.
+            </p>
+            <p class="identity">
+              계산표에는 수식을 남깁니다. 숫자 하나를 고치면 합계도 바뀝니다.
+              종이 조명도 마찬가지입니다. 아래 도안에서 주름을 하나 줄여 보세요.
+              종이를 어디서 접어야 할지 새 도안에 표시됩니다.
+            </p>
+            <div class="actions">
+              <a class="button" href="#workshop">내 손으로 도안 고치기</a
+              ><a class="ink-link" href="#compare">다른 모델과 비교</a>
             </div>
-            <div class="scan-line" aria-hidden="true"></div>
-            <span class="art-stamp" aria-hidden="true" lang="en">Astra</span>
           </div>
-          <figcaption>
-            <label for="reveal">스크롤로 도면 펼치기</label
-            ><input
-              type="range"
-              id="reveal"
-              min="0"
-              max="100"
-              value="0"
-              aria-label="조명 콘셉트 이미지와 형상 도면 비교"
-            /><output for="reveal" id="reveal-out">0%</output>
-          </figcaption>
-        </figure>
-      </section>
-
+          <figure class="cover-figure">
+            <div class="cover-art" id="cover-art">
+              <canvas
+                id="hero-cad"
+                aria-label="접힌 종이 조명의 능선을 선으로 표현한 회전 모형"
+              ></canvas>
+              <div class="photo-mask">
+                <img
+                  class="lamp-photo"
+                  fetchpriority="high"
+                  src="assets/paper-lamp.webp"
+                  width="1448"
+                  height="1086"
+                  alt="코발트색 작업대에서 주름 사이로 빛이 비치는 종이 조명 콘셉트"
+                />
+              </div>
+              <div class="scan-line" aria-hidden="true"></div>
+              <span class="art-stamp" aria-hidden="true" lang="en">Astra</span>
+            </div>
+            <figcaption>
+              <label for="reveal">스크롤로 도면 펼치기</label
+              ><input
+                type="range"
+                id="reveal"
+                min="0"
+                max="100"
+                value="0"
+                aria-label="조명 콘셉트 이미지와 형상 도면 비교"
+              /><output for="reveal" id="reveal-out">0%</output>
+            </figcaption>
+          </figure>
+        </section>
+      </div>
+    </div>
+    <main>
       <section id="record" class="record wrap section">
         <p class="eyebrow">
           <span class="rule"></span> CASE NOTES <b>/</b> 제작 기록
         </p>
         <div class="chapter-head">
-          <h2>사진을 읽는 일은<br />무엇을 남길지 고르는 일.</h2>
+          <h2>조명에는 건물의 어느 부분을<br />옮겼을까요?</h2>
           <p>
-            시카고 마리나 시티의 사진에는 창문도, 탑의 높이도, 둥근 발코니도
-            있습니다. OpenAI 팀과 종이 조명을 만들 때 제가 가져온 것은 발코니의
-            가장자리였습니다. 그 하나를 남기고 나머지를 덜어 내자, 건물에서
-            종이의 주름이 보였습니다.
+            시카고 마리나 시티의 사진을 보면 층마다 둥근 발코니가 둘러서
+            있습니다. OpenAI 팀과 저는 그 곡선을 종이 조명의 주름으로
+            옮겼습니다.
           </p>
         </div>
         <div class="notebook">
@@ -111,7 +118,7 @@
               aria-label="선택한 제작 단계를 설명하는 스케치"
             ></canvas
             ><span id="case-plate" class="plate-caption"
-              >평면 스케치 · 형태 재해석</span
+              >발코니 윤곽 스케치</span
             >
           </div>
           <div class="study-text">
@@ -124,12 +131,10 @@
             </div>
             <div class="case-body" aria-live="polite">
               <p class="serif-label" id="case-en">Reference</p>
-              <h3 id="case-title">건물에서 곡선 하나를 꺼냅니다.</h3>
+              <h3 id="case-title">발코니의 윤곽을 따서 그렸습니다.</h3>
               <p id="case-text">
-                마리나 시티 전체를 작게 복제하면 건물 모형이 됩니다. 조명에
-                가져올 것은 탑의 높이보다 층마다 반복되는 발코니의
-                가장자리였습니다. 왼쪽은 그 반복을 평면에서 다시 그린
-                스케치입니다.
+                위에서 내려다보면 발코니의 가장자리가 꽃잎처럼 둥글게
+                이어집니다. 그 윤곽을 층마다 겹쳐 그린 스케치입니다.
               </p>
             </div>
             <a
@@ -142,8 +147,8 @@
           </div>
         </div>
         <p class="credit">
-          위 조명 이미지와 스케치는 공개 사례를 바탕으로 이 페이지에서 새로 만든
-          시각화입니다.
+          이 페이지의 조명 그림과 스케치는 OpenAI의 제작 사례를 참고해 새로
+          그렸습니다.
         </p>
       </section>
 
@@ -152,11 +157,11 @@
           <span class="rule"></span> SAME BRIEF <b>/</b> 같은 의뢰, 두 세대
         </p>
         <h2 id="handoff-title">
-          제 전작과 제가 받은<br />의뢰서는 같았습니다.
+          같은 의뢰서를 받고<br />서로 무엇을 만들었을까요?
         </h2>
         <p class="handoff-intro">
-          종이 조명에서 제 몫은 사람이 이어받을 도안을 남기는 것이었습니다. 그
-          차이는 같은 자료를 두 세대에 나란히 줬을 때 더 잘 보입니다.
+          OpenAI가 전작인 GPT-6 Astra와 저에게 같은 자료를 줬습니다. 굿즈
+          기획서와 기업가치 계산표를 차례로 살펴보세요.
         </p>
         <div class="pair-picker" role="group" aria-label="전작과 비교할 작업">
           <button data-brief="merch" aria-pressed="true">굿즈 기획서</button
@@ -167,19 +172,19 @@
         <div class="pair-grid" aria-live="polite">
           <article>
             <p class="eyebrow">GPT-6 ASTRA</p>
-            <h3 id="prior-title">네 팀, 팀마다 시안 하나.</h3>
+            <h3 id="prior-title">팀마다 시안 한 가지</h3>
             <p id="prior-body">
-              네 팀의 동물 굿즈를 기획하는 과제였습니다. 전작이 만든 목업에서는
-              팀마다 한 가지 디자인의 모습을 볼 수 있었습니다.
+              의뢰는 네 팀의 동물 굿즈를 기획해 달라는 것이었습니다. 전작은
+              팀마다 한 가지 디자인을 골라 제품 시안으로 보여줬습니다.
             </p>
           </article>
           <article>
             <p class="eyebrow">GPT-6.2 ASTRA</p>
-            <h3 id="new-title">여덟 디자인을 제작 파일까지.</h3>
+            <h3 id="new-title">여덟 가지 디자인과 제작 파일</h3>
             <p id="new-body">
-              저는 여덟 디자인 각각을 핀, 티셔츠, 가방 패치에 얹었습니다.
-              제작자가 크기를 정하고 색을 대조할 수 있게 벡터 원본, 권장 치수,
-              실물 샘플 확인 지침도 함께 건넸습니다.
+              저는 여덟 가지 디자인을 각각 핀, 티셔츠, 가방 패치에 적용했습니다.
+              제작자가 시제품의 크기와 색을 확인할 수 있도록 벡터 원본과 권장
+              치수, 샘플 확인 지침도 건넸습니다.
             </p>
           </article>
         </div>
@@ -199,8 +204,9 @@
           <div class="chapter-head">
             <h2>어떤 일에 저를<br />고르시겠어요?</h2>
             <p>
-              평가마다 결과물이 다릅니다. 코드를 고칠 때의 비용, 일을 끝까지
-              마친 점수, 사람이 직접 사용한 뒤의 선호도를 따로 보세요.
+              코드 수정이 목적이라면 점수와 비용을 함께 보세요. 3D 설계가
+              목적이라면 완성한 화면을 직접 써 본 사람들의 평가가 더 잘
+              맞습니다.
             </p>
           </div>
           <div class="choice-grid">
@@ -224,12 +230,12 @@
               <p id="score-test" class="eyebrow">AGENTS’ LAST EXAM</p>
               <div id="score" class="score">+5.2<span>점</span></div>
               <h3 id="score-title">
-                전작보다 점수가 높았고, 과제당 비용은 3분의 1 미만이었습니다.
+                전작보다 5.2점 높았고, 과제당 비용은 전작의 3분의 1에도 못
+                미쳤습니다.
               </h3>
               <p id="score-copy">
-                기준은 GPT-6 Astra입니다. 자료를 읽고 여러 단계를 거쳐 전문
-                업무를 마치는 평가라서, 긴 프로젝트에 저를 쓸 이유를 가장
-                직접적으로 보여줍니다.
+                여기서 전작은 GPT-6 Astra입니다. 이 시험에서는 자료 검토부터
+                최종 결과물 작성까지 여러 단계를 한 모델에 맡깁니다.
               </p>
               <div id="score-detail" class="score-detail"></div>
               <a
@@ -244,19 +250,20 @@
           <aside class="margin-note">
             <span class="serif-label">A limit.</span>
             <div>
-              <h3>제가 틀린 자리도 펼칠 수 있어야 합니다.</h3>
+              <h3>제 계산이 맞는지 어떻게 확인할까요?</h3>
               <p>
-                AA-AnalystAgent는 실제 보고서와 스프레드시트를 읽게 한 뒤 같은
-                질문을 다섯 번 따로 물었습니다. 제가 다섯 번 모두 맞힌 문항은
-                <strong>62.5%</strong>였습니다. 그래서 중요한 합계라면, 최종
-                숫자와 함께 어떤 표의 어느 항목을 더했는지도 요구해 주세요.
+                AA-AnalystAgent 평가에서 저는 실제 보고서와 스프레드시트를 읽고
+                같은 문제를 다섯 번씩 풀었습니다. 다섯 번 모두 맞힌 문항의
+                비율은
+                <strong>62.5%</strong>였습니다. 중요한 합계를 맡길 때는 어떤
+                표에서 어느 항목을 더했는지도 물어보세요.
               </p>
             </div>
             <details class="ledger">
               <summary>합계의 근거를 직접 확인하기</summary>
               <p>
-                예시 장부 · 의료 수송에 실제로 지급한 금액만 더해 보세요. 원
-                평가의 과제 유형을 설명하는 가상 자료입니다.
+                평가 방식을 설명하려고 만든 예시 장부입니다. 의료 수송비로 실제
+                지급한 금액만 더해 보세요.
               </p>
               <fieldset>
                 <legend>합계에 넣을 항목</legend>
@@ -288,40 +295,43 @@
           <span class="rule"></span> PAPER WORKSHOP <b>/</b> 도안 작업대
         </p>
         <div class="chapter-head">
-          <h2>이제, 당신의 손으로.</h2>
+          <h2>종이 모형을 직접 접어 보세요.</h2>
           <p>
-            조명의 주름 원리를 단순화한 종이 모형입니다. 폭 230mm짜리 종이띠 한
-            장을 산과 골로 번갈아 접습니다. 주름을 더 넣으면 같은 종이가 얼마나
-            가늘어지는지 확인해 보세요.
+            가로 230mm인 종이띠를 앞뒤로 번갈아 접은 모형입니다.
+            <span id="fold-help">아래로 스크롤하면 종이가 펼쳐집니다.</span>
+            주름 수를 바꿔 보세요. 같은 길이의 종이를 써도 모형의 지름이
+            달라집니다.
           </p>
         </div>
-        <div class="bench">
-          <figure>
-            <canvas
-              id="fold-art"
-              aria-label="주름 수와 높이에 맞춰 실시간으로 접히는 종이 모형"
-            ></canvas>
-            <figcaption>
-              <span>주름 모형</span><span id="model-dims"></span>
-            </figcaption>
-          </figure>
-          <div class="settings">
-            <h3>종이 한 장의 치수</h3>
-            <label for="ribs"
-              >주름 수 <output id="ribs-out" for="ribs">12개</output></label
-            ><input id="ribs" type="range" min="8" max="16" value="12" />
-            <label for="height"
-              >종이 높이
-              <output id="height-out" for="height">65 mm</output></label
-            ><input id="height" type="range" min="40" max="85" value="65" />
-            <label for="fold"
-              >접힌 정도 <output id="fold-out" for="fold">100%</output></label
-            ><input id="fold" type="range" min="0" max="100" value="100" />
-            <div class="plan-buttons">
-              <button class="outline" id="fold-toggle">펼쳐 보기</button
-              ><button class="button" id="print">A4 도안 인쇄</button>
+        <div class="scroll-scene folding">
+          <div class="scene-frame bench">
+            <figure>
+              <canvas
+                id="fold-art"
+                aria-label="주름 수와 높이에 맞춰 실시간으로 접히는 종이 모형"
+              ></canvas>
+              <figcaption>
+                <span>주름 모형</span><span id="model-dims"></span>
+              </figcaption>
+            </figure>
+            <div class="settings">
+              <h3>종이 한 장의 치수</h3>
+              <label for="ribs"
+                >주름 수 <output id="ribs-out" for="ribs">12개</output></label
+              ><input id="ribs" type="range" min="8" max="16" value="12" />
+              <label for="height"
+                >종이 높이
+                <output id="height-out" for="height">65 mm</output></label
+              ><input id="height" type="range" min="40" max="85" value="65" />
+              <label for="fold"
+                >접힌 정도 <output id="fold-out" for="fold">100%</output></label
+              ><input id="fold" type="range" min="0" max="100" value="100" />
+              <div class="plan-buttons">
+                <button class="outline" id="fold-toggle">펼쳐 보기</button
+                ><button class="button" id="print">A4 도안 인쇄</button>
+              </div>
+              <small>가로 A4 · 실제 크기 100% · 풀칠 여백 8mm 포함</small>
             </div>
-            <small>가로 A4 · 실제 크기 100% · 풀칠 여백 8mm 포함</small>
           </div>
         </div>
       </section>
@@ -330,7 +340,7 @@
       <div class="wrap">
         <div class="colophon">
           <p id="closing">
-            제가 그은 선입니다.<br /><em>이제 당신이 고칠 차례입니다.</em>
+            주름과 높이를 정했다면<br /><em>도안을 인쇄해 보세요.</em>
           </p>
           <span id="signature">GPT-6.2 Astra · 작업 노트에서</span>
         </div>
@@ -345,8 +355,9 @@
       <p id="print-spec"></p>
       <canvas id="net" width="2380" height="850"></canvas>
       <p>
-        실선은 자르는 선, 긴 파선은 산 접기, 점선은 골 접기입니다. 양 끝을 붙일
-        때 마지막 8mm에 풀을 칠하세요.
+        실선을 따라 자르세요. 긴 파선이 산등성이처럼 솟고 점선이 골짜기처럼
+        들어가도록 번갈아 접으세요. 마지막 8mm 여백에 풀을 칠해 양 끝을
+        붙이세요.
       </p>
       <div class="calibration">50 mm</div>
     </section>
