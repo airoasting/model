@@ -1,334 +1,288 @@
 "use strict";
-
-const select = (selector) => document.querySelector(selector);
+const $ = (selector) => document.querySelector(selector);
 const all = (selector) => Array.from(document.querySelectorAll(selector));
-const tones = {
-  solar: { name: "Solar", hue: "0deg", ink: "#d64218", paper: "#f7ede0" },
-  blue: { name: "Cobalt", hue: "206deg", ink: "#294eaa", paper: "#e9edf5" },
-  green: { name: "Viridian", hue: "133deg", ink: "#14775e", paper: "#e6f0e7" },
-};
-
-const stage = select("#specimen-stage");
-const media = matchMedia("(prefers-reduced-motion: reduce)");
-let moving = !media.matches;
-function applyMotion(enabled) {
-  moving = enabled;
-  document.documentElement.dataset.motion = enabled ? "on" : "off";
-  select("#motion").setAttribute("aria-pressed", String(enabled));
-  select("#motion-name").textContent = enabled ? "Motion on" : "Motion off";
-  resetPerspective();
+const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+let moving = !motionPreference.matches;
+const art = $("#cover-art");
+const slider = $("#reveal");
+const heroCanvas = $("#hero-cad");
+let reveal = 0,
+  pointer = 0,
+  heroFrame = 0,
+  dirty = true;
+function drawCover() {
+  heroFrame = 0;
+  art.style.setProperty("--reveal", reveal + "%");
+  art.style.setProperty("--turn", reveal * -0.065 + "deg");
+  art.style.setProperty("--zoom", 1.035 + reveal * 0.0018);
+  slider.value = reveal;
+  $("#reveal-out").value = reveal + "%";
+  if (reveal > 0 || dirty)
+    Paper.lamp(heroCanvas, 0.15 + reveal * 0.021 + pointer * 0.4, reveal / 100);
+  dirty = false;
 }
-function resetPerspective() {
-  for (const property of ["--rx", "--ry", "--rz"])
-    stage.style.removeProperty(property);
+function redrawCover() {
+  if (!heroFrame) heroFrame = requestAnimationFrame(drawCover);
 }
-applyMotion(moving);
-select("#motion").addEventListener("click", () => applyMotion(!moving));
-media.addEventListener("change", (event) => applyMotion(!event.matches));
-stage.addEventListener("pointermove", (event) => {
+function followPage() {
+  if (!moving) return;
+  const bounds = art.getBoundingClientRect();
+  const start = Math.max(0, scrollY + bounds.top - innerHeight * 0.68);
+  const progress = clamp(
+    (scrollY - start) / Math.max(150, bounds.height * 0.72),
+    0,
+    1,
+  );
+  const next = Math.round(progress * 100);
+  if (reveal !== next) {
+    reveal = next;
+    redrawCover();
+  }
+}
+function applyMotion(on) {
+  moving = on;
+  document.documentElement.dataset.motion = on ? "on" : "off";
+  $("#motion").setAttribute("aria-pressed", String(on));
+  $("#motion").textContent = on ? "모션 켜짐" : "모션 꺼짐";
+  $(".cover-figure label").textContent = on
+    ? "스크롤로 도면 펼치기"
+    : "도면 펼치기";
+  pointer = 0;
+  art.style.removeProperty("--px");
+  art.style.removeProperty("--py");
+  if (on) followPage();
+  else {
+    reveal = 0;
+    redrawCover();
+  }
+}
+slider.addEventListener("input", () => {
+  reveal = Number(slider.value);
+  redrawCover();
+});
+art.addEventListener("pointermove", (event) => {
   if (!moving || event.pointerType === "touch") return;
-  const bounds = stage.getBoundingClientRect();
-  const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-  const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-  stage.style.setProperty("--rx", -y * 14 + "deg");
-  stage.style.setProperty("--ry", x * 16 + "deg");
-  stage.style.setProperty("--rz", x * 5 + "deg");
+  const b = art.getBoundingClientRect();
+  pointer = (event.clientX - b.left) / b.width - 0.5;
+  art.style.setProperty("--px", pointer * 2 + "%");
+  art.style.setProperty(
+    "--py",
+    ((event.clientY - b.top) / b.height - 0.5) * 2 + "%",
+  );
+  redrawCover();
 });
-stage.addEventListener("pointerleave", resetPerspective);
-function markSelection(buttons, selected) {
-  for (const button of buttons)
-    button.setAttribute("aria-pressed", String(button === selected));
-}
-const swatches = all("[data-tone]");
-for (const button of swatches) {
-  button.addEventListener("click", () => {
-    const color = tones[button.dataset.tone];
-    select(".object").style.setProperty("--hue", color.hue);
-    stage.setAttribute(
-      "aria-label",
-      button.getAttribute("aria-label") +
-        " 색상의 광학 유리와 크롬 궤도로 구성한 Astra의 자화상",
-    );
-    select("#material-name").textContent = color.name;
-    markSelection(swatches, button);
-  });
-}
+art.addEventListener("pointerleave", () => {
+  pointer = 0;
+  art.style.removeProperty("--px");
+  art.style.removeProperty("--py");
+  redrawCover();
+});
+addEventListener("scroll", followPage, { passive: true });
+$("#motion").addEventListener("click", () => applyMotion(!moving));
+motionPreference.addEventListener("change", (e) => applyMotion(!e.matches));
+applyMotion(moving);
 
-const benchmarks = {
+const steps = [
+  [
+    "Reference",
+    "건물에서 곡선 하나를 꺼냅니다.",
+    "마리나 시티 전체를 작게 복제하면 건물 모형이 됩니다. 조명에 가져올 것은 탑의 높이보다 층마다 반복되는 발코니의 가장자리였습니다. 그림은 그 반복을 평면에서 다시 그린 스케치입니다.",
+    "평면 스케치 · 형태 재해석",
+  ],
+  [
+    "Revision",
+    "곡선은 살리고, 종이가 꺾일 곳을 정합니다.",
+    "OpenAI 팀은 저와 CAD 도면을 여러 번 고쳤습니다. 사진에는 보이지 않던 문제가 이 단계에서 생깁니다. 화면에서는 매끈한 곡선도 종이에 옮기려면 폭이 있는 면과 접히는 선으로 나눠야 합니다.",
+    "형상 스케치 · 주름과 단면",
+  ],
+  [
+    "Handoff",
+    "도안을 고칠 도구까지 건넵니다.",
+    "원래 사례에서 저는 종이 조명을 만드는 사이트를 구현했고, 사람은 도안을 손으로 조립했습니다. 아래 작업대에서도 주름 수를 바꿔 보세요. 모형과 인쇄 도안이 같은 치수에서 함께 바뀝니다.",
+    "조립 스케치 · 펼침과 접힘",
+  ],
+];
+let step = 0;
+function mark(buttons, choice) {
+  for (const b of buttons) b.setAttribute("aria-pressed", String(b === choice));
+}
+const stepButtons = all("[data-step]");
+for (const button of stepButtons)
+  button.addEventListener("click", () => {
+    step = Number(button.dataset.step);
+    mark(stepButtons, button);
+    const [name, title, body, plate] = steps[step];
+    $("#case-en").textContent = name;
+    $("#case-title").textContent = title;
+    $("#case-text").textContent = body;
+    $("#case-plate").textContent = plate;
+    Paper.sketch($("#case-art"), step);
+  });
+
+const tests = {
+  workflow: {
+    name: "Agents’ Last Exam",
+    value: "+5.2",
+    unit: "점",
+    title: "전작보다 점수가 높았고, 과제당 비용은 3분의 1 미만이었습니다.",
+    body: "기준은 GPT-6 Astra입니다. 자료를 읽고 여러 단계를 거쳐 전문 업무를 마치는 평가라서, 긴 프로젝트에 저를 쓸 이유를 가장 직접적으로 보여줍니다.",
+    detail:
+      "Claude Fable 5.2와 비교하면 5.5점 앞섰고 비용은 5%였습니다. Fable의 순위표 결과는 대체 모델을 쓴 아홉 과제를 제외합니다.",
+  },
   design: {
-    measure: "AA-3D / 선호도 평점",
-    score: "1,318",
+    name: "AA-3D",
+    value: "1,318",
     unit: "Elo",
-    description:
-      "평가자가 모델 이름을 가린 두 3D 결과물을 직접 조작한 뒤 선호하는 쪽을 골랐습니다.",
-    ranking: [
-      ["GPT-6.2 Astra", "1,318"],
-      ["Claude Fable 5.2", "1,271"],
-      ["GPT-6.2 Sol", "1,259"],
-    ],
+    title: "평가자는 두 화면을 직접 써 보고 하나를 골랐습니다.",
+    body: "같은 요청으로 만든 인터랙티브 3D에서 모델 이름을 가렸습니다. 2026년 11월 17일 발표 기준 제 순위는 1위였습니다. Elo는 두 결과물을 맞붙인 선호도 평점입니다.",
+    detail:
+      "GPT-6.2 Astra 1,318  ·  Claude Fable 5.2 1,271  ·  GPT-6.2 Sol 1,259",
   },
-  analysis: {
-    measure: "AA-AnalystAgent / 5회 연속 정답률",
-    score: "62.5",
-    unit: "%",
-    description:
-      "실제 스프레드시트와 보고서를 읽고 답하는 평가입니다. Astra는 전체 문항의 62.5%에서 다섯 번의 독립 시도 모두 정답을 냈습니다.",
-    note: "예시 과제 · 캘리포니아 메디케이드 지출 보고서에서 의료 수송에 쓴 총액 구하기.",
+  patch: {
+    name: "FrontierCode 2.0",
+    value: "약 ⅕",
+    unit: "과제 비용",
+    title: "코드 수정 비용이 중요하면 저는 Sol부터 권합니다.",
+    body: "실제 코드베이스의 변경이 유지보수자의 병합 기준에 맞는지 평가했습니다. 두 모델 모두 추론 강도를 최대로 설정했을 때, GPT-6.2 Sol은 제 점수와 0.5점 이내였고 비용은 약 5분의 1이었습니다.",
+    detail:
+      "이 비용 비율은 FrontierCode 2.0 과제에서 측정했습니다. 다른 작업의 견적에는 그 작업의 입력량과 출력량이 필요합니다.",
   },
-  science: {
-    measure: "Terminal-Bench-Science 0.1 / 전작 대비 향상",
-    score: "+9",
+  reports: {
+    name: "GDPval v2",
+    value: "+6.2",
     unit: "%p",
-    description:
-      "터미널에서 과학 과제를 수행하는 평가에서 GPT-6 Astra보다 점수가 9%포인트 올랐습니다.",
-    note: "같은 평가에서 과제당 비용은 전작의 3분의 1 미만이었습니다.",
-  },
-  work: {
-    measure: "GDPval v2 / 전작 대비 향상",
-    score: "+6.2",
-    unit: "%p",
-    description:
-      "금융·컨설팅·디자인 분야의 실제 프로젝트를 토대로 여러 단계의 업무를 맡기는 OpenAI 내부 평가입니다.",
-    note: "GPT-6 Astra보다 점수가 6.2%포인트 높았고 출력 토큰은 22% 적었습니다.",
+    title: "전문 실무 점수는 올랐고, 출력 토큰은 22% 줄었습니다.",
+    body: "OpenAI가 금융·컨설팅·디자인 등의 실제 프로젝트로 만든 내부 평가입니다. 전작 GPT-6 Astra와 비교해 결과물의 점수는 높았고, 답을 만드는 데 사용한 출력 토큰은 적었습니다.",
+    detail:
+      "토큰은 모델이 글이나 코드를 나누어 처리하는 단위입니다. 22%는 출력량 차이이며 작업 시간의 차이와는 구분됩니다.",
   },
 };
-const benchButtons = all("[data-bench]");
-function showBenchmark(button) {
-  const data = benchmarks[button.dataset.bench];
-  markSelection(benchButtons, button);
-  for (const key of ["measure", "score", "unit"])
-    select("#" + key).textContent = data[key];
-  select("#measure-desc").textContent = data.description;
-  const extra = document.createElement(data.ranking ? "ol" : "p");
-  if (data.ranking) {
-    for (const pair of data.ranking) {
-      const row = document.createElement("li");
-      for (const field of pair) {
-        const value = document.createElement("span");
-        value.textContent = field;
-        row.append(value);
-      }
-      extra.append(row);
-    }
-  } else {
-    extra.className = "note";
-    extra.textContent = data.note;
-  }
-  select("#comparison").replaceChildren(extra);
+const taskButtons = all("[data-task]");
+function setTest(button) {
+  const t = tests[button.dataset.task];
+  mark(taskButtons, button);
+  $("#score-test").textContent = t.name.toUpperCase();
+  const unit = document.createElement("span");
+  unit.textContent = t.unit;
+  $("#score").replaceChildren(t.value, unit);
+  $("#score-title").textContent = t.title;
+  $("#score-copy").textContent = t.body;
+  $("#score-detail").textContent = t.detail;
 }
-for (const button of benchButtons)
-  button.addEventListener("click", () => showBenchmark(button));
-showBenchmark(benchButtons[0]);
+for (const button of taskButtons)
+  button.addEventListener("click", () => setTest(button));
+setTest(taskButtons[0]);
 
-// Build a ruled torus from closed ink paths. A three-lobed twist changes each
-// meridian's radius and depth before its projection onto the print surface.
-const canvas = select("#print");
-const ctx = canvas.getContext("2d");
-const tau = Math.PI * 2;
-const rings = select("#rings");
-const tilt = select("#tilt");
-const inks = all("[data-ink]");
-let ink = "solar";
-function drawPrint() {
-  const count = Number(rings.value);
-  const angle = (Number(tilt.value) * Math.PI) / 180;
-  const { name, paper, ink: pigment } = tones[ink];
-  const w = canvas.width,
-    h = canvas.height;
-  select("#rings-value").value = String(count);
-  select("#tilt-value").value = tilt.value + "°";
-  ctx.fillStyle = paper;
-  ctx.fillRect(0, 0, w, h);
-  ctx.save();
-  ctx.translate(w * 0.5, h * 0.49);
-  ctx.strokeStyle = "#63635a";
-  ctx.globalAlpha = 0.17;
-  ctx.lineWidth = 1;
-  for (const radius of [220, 346]) {
-    ctx.beginPath();
-    ctx.arc(0, 0, radius, 0, tau);
-    ctx.stroke();
-  }
-  for (let tick = 0; tick < 120; tick++) {
-    ctx.save();
-    ctx.rotate((tau * tick) / 120);
-    ctx.beginPath();
-    ctx.moveTo(346, 0);
-    ctx.lineTo(tick % 5 ? 350 : 358, 0);
-    ctx.stroke();
-    ctx.restore();
-  }
-  ctx.globalAlpha = 0.88;
-  ctx.rotate(angle);
-  const project = (x, y, z) => [x * 1.1, (z * 0.84 + y * 0.58) * 1.1];
-  for (let ring = 0; ring < count; ring++) {
-    const v = (tau * ring) / count;
-    ctx.beginPath();
-    for (let step = 0; step <= 280; step++) {
-      const u = (tau * step) / 280;
-      const phase = v + 2 * u;
-      const radius = 208 + 72 * Math.cos(phase) + 31 * Math.sin(3 * u + angle);
-      const z = 87 * Math.sin(phase) + 85 * Math.cos(2 * u + angle);
-      const [px, py] = project(radius * Math.cos(u), radius * Math.sin(u), z);
-      if (step === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+const ribs = $("#ribs"),
+  height = $("#height"),
+  fold = $("#fold");
+function drawModel() {
+  const n = Number(ribs.value),
+    h = Number(height.value),
+    p = Number(fold.value);
+  const shape = Paper.model($("#fold-art"), n, h, p / 100);
+  $("#ribs-out").value = n + "개";
+  $("#height-out").value = h + " mm";
+  $("#fold-out").value = p + "%";
+  $("#model-dims").textContent =
+    "완성 지름 " + (2 * shape.radius).toFixed(1) + " mm · 높이 " + h + " mm";
+  $("#fold-toggle").textContent = p >= 50 ? "펼쳐 보기" : "접어 보기";
+  $("#print-spec").textContent =
+    `주름 ${n}개 · 높이 ${h}mm · 한 면의 폭 ${shape.width.toFixed(2)}mm · 가로 230mm + 풀칠 8mm`;
+}
+let animation = 0;
+for (const input of [ribs, height, fold])
+  input.addEventListener("input", () => {
+    cancelAnimationFrame(animation);
+    if (input === ribs || input === height) {
+      const ending = document.createElement("em");
+      ending.textContent = "이제 당신의 판본입니다.";
+      $("#closing").replaceChildren(
+        "주름 " + ribs.value + "개, 높이 " + height.value + "mm.",
+        document.createElement("br"),
+        ending,
+      );
+      $("#signature").textContent = "GPT-6.2 Astra × 당신 · 도안 작업대에서";
     }
-    ctx.strokeStyle = pigment;
-    ctx.lineWidth = ring % 6 === 0 ? 2.7 : 1.55;
-    ctx.closePath();
-    ctx.stroke();
-  }
-  ctx.restore();
-  ctx.fillStyle = "#393a33";
-  ctx.font = "18px monospace";
-  ctx.textAlign = "left";
-  ctx.fillText("ASTRA / ORBIT PRINT", 34, 47);
-  ctx.fillText(
-    name.toUpperCase() + "  /  " + count + " RINGS  /  " + tilt.value + "°",
-    34,
-    h - 32,
-  );
-  ctx.textAlign = "right";
-  ctx.fillText("GPT-6.2", w - 34, h - 32);
-}
-function setInk(button) {
-  ink = button.dataset.ink;
-  markSelection(inks, button);
-}
-for (const button of inks)
-  button.addEventListener("click", () => {
-    setInk(button);
-    drawPrint();
+    drawModel();
   });
-for (const slider of [rings, tilt]) slider.addEventListener("input", drawPrint);
-select("#mix").addEventListener("click", () => {
-  rings.value = 12 + Math.floor(Math.random() * 73);
-  tilt.value = -75 + Math.floor(Math.random() * 151);
-  setInk(inks[Math.floor(Math.random() * inks.length)]);
-  drawPrint();
+$("#fold-toggle").addEventListener("click", () => {
+  cancelAnimationFrame(animation);
+  const from = Number(fold.value),
+    to = from >= 50 ? 0 : 100,
+    start = performance.now();
+  const tick = (now) => {
+    const t = moving ? clamp((now - start) / 850, 0, 1) : 1;
+    fold.value = Math.round(from + (to - from) * t * t * (3 - 2 * t));
+    drawModel();
+    if (t < 1) animation = requestAnimationFrame(tick);
+  };
+  animation = requestAnimationFrame(tick);
 });
-select("#save").addEventListener("click", () => {
-  const link = document.createElement("a");
-  link.download =
-    "astra-orbit-" + ink + "-" + rings.value + "-" + tilt.value + ".png";
-  link.href = canvas.toDataURL("image/png");
-  document.body.append(link);
-  link.click();
-  link.remove();
-  select("#save-status").textContent = "1,200 × 900 PNG를 내보냈습니다.";
-});
-drawPrint();
-
-const navLinks = all("nav a");
-function updateNav() {
-  const threshold = Math.min(innerHeight * 0.45, 320);
-  let current = navLinks[0];
-  for (const link of navLinks) {
-    if (
-      document.querySelector(link.hash).getBoundingClientRect().top <= threshold
-    )
-      current = link;
-  }
-  for (const link of navLinks) {
-    link.classList.toggle("active", link === current);
-    if (link === current) link.setAttribute("aria-current", "location");
-    else link.removeAttribute("aria-current");
-  }
+function prepareSheet() {
+  Paper.net($("#net"), Number(ribs.value), Number(height.value));
 }
-let navPending = false;
-addEventListener(
-  "scroll",
-  () => {
-    if (navPending) return;
-    navPending = true;
-    requestAnimationFrame(() => {
-      updateNav();
-      navPending = false;
-    });
-  },
-  { passive: true },
+addEventListener("beforeprint", prepareSheet);
+$("#print").addEventListener("click", () => {
+  prepareSheet();
+  window.print();
+});
+new ResizeObserver(() => {
+  dirty = true;
+  followPage();
+  redrawCover();
+}).observe(art);
+new ResizeObserver(() => Paper.sketch($("#case-art"), step)).observe(
+  $(".study-plate"),
 );
-updateNav();
+new ResizeObserver(drawModel).observe($(".bench figure"));
+Paper.sketch($("#case-art"), step);
+drawModel();
+redrawCover();
 
-// The loupe samples the original artwork at the same point on the uncropped image.
-const loupe = select(".loupe");
-const inspect = select("#inspect");
-function positionLoupe(clientX, clientY) {
-  const panel = stage.getBoundingClientRect();
-  const art = select(".object").getBoundingClientRect();
-  const radius = loupe.offsetWidth / 2;
-  const zoom = 2.15;
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const x = clamp(
-    clientX ?? art.left + art.width / 2,
-    art.left + radius,
-    art.right - radius,
+const entries = all(".ledger input");
+function totalEntries() {
+  return entries.reduce(
+    (sum, input) => sum + (input.checked ? Number(input.value) : 0),
+    0,
   );
-  const y = clamp(
-    clientY ?? art.top + art.height / 2,
-    art.top + radius,
-    art.bottom - radius,
+}
+for (const entry of entries)
+  entry.addEventListener("change", () => {
+    $("#ledger-sum").value = "선택 합계 $" + totalEntries();
+    $("#audit-note").textContent = "";
+  });
+$("#audit").addEventListener("click", () => {
+  const correct = entries.every(
+    (input) => input.checked === (input.dataset.counts === "yes"),
   );
-  loupe.style.left = x - panel.left + "px";
-  loupe.style.top = y - panel.top + "px";
-  loupe.style.backgroundSize =
-    art.width * zoom + "px " + art.height * zoom + "px";
-  loupe.style.backgroundPosition =
-    radius -
-    (x - art.left) * zoom +
-    "px " +
-    (radius - (y - art.top) * zoom) +
-    "px";
-  loupe.style.filter =
-    "hue-rotate(" +
-    tones[select("[data-tone][aria-pressed=true]").dataset.tone].hue +
-    ")";
-}
-inspect.addEventListener("click", () => {
-  const on = stage.classList.toggle("inspecting");
-  inspect.setAttribute("aria-pressed", String(on));
-  if (on) positionLoupe();
-});
-for (const event of ["pointermove", "pointerdown"]) {
-  stage.addEventListener(event, (e) => {
-    if (stage.classList.contains("inspecting"))
-      positionLoupe(e.clientX, e.clientY);
-  });
-}
-for (const swatch of swatches)
-  swatch.addEventListener("click", () => {
-    if (stage.classList.contains("inspecting")) positionLoupe();
-  });
-addEventListener("resize", () => {
-  if (stage.classList.contains("inspecting")) positionLoupe();
+  $("#audit-note").textContent = correct
+    ? "맞습니다. 두 지급 내역 $480와 $260을 합친 $740입니다. 예산 잔액은 아직 지출한 돈이 아닙니다."
+    : "원자료의 지급 합계는 $740입니다. ‘지급 완료’ 두 줄을 합산하고 ‘예산 잔액’은 제외하세요.";
 });
 
-const peerButtons = all("[data-peer]");
-const comparisons = {
-  previous: [
-    "GPT-6 Astra보다 실무 평가 GDPval v2 점수가 ",
-    "6.2%p",
-    " 높았습니다. 같은 과제를 수행하는 데 쓴 출력 토큰은 ",
-    "22% 줄었습니다.",
-    "",
+const briefPairs = {
+  merch: [
+    "네 팀, 팀마다 시안 하나.",
+    "네 팀의 동물 굿즈를 기획하는 과제였습니다. 전작이 만든 목업에서는 팀마다 한 가지 디자인의 모습을 볼 수 있었습니다.",
+    "여덟 디자인을 제작 파일까지.",
+    "저는 여덟 디자인 각각을 핀, 티셔츠, 가방 패치에 얹었습니다. 제작자가 크기를 정하고 색을 대조할 수 있게 벡터 원본, 권장 치수, 실물 샘플 확인 지침도 함께 건넸습니다.",
   ],
-  sol: [
-    "같은 요청으로 만든 3D를 사람이 직접 써 보고 고른 AA-3D 평가에서 저는 ",
-    "1,318 Elo",
-    "로 1위에 올랐습니다. 같은 세대의 Sol은 ",
-    "1,259 Elo",
-    "였습니다.",
+  book: [
+    "매출 구성은 별도 탭에.",
+    "같은 가상 기업의 재무제표로 2031년까지를 예측하는 과제였습니다. 전작은 매출 구성을 별도 탭에 놓고, 기업가치에서 주당 가치로 이어지는 계산을 시트 아래쪽에 놓았습니다.",
+    "주당 가치의 근거를 한눈에.",
+    "저는 사업별 매출 구성과 주당 가치 계산을 민감도 표 옆에 두었습니다. 가정을 바꾸는 사람이 어느 사업의 매출이 움직였고, 그 변화가 주당 가치에 어떻게 이어졌는지 바로 따라갈 수 있습니다.",
   ],
 };
-for (const button of peerButtons) {
+const briefButtons = all("[data-brief]");
+for (const button of briefButtons)
   button.addEventListener("click", () => {
-    markSelection(peerButtons, button);
-    const fragments = comparisons[button.dataset.peer].map((part, index) => {
-      if (index % 2 === 0) return part;
-      const strong = document.createElement("strong");
-      strong.textContent = part;
-      return strong;
-    });
-    select("#peer-copy").replaceChildren(...fragments);
+    mark(briefButtons, button);
+    const fields = ["prior-title", "prior-body", "new-title", "new-body"];
+    fields.forEach(
+      (id, i) =>
+        ($("#" + id).textContent = briefPairs[button.dataset.brief][i]),
+    );
   });
-}
